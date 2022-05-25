@@ -9,6 +9,7 @@
 .vs/**/*
 .vscode
 .markdownlint.json
+.eslintrc.js
 
 
 
