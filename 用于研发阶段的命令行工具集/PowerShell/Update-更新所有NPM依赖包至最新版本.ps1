@@ -34,21 +34,21 @@ Param(
 
 
 PROCESS {
-    ${script:应仅作仿真演练} = $false
+    [boolean]${script:应仅作仿真演练} = $false
 
 
 
     Try {
 
         # ───────────────────────────────────────────────────────────────
-        #  1) 按需删除 node_modules      文件夹
-        #  2) 按需删除 package-lock.json 文件
-        #  3) 配置各依赖包可安装之版本
+        #  1) 按需删除 node_modules      文件夹。
+        #  2) 按需删除 package-lock.json 文件。
+        #  3) 安装依赖包。
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #     顺便提醒，虽然一般而言 latest 版本应恰为最高版本，但并不确保。
         # ───────────────────────────────────────────────────────────────
 
-        ${local:本产品所有的_npm_依赖包的安装版本配置总表} = @(
+        ${private:本产品所有的_npm_依赖包的安装版本配置总表} = @(
             @{
                 # 取 '本产品拟囊括这些软件之整体或部分' ，
                 # 说白了就是在安装这些依赖包时，会采取该命令：
@@ -79,7 +79,7 @@ PROCESS {
 
 
 
-        ${local:本产品所有的_npm_依赖包的安装版本配置总表} | Update-吴乐川更新当前_npm_项目的所有批次的依赖包 `
+        ${private:本产品所有的_npm_依赖包的安装版本配置总表} | Update-吴乐川更新当前_npm_项目的所有批次的依赖包 `
             -应仅作仿真演练:${script:应仅作仿真演练} `
             -安装之前应先删除旧有的_node_modules_文件夹:$安装之前应先删除旧有的_node_modules_文件夹 `
             -安装之前应先删除旧有的_package_lock_json_文件:$安装之前应先删除旧有的_package_lock_json_文件
@@ -89,7 +89,7 @@ PROCESS {
 
 
         # ───────────────────────────────────────────────────────────────
-        #  4) 更新与研发相关的数据库
+        #  4) 更新与研发相关的数据库。
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #     例如： Browserslist:caniuse-lite
         # ───────────────────────────────────────────────────────────────
@@ -117,7 +117,7 @@ PROCESS {
 
 
         # ───────────────────────────────────────────────────────────────
-        #  5) 其他交代
+        #  5) 其他交代。
         # ───────────────────────────────────────────────────────────────
 
         Write-吴乐川管理某_npm_项目__打印提示语__其他交代  -应仅作仿真演练:$应仅作仿真演练
@@ -136,7 +136,7 @@ PROCESS {
 
     } catch {
 
-        ${local:RunTimeException} = $_
+        ${private:RunTimeException} = $_
 
     }
 }
@@ -152,12 +152,13 @@ PROCESS {
 BEGIN {
     # 该名为 BEGIN 之代码块故意安排在 PROCESS 代码块之后。但实际上 BEGIN 会在 PROCESS 之前运行。
 
-    ${local:RunTimeException} = $null
+    ${private:RunTimeException} = $null
+    [string]${private:执行本命令前的工作路径} = "$PWD"
 
     Write-Host "`n【当下工作路径】：`n    '$PWD'"
 
     if ("$PWD" -match "\\用于研发阶段的命令行工具集\\PowerShell`$") {
-        ${local:执行本命令前的工作路径} = "$PWD"
+        ${private:执行本命令前的工作路径} = "$PWD"
         Set-Location '..\..\'
         Write-Host "`n【当下工作路径】临时变更为：`n    '$PWD'"
     }
@@ -168,10 +169,14 @@ BEGIN {
 
 
 
-    $吴乐川的模块的路径 = '.\源代码\发布的源代码\PowerShell'
+    # 下方这一行的写法专门针对本工具集自身，不适应于其他任何 npm 项。
+    [string]${script:吴乐川的模块的路径} = '.\源代码\发布的源代码\PowerShell'
 
-    Import-Module  "${吴乐川的模块的路径}\吴乐川-数据处理-文本.psm1"
-    Import-Module  "${吴乐川的模块的路径}\吴乐川-管理某-npm-项目的依赖包等资源.psm1"
+    # 在采用本工具集的其他 npm 项目中，应这样写：
+    # [string]${script:吴乐川的模块的路径} = '.\node_modules\@wulechuan\cli-scripts--npm-project-helpers\源代码\发布的源代码\PowerShell'
+
+    Import-Module  "${script:吴乐川的模块的路径}\吴乐川-数据处理-文本.psm1"
+    Import-Module  "${script:吴乐川的模块的路径}\吴乐川-管理某-npm-项目的依赖包等资源.psm1"
 }
 
 
@@ -183,17 +188,17 @@ BEGIN {
 
 
 END {
-    if (${local:执行本命令前的工作路径} -and ("${local:执行本命令前的工作路径}" -ne "$PWD")) {
+    if (${private:执行本命令前的工作路径} -and ("${private:执行本命令前的工作路径}" -ne "$PWD")) {
+        Set-Location  "${private:执行本命令前的工作路径}"
         Write-Host "`n【当下工作路径】已复原。"
-        Set-Location  "${local:执行本命令前的工作路径}"
     }
 
 
 
-    if (${local:RunTimeException}) {
+    if (${private:RunTimeException}) {
         Write-Host
         Write-Host -F 'Red' '执行过程曾出错。'
         Write-Host
-        throw ${local:RunTimeException}
+        throw ${private:RunTimeException}
     }
 }

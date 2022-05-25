@@ -379,7 +379,7 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_packa
                 Write-Host  -F 'White'  'package-lock.json 文件已删除。'
             } else {
                 Write-Host              -F 'DarkYellow'  '   【仿真演练】'
-                
+
                 Write-Host  -NoNewline                   '    '
                 Write-Host  -NoNewline  -F 'White'       "package-lock.json 文件已"
                 Write-Host  -NoNewline  -F 'DarkYellow'  "（视为）"
