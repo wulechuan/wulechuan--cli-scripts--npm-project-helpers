@@ -22,19 +22,13 @@ function Write-_吴乐川打印测量提示语长度的尺子_纯粹是于研发
 
 
 function Write-_吴乐川打印足够的的空白行_在某任务开始前 {
-    Write-Host
+    (1..2).ForEach{ Write-Host }
 }
 
 
 
 function Write-_吴乐川打印足够的的空白行_在某任务结束后 {
-    Write-Host
-    Write-Host
-    Write-Host
-    Write-Host
-    Write-Host
-    Write-Host
-    Write-Host
+    (1..7).ForEach{ Write-Host }
 }
 
 
@@ -266,7 +260,7 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_
     )
 
     BEGIN {
-        [string]${private:首选颜色} = 'DarkCyan'
+        [string]${private:首选颜色} = 'Cyan'
 
         [string]${private:作为任务起始前提示语的文本全文} = $应仅作仿真演练 `
             ? '═══【仿真演练】═══ 删除 node_modules 文件夹 ════════════════════════════' `
@@ -474,7 +468,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
         -固定格式的文本_第3片段 '研发' `
         -首选颜色 'DarkGreen' `
         -强调文字的字色 'Black' `
-        -强调文字的底色 'DarkGreen' `
+        -强调文字的底色 'Green' `
         -该信息系作为任务结束语:$该信息系作为任务结束语 `
         -不应在首部留有过多的空白:$不应在首部留有过多的空白 `
         -应仅作仿真演练:$应仅作仿真演练

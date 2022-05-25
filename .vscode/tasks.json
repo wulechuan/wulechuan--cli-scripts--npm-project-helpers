@@ -20,6 +20,13 @@
             "problemMatcher": []
         },
         {
+            "label": "更新所有 npm 依赖包至允许范围内的最新版本（Bash）",
+            "type": "shell",
+            "command": "bash  -c  'source  ./用于研发阶段的命令行工具集/bash/update-更新所有-npm-依赖包至允许范围内的最新版本.sh'",
+            "group": "none",
+            "problemMatcher": []
+        },
+        {
             "label": "每当制作集得之版本之前",
             "type": "shell",
             "command": "npm  run  每当制作集得之版本之前",
