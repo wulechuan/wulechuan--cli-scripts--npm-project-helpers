@@ -56,8 +56,41 @@ PROCESS {
                 这批依赖包之依赖类别 = '本产品拟囊括这些软件之整体或部分'
 
                 这批依赖包之安装版本配置集 = @{
-                    'chalk' = $null
-                    'fs-extra' = $null
+                    # 为方便指称，本注释块中将 @wulechuan/cli-scripts--npm-project-helpers 简称为 “【甲】”。
+                    #
+                    # 配置示范集：
+                    #
+                    # 'chalk' = $null                             # 这意味着将安装 chalk 最晚的版本，即 chalk@latest 。
+                    # 'chalk' = @($null)                          # 这意味着将安装 chalk 最晚的版本，即 chalk@latest 。
+                    # 'chalk' = 'latest'                          # 这意味着将安装 chalk 最晚的版本，即 chalk@latest 。
+                    #
+                    # 'vue' = @('^2', '不打算迁移至 Vuejs 3。')   # 这意味着将安装 vue 的 `v2.x.x` 版，即 vue@^2 。
+                    #
+                    # 'vue' = @(  2,  '不打算迁移至 Vuejs 3。')   # 这意味着将安装 vue 的 `v2.x.x` 版，即 vue@^2 。
+                    #                                             # 但像这样采用整型（Int32）而不是文本型（String）的写法并不好。
+                    #                                             # 类似的，采用浮点型（Double）的写法（例如 2.6 ）也不好。
+                    #                                             # 推荐总是采用文本型。例如 '2' 、'2.6' 。
+                    #
+                    # - - - 以下均是错误的写法 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+                    #
+                    # 'glob' = ($null, '我想升级到最新版本。')    # 这样写，【甲】将报错并退出！
+                    #                                             # 原因：该写法并没有锁定 glob 的版本范围，确给出了所谓 “原因” 。
+                    #                                             # 【甲】要求不锁定版本范围则不应给出原因。如此严格的要求，是故意为之。
+                    #                                             # 谨防出现 “原本想锁定版本范围却忘记配置版本” 的情形。
+                    #
+                    # 'glob' = 1.1.2                              # 这种写法不正确！但【甲】不会报错！
+                    #                                             # 因为，此处 1.1.2 的这种写法，
+                    #                                             # PowerShell 不会将其理解为文本（string），
+                    #                                             # 而是理解为无效的浮点数（Double），进而替换为 $null 值。
+                    #                                             # 由是，【甲】无从获得 '1.1.2' ，而只能获得 $null ，并自动将 $null 理解为 'latest' 。
+
+
+
+                    # 如果 @wulechuan/cli-scripts--npm-project-helpers 工具集随附的 JavaScript 程序运行如期，
+                    # 其将在此处插入当前 npm 项目的【产品级】依赖包的列表。    另，切勿改动该行。该行之部分文字是供 JavaScript 程序识别的特殊记号。
+
+                    'chalk'        = $null
+                    'fs-extra'     = $null
                     'jsonc-parser' = $null
                 }
             }
@@ -71,8 +104,11 @@ PROCESS {
                 这批依赖包之依赖类别 = '本产品仅会在研发阶段借助这些软件'
 
                 这批依赖包之安装版本配置集 = @{
+                    # 如果 @wulechuan/cli-scripts--npm-project-helpers 工具集随附的 JavaScript 程序运行如期，
+                    # 其将在此处插入当前 npm 项目的【研发级】依赖包的列表。    另，切勿改动该行。该行之部分文字是供 JavaScript 程序识别的特殊记号。
+
                     '@wulechuan/cli-scripts--git-push' = $null
-                    'eslint' = $null
+                    'eslint'                           = $null
                 }
             }
         )

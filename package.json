@@ -19,7 +19,7 @@
     "jsonc-parser": "^3.0.0"
   },
   "devDependencies": {
-    "@wulechuan/cli-scripts--git-push": "^6.0.0",
+    "@wulechuan/cli-scripts--git-push": "^6.0.1",
     "eslint": "^8.16.0"
   },
   "homepage": "https://github.com/wulechuan/wulechuan--cli-scripts--npm-project-helpers#readme",

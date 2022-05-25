@@ -1,6 +1,10 @@
 #!/bin/bash
 
-source  './node_modules\@wulechuan\cli-scripts--npm-project-helpers\源代码/发布的源代码/bash/吴乐川-管理某-npm-项目的依赖包等资源.sh'
+# 下方这一行的写法专门针对本工具集自身，不适应于其他任何 npm 项。
+source  './源代码/发布的源代码/bash/吴乐川-管理某-npm-项目的依赖包等资源.sh'
+
+# 在采用本工具集的其他 npm 项目中，应这样写：
+# source  './node_modules\@wulechuan\cli-scripts--npm-project-helpers\源代码/发布的源代码/bash/吴乐川-管理某-npm-项目的依赖包等资源.sh'
 
 
 
@@ -33,6 +37,11 @@ Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依�
 # 如果 @wulechuan/cli-scripts--npm-project-helpers 工具集随附的 JavaScript 程序运行如期，
 # 其将在此处插入当前 npm 项目的【产品级】、【可自由采取其版本】的依赖包的列表。    另，切勿改动该行。该行之部分文字是供 JavaScript 程序识别的特殊记号。
 
+npm  i \
+    chalk@latest \
+    fs-extra@latest \
+    jsonc-parser@latest
+
 Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为最晚版本  --is-ending
 
 
@@ -49,6 +58,8 @@ Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依�
 
 # 如果 @wulechuan/cli-scripts--npm-project-helpers 工具集随附的 JavaScript 程序运行如期，
 # 其将在此处插入当前 npm 项目的【产品级】、【须锁定其版本范围】依赖包的列表。    另，切勿改动该行。该行之部分文字是供 JavaScript 程序识别的特殊记号。
+
+echo  '暂无。'
 
 Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为特定版本  --is-ending
 
@@ -69,6 +80,10 @@ Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依�
 # 如果 @wulechuan/cli-scripts--npm-project-helpers 工具集随附的 JavaScript 程序运行如期，
 # 其将在此处插入当前 npm 项目的【研发级】、【可自由采取其版本】依赖包的列表。    另，切勿改动该行。该行之部分文字是供 JavaScript 程序识别的特殊记号。
 
+npm  i  -D \
+    @wulechuan/cli-scripts--git-push@latest \
+    eslint@latest
+
 Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为最晚版本  --is-ending
 
 
@@ -85,6 +100,8 @@ Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依�
 
 # 如果 @wulechuan/cli-scripts--npm-project-helpers 工具集随附的 JavaScript 程序运行如期，
 # 其将在此处插入当前 npm 项目的【研发级】、【须锁定其版本范围】依赖包的列表。    另，切勿改动该行。该行之部分文字是供 JavaScript 程序识别的特殊记号。
+
+echo  '暂无。'
 
 Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为特定版本  --is-ending
 

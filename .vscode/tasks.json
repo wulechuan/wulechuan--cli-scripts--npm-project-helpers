@@ -33,12 +33,12 @@
             "group": "none",
             "problemMatcher": []
         },
-        // {
-        //     "label": "将代码依次推送至多个集得源（Bash）",
-        //     "type": "shell",
-        //     "command": "bash  -c 'source  ./用于研发阶段的命令行工具集/bash/push-将代码依次推送至多个集得源.sh'",
-        //     "group": "none",
-        //     "problemMatcher": []
-        // }
+        {
+            "type": "shell",
+            "command": "bash  -c 'source  ./用于研发阶段的命令行工具集/bash/push-将代码依次推送至多个集得源.sh'",
+            "group": "none",
+            "problemMatcher": [],
+            "label": "将代码依次推送至多个集得源（Bash）"
+        }
     ]
 }
