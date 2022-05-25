@@ -344,7 +344,7 @@ function vscode_tasksJSON_自动配置功能之主体 ({
         任务列表经本次处理后已有改动 = 确保某_vscode_任务存在({
             本工具集一切命令行消息之前缀,
             任务列表: tasks,
-            任务标签: '更新所有 npm 依赖包至最新版本（PowerShell）',
+            任务标签: '更新所有 npm 依赖包至允许范围内的最新版本（PowerShell）',
             拟采纳的任务定义: {
                 type: 'shell',
 
@@ -379,7 +379,7 @@ function vscode_tasksJSON_自动配置功能之主体 ({
         任务列表经本次处理后已有改动 = 确保某_vscode_任务存在({
             本工具集一切命令行消息之前缀,
             任务列表: tasks,
-            任务标签: '将代码依次推送至多个集得源（Bash）',
+            任务标签: '更新所有 npm 依赖包至允许范围内的最新版本（Bash）',
             拟采纳的任务定义: {
                 type: 'shell',
 
