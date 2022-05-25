@@ -674,10 +674,11 @@ function ConvertTo-_吴乐川管理某_npm_项目__新装或升级依赖包__内
 
             [string]${private:某依赖包之版本配置} = ''
             [string]${private:某依赖包之锁定版本范围之原因} = "${private:措辞_未注明须锁定版本范围的原因}"
+            # Write-Host "`e[33m`"${private:某依赖包之名称}`"： `${private:某依赖包之原始扼要配置} ${private:某依赖包之原始扼要配置}`e[0;0m"
 
 
 
-            if (${private:某依赖包之原始扼要配置}) {
+            if (${private:某依赖包之原始扼要配置} -or (${private:某依赖包之原始扼要配置} -eq 0)) {
                 ${private:某依赖包之原始扼要配置之值类型} = ${private:某依赖包之原始扼要配置}.GetType()
                 # Write-Host "`e[33m`"${private:某依赖包之名称}`"： `${private:某依赖包之原始扼要配置}.GetType() ${private:某依赖包之原始扼要配置之值类型}`e[0;0m"
 
