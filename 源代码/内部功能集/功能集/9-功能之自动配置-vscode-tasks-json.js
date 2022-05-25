@@ -356,7 +356,7 @@ function vscode_tasksJSON_自动配置功能之主体 ({
                         '\'',
 
                         '.',
-                        `.\\${用于研发阶段的命令行工具集_这一文件夹之相对路径_用于调用某_PowerShell}`,
+                        `\\${用于研发阶段的命令行工具集_这一文件夹之相对路径_用于调用某_PowerShell}`,
                         '\\PowerShell',
                         '\\Update-更新所有-npm-依赖包至允许范围内的最新版本.ps1',
                         '  -安装之前应先删除旧有的_node_modules_文件夹',
