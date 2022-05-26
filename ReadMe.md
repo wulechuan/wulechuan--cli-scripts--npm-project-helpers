@@ -203,7 +203,7 @@ npm i -D 壬@3.2.1 鬼@9.8.7
 
 
 
-##### PowerShell 环境中的简易用法示例
+##### PowerShell 环境中的简易用法示例 1
 
 ```ps1
 [string]${script:吴乐川的模块的路径} = '.\node_modules\@wulechuan\cli-scripts--npm-project-helpers\源代码\发布的源代码\PowerShell'
@@ -260,6 +260,148 @@ ${private:本产品所有的_npm_依赖包的安装版本配置总表} | Update-
 ```
 
 
+##### PowerShell 环境中的简易用法示例 2
+
+再举一个稍复杂的例子。本例来自我为某陈旧项目所作的真实配置。
+
+```ps1
+# 本例来自我为某陈旧项目所作的真实配置。
+#
+# 不妨指出，该例仅是片段，并非全文。
+# 虽为片段，仍可以在 PowerShell 环境中运行，不会报错。
+# 但徒有此片段则并无实用价值。故从实用角度出发可视本片段为 “ 不可运转 ” 。
+# 本片段须代入上例中更 “ 真实 ” 的 PowerShell 文件方具实用价值。
+
+${private:本产品所有的_npm_依赖包的安装版本配置总表} = @(
+    @{
+        # 取 '本产品拟囊括这些软件之整体或部分' ，
+        # 说白了就是在安装这些依赖包时，会采取该命令：
+        #     npm  install ，而不带 --save-dev 之参数。
+        这批依赖包之依赖类别 = '本产品拟囊括这些软件之整体或部分'
+
+        这批依赖包之安装版本配置集 = @{
+            # 如果 @wulechuan/cli-scripts--npm-project-helpers 工具集随附的 JavaScript 程序运行如期，
+            # 其将在此处插入当前 npm 项目的【产品级】依赖包的列表。    另，切勿改动该行。该行之部分文字是供 JavaScript 程序识别的特殊记号。
+
+            '@riophae/vue-treeselect'           = $null
+            '@wulechuan/echarts-vue2-component' = $null
+            'axios'                             = $null
+            'clipboard'                         = $null
+            'core-js'                           = $null
+            'echarts'                           = $null
+            'element-ui'                        = $null
+            'file-saver'                        = $null
+            'fuse.js'                           = $null
+            'highlight.js'                      = @('^10')
+            'js-beautify'                       = $null
+            'js-cookie'                         = $null
+            'jsencrypt'                         = $null
+            'normalize.css'                     = $null
+            'nprogress'                         = $null
+            'quill'                             = $null
+            'screenfull'                        = ('^5')
+            'sheetjs-style'                     = $null
+            'sheetjs-style-v2'                  = $null
+            'sortablejs'                        = $null
+            'vue'                               = ('^2',    '不打算迁移至 Vuejs 3。')
+            'vue-count-to'                      = $null
+            'vue-cropper'                       = $null
+            'vue-quill-editor'                  = $null
+            'vue-router'                        = ('~3.4',  'vue-router 即便升级到区区 v3.5.x 版， vueRouterInstance.addRoute 也会报错。只能停留在 v3.4.x ，目前是 v3.4.9 。')
+            'vuedraggable'                      = $null
+            'vuex'                              = ('^3')
+
+            'xlsx'                              = ('~0.17', (@( # 提醒 PowerShell 新手，这里列表外层的括弧不可省略。
+                    "xlsx 如果更新到 v0.18.x 版，那么所有相关的导入语句须"
+                    "     改写为 `“ import * as XLSX from 'xlsx' `”。"
+                    ""
+                    "如果停留在 v0.17.x 版，则导入语句维持不变，即"
+                    "     为 `“ import XLSX from 'xlsx' `”。"
+                    "为求稳妥，暂不升级至 v0.18.x 版。"
+                ) -join "`n")
+            )
+
+            'xlsx-js-style'                     = $null
+            'xlsx-style'                        = $null
+        }
+    }
+
+
+
+    @{
+        # 取 '本产品仅会在研发阶段借助这些软件' ，
+        # 说白了就是在安装这些依赖包时，会采取该命令：
+        #     npm  install  --save-dev 。
+        这批依赖包之依赖类别 = '本产品仅会在研发阶段借助这些软件'
+
+        这批依赖包之安装版本配置集 = @{
+            # 如果 @wulechuan/cli-scripts--npm-project-helpers 工具集随附的 JavaScript 程序运行如期，
+            # 其将在此处插入当前 npm 项目的【研发级】依赖包的列表。    另，切勿改动该行。该行之部分文字是供 JavaScript 程序识别的特殊记号。
+
+            '@vue/cli-plugin-babel'                 = @('~4.4')
+            '@vue/cli-plugin-eslint'                = @('~4.4')
+            '@vue/cli-service'                      = @('~4.4')
+            '@wulechuan/cli-scripts--git-push'      = $null
+            '@wulechuan/css-stylus-markdown-themes' = $null
+            'babel-eslint'                          = $null
+            'chalk'                                 = $null
+            'connect'                               = $null
+
+            'eslint'                                = @('^6', (@( # 提醒 PowerShell 新手，这里列表外层的括弧不可省略。
+                    "若安装 eslint@8 则无法正常运转。"
+                    "安装 eslint@7.x 可以正常运转，但在凭借本文件安装时，会有不兼容之警告；而直接 npm i 却又没有警告。"
+                    "安装 eslint@6.x 则完全无问题。"
+                ) -join "`n")
+            )
+
+            'eslint-plugin-vue'                     = @('^6', '同 eslint 。')
+
+            'lint-staged'                           = $null
+            'runjs'                                 = $null
+
+            'sass'                                  = @('~1.32', (@( # 提醒 PowerShell 新手，这里列表外层的括弧不可省略。
+                    "sass@1.43.x 或更晚版本在运行期间会在命令行终端"
+                    "            报 `“ 斜杠作为分隔符或除号有潜在歧义 `” 的错误。且消息是彩色的。"
+                    "`n"
+                    "sass@1.33.x 运行期间也会在命令行终端报上述错误，但消息是单色的。"
+                    "sass@1.32.x 或更旧的版本在运行期间不会给出上述警告。"
+                    "`n"
+                    "顺便指出，上述警告涉及的 Sass 旧语法都来自 ElementUI ，"
+                    "而非我们的代码。所以我们无能为力。"
+                    "`n"
+                    "总之，即便安装当下最新的 sass@1.51.0 ，最终构建的应用也看不出什么异常。"
+                    "但程序员须忍受大量的警告信息。"
+                    "若要避免警告信息，则必须安装 sass@1.32.x 或更旧的版本。"
+                ) -join "")
+            )
+
+            'sass-loader'                           = @('^10', (@( # 提醒 PowerShell 新手，这里列表外层的括弧不可省略。
+                    "若安装 sass-loader@11 或更晚版本，则在凭借本文将安装时，"
+                    "或警告 webpack 不应低于第 5 版。但实际运转看不出异常。"
+                    "换句话说，sass-loader@10 会锁定 webpack@4 ，"
+                    "这二者搭配，则安装依赖包时不会有不兼容之警告。"
+                ) -join "`n")
+            )
+
+            'script-ext-html-webpack-plugin'        = $null
+            'svg-sprite-loader'                     = $null
+
+            'vue-template-compiler'                 = @('^2', (@( # 提醒 PowerShell 新手，这里列表外层的括弧不可省略。
+                    "vue-template-compiler 必须与【产品依赖包】中"
+                    "的 vue 的版本`“严格一致，不差分毫`”。"
+                    "否则在运行期间会遭遇 `“ parseComponent `” 的错误。"
+                ) -join "`n")
+            )
+
+            # - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+            'webpack'                               = @('^4', '因 sass-loader 有此要求。')
+        }
+    }
+)
+```
+
+
+
 ##### 在 PowerShell 环境中为诸 npm 依赖包配置版本范围
 
 由上例可见，在 PowerShell 环境中，为一组 npm 依赖包配置版本范围，关键是配置 PowerShell 的 `HashTable` 。配置时，需尊照本人设计的数据结构，或者说本人设计的规则。
@@ -298,6 +440,8 @@ ${private:本产品所有的_npm_依赖包的安装版本配置总表} | Update-
                 #                                             # 类似的，采用浮点型（Double）的写法（例如 2.6 ）也不好。
                 #                                             # 推荐总是采用文本型。例如 '2' 、'2.6' 。
                 #
+                # 'through2' = 0                              # 【本程序】对数字【零】做了特别关照，将其理解为 '0' 。npm 进而将其理解为 '^0.0.0' 。
+                #
                 # - - - 以下均是错误的写法 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                 #
                 # 'glob' = ($null, '我想升级到最新版本。')    # 这样写，【本程序】将报错并退出！
@@ -310,8 +454,6 @@ ${private:本产品所有的_npm_依赖包的安装版本配置总表} | Update-
                 #                                             # PowerShell 不会将其理解为文本（string），
                 #                                             # 而是理解为无效的浮点数（Double），进而替换为 $null 值。
                 #                                             # 由是，【本程序】无从获得 '1.1.2' ，而只能获得 $null ，并自动将 $null 理解为 'latest' 。
-                #
-                # 'through2' = 0                              # 【本程序】对数字【零】做了特别关照，将其理解为 '0' 。npm 进而将其理解为 '^0.0.0' 。
             }
         }
 
