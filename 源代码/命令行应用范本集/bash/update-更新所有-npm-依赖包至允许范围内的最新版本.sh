@@ -169,6 +169,7 @@ function 完整流程  {
             # echo -e "\e[33m以下是一个 JavaScript 对象。\e[0;0m"
             # echo
             # echo '{'
+
             # Write-吴乐川打印_JSON_键          -Indent 1 '爷爷' -ValueIsObject
             # Write-吴乐川打印_JSON_键          -Indent 2 '葫芦娃' -ValueIsObject
             # echo
@@ -178,7 +179,8 @@ function 完整流程  {
             # Write-乐川打印_JSON_值_文本型      -IsValueOfLastKey '力娃子'
             # Write-吴乐川打印_JSON_某字典结束    -Indent 2
             # Write-吴乐川打印_JSON_某字典结束    -Indent 1
-            # Write-吴乐川打印_JSON_某字典结束    -Indent 0
+
+            # echo '}'
 
             # ───────────────────────────
 
