@@ -1,10 +1,11 @@
 #!/bin/bash
 
 # 下方这一行的写法专门针对本工具集自身，不适应于其他任何 npm 项。
+source  './源代码/发布的源代码/bash/吴乐川-打印-json.sh'
 source  './源代码/发布的源代码/bash/吴乐川-管理某-npm-项目的依赖包等资源.sh'
 
 # 在采用本工具集的其他 npm 项目中，应这样写：
-# source  './node_modules\@wulechuan\cli-scripts--npm-project-helpers\源代码/发布的源代码/bash/吴乐川-管理某-npm-项目的依赖包等资源.sh'
+# source  './node_modules/@wulechuan/cli-scripts--npm-project-helpers/源代码/发布的源代码/bash/吴乐川-管理某-npm-项目的依赖包等资源.sh'
 
 
 
@@ -286,7 +287,7 @@ function 完整流程  {
 
     Write-吴乐川管理某_npm_项目__打印提示语__其他交代  --dry-run $ShouldDryRun
 
-    if true; then
+    if false; then
 
         echo  '暂无。'
 
@@ -300,6 +301,20 @@ function 完整流程  {
             # ───────────────────────────
 
             [ 0 ]
+
+            echo -e "\e[33m以下是一个 JavaScript 对象。\e[0;0m"
+            echo
+            echo '{'
+            Write-吴乐川打印_JSON_键          -Indent 1 '爷爷' -ValueIsObject
+            Write-吴乐川打印_JSON_键          -Indent 2 '葫芦娃' -ValueIsObject
+            echo
+            Write-吴乐川打印_JSON_注释_并换行  -Indent 3 '// 实验证明，截止 2022-05-26 ，'
+            Write-吴乐川打印_JSON_注释_并换行  -Indent 3 '// 大娃必须是力娃子。'
+            Write-吴乐川打印_JSON_键          -Indent 3 '大娃'
+            Write-乐川打印_JSON_值_文本型      -IsValueOfLastKey '力娃子'
+            Write-吴乐川打印_JSON_某字典结束    -Indent 2
+            Write-吴乐川打印_JSON_某字典结束    -Indent 1
+            Write-吴乐川打印_JSON_某字典结束    -Indent 0
 
             # ───────────────────────────
 

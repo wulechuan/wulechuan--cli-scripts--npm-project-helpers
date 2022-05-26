@@ -160,13 +160,28 @@ PROCESS {
 
         Write-吴乐川管理某_npm_项目__打印提示语__其他交代  -应仅作仿真演练:$应仅作仿真演练
 
-        if ($true) {
+        if ($false) {
 
             Write-Host  '暂无。'
 
         } else {
 
             # 此处不妨做些关于当前 npm 项目的必要交代。例如注意事项、关键步骤等等。
+
+            Write-Host -F 'Yellow' '以下是一个 JavaScript 对象。'
+            Write-Host
+
+            Write-Host '{'
+            Write-吴乐川打印_JSON_键          -Indent 1 '爷爷' -ValueIsObject
+            Write-吴乐川打印_JSON_键          -Indent 2 '葫芦娃' -ValueIsObject
+            Write-Host
+            Write-吴乐川打印_JSON_注释_并换行  -Indent 3 '// 实验证明，截止 2022-05-26 ，'
+            Write-吴乐川打印_JSON_注释_并换行  -Indent 3 '// 大娃必须是力娃子。'
+            Write-吴乐川打印_JSON_键          -Indent 3 '大娃'
+            Write-吴乐川打印_JSON_值_文本型    -IsValueOfLastKey '力娃子'
+            Write-吴乐川打印_JSON_某字典结束    -Indent 2
+            Write-吴乐川打印_JSON_某字典结束    -Indent 1
+            Write-吴乐川打印_JSON_某字典结束    -Indent 0
 
         }
 
@@ -213,6 +228,7 @@ BEGIN {
     # 在采用本工具集的其他 npm 项目中，应这样写：
     # [string]${script:吴乐川的模块的路径} = '.\node_modules\@wulechuan\cli-scripts--npm-project-helpers\源代码\发布的源代码\PowerShell'
 
+    Import-Module  "${script:吴乐川的模块的路径}\吴乐川-打印-json.psm1"
     Import-Module  "${script:吴乐川的模块的路径}\吴乐川-数据处理-文本.psm1"
     Import-Module  "${script:吴乐川的模块的路径}\吴乐川-管理某-npm-项目的依赖包等资源.psm1"
 }
