@@ -347,6 +347,9 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_
     if [ $ShouldRunThisTask -eq 1 ]; then
         if [ -d .'/node_modules' ]; then
             if [ "$ShouldDryRun" -eq 0 ]; then
+                echo  -e  "\e[0;31m正在删除 node_modules 文件夹。\e[0;0m"
+                echo
+
                 rm  -rf  .'/node_modules'
 
                 if [ $? -gt 0 ]; then

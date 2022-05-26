@@ -43,7 +43,31 @@
 
 **本工具集有“实用价值不高”之嫌，但它们满足了我个人的癖好。**
 
+#### 运行截屏
 
+1.  ![吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_01](./文档集/插图集/吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_01.png)
+1.  ![吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_02](./文档集/插图集/吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_02.png)
+1.  ![吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_03](./文档集/插图集/吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_03.png)
+1.  ![吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_04](./文档集/插图集/吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_04.png)
+1.  ![吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_05](./文档集/插图集/吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_05.png)
+
+如果图片加载太慢，或干脆打不开。不妨改为在以下地方查阅这些图片。
+
+-   中国大陆境内者推荐查阅《码云》上存放的图片。
+
+    1.  《[吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_01](https://gitee.com/nanchang-wulechuan/wulechuan--cli-scripts--npm-project-helpers/blob/master/文档集/插图集/吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_01.png)》，
+    1.  《[吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_02](https://gitee.com/nanchang-wulechuan/wulechuan--cli-scripts--npm-project-helpers/blob/master/文档集/插图集/吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_02.png)》，
+    1.  《[吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_03](https://gitee.com/nanchang-wulechuan/wulechuan--cli-scripts--npm-project-helpers/blob/master/文档集/插图集/吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_03.png)》，
+    1.  《[吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_04](https://gitee.com/nanchang-wulechuan/wulechuan--cli-scripts--npm-project-helpers/blob/master/文档集/插图集/吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_04.png)》，
+    1.  《[吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_05](https://gitee.com/nanchang-wulechuan/wulechuan--cli-scripts--npm-project-helpers/blob/master/文档集/插图集/吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_05.png)》。
+
+-   存放于《GitHub》上的图片。
+
+    1.  《[吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_01](https://github.com/wulechuan/wulechuan--cli-scripts--npm-project-helpers/blob/master/文档集/插图集/吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_01.png)》，
+    1.  《[吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_02](https://github.com/wulechuan/wulechuan--cli-scripts--npm-project-helpers/blob/master/文档集/插图集/吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_02.png)》，
+    1.  《[吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_03](https://github.com/wulechuan/wulechuan--cli-scripts--npm-project-helpers/blob/master/文档集/插图集/吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_03.png)》，
+    1.  《[吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_04](https://github.com/wulechuan/wulechuan--cli-scripts--npm-project-helpers/blob/master/文档集/插图集/吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_04.png)》，
+    1.  《[吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_05](https://github.com/wulechuan/wulechuan--cli-scripts--npm-project-helpers/blob/master/文档集/插图集/吴乐川的_npm_项目依赖包管理工具运行截屏_2022-05-26_05.png)》。
 
 
 
@@ -262,7 +286,7 @@ ${private:本产品所有的_npm_依赖包的安装版本配置总表} | Update-
 
 ##### PowerShell 环境中的简易用法示例 2
 
-再举一个稍复杂的例子。本例来自我为某陈旧项目所作的真实配置。
+再举一个稍复杂的例子。本例来自我为某陈旧项目所作的真实配置。参见上文《[运行截屏](#运行截屏)》。
 
 ```ps1
 # 本例来自我为某陈旧项目所作的真实配置。
@@ -314,11 +338,12 @@ ${private:本产品所有的_npm_依赖包的安装版本配置总表} = @(
             'xlsx'                              = ('~0.17', (@( # 提醒 PowerShell 新手，这里列表外层的括弧不可省略。
                     "xlsx 如果更新到 v0.18.x 版，那么所有相关的导入语句须"
                     "     改写为 `“ import * as XLSX from 'xlsx' `”。"
-                    ""
+                    "`n"
                     "如果停留在 v0.17.x 版，则导入语句维持不变，即"
                     "     为 `“ import XLSX from 'xlsx' `”。"
+                    "`n"
                     "为求稳妥，暂不升级至 v0.18.x 版。"
-                ) -join "`n")
+                ) -join "")
             )
 
             'xlsx-js-style'                     = $null
@@ -349,9 +374,11 @@ ${private:本产品所有的_npm_依赖包的安装版本配置总表} = @(
 
             'eslint'                                = @('^6', (@( # 提醒 PowerShell 新手，这里列表外层的括弧不可省略。
                     "若安装 eslint@8 则无法正常运转。"
+                    "`n"
                     "安装 eslint@7.x 可以正常运转，但在凭借本文件安装时，会有不兼容之警告；而直接 npm i 却又没有警告。"
+                    "`n"
                     "安装 eslint@6.x 则完全无问题。"
-                ) -join "`n")
+                ) -join "")
             )
 
             'eslint-plugin-vue'                     = @('^6', '同 eslint 。')
@@ -364,6 +391,7 @@ ${private:本产品所有的_npm_依赖包的安装版本配置总表} = @(
                     "            报 `“ 斜杠作为分隔符或除号有潜在歧义 `” 的错误。且消息是彩色的。"
                     "`n"
                     "sass@1.33.x 运行期间也会在命令行终端报上述错误，但消息是单色的。"
+                    "`n"
                     "sass@1.32.x 或更旧的版本在运行期间不会给出上述警告。"
                     "`n"
                     "顺便指出，上述警告涉及的 Sass 旧语法都来自 ElementUI ，"
@@ -380,7 +408,7 @@ ${private:本产品所有的_npm_依赖包的安装版本配置总表} = @(
                     "或警告 webpack 不应低于第 5 版。但实际运转看不出异常。"
                     "换句话说，sass-loader@10 会锁定 webpack@4 ，"
                     "这二者搭配，则安装依赖包时不会有不兼容之警告。"
-                ) -join "`n")
+                ) -join "")
             )
 
             'script-ext-html-webpack-plugin'        = $null
@@ -390,7 +418,7 @@ ${private:本产品所有的_npm_依赖包的安装版本配置总表} = @(
                     "vue-template-compiler 必须与【产品依赖包】中"
                     "的 vue 的版本`“严格一致，不差分毫`”。"
                     "否则在运行期间会遭遇 `“ parseComponent `” 的错误。"
-                ) -join "`n")
+                ) -join "")
             )
 
             # - - - - - - - - - - - - - - - - - - - - - - - - - - - 

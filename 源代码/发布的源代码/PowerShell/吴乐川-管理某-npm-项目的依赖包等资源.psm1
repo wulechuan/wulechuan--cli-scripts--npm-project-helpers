@@ -291,6 +291,9 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_
         if (Test-Path "${private:node_modules_的路径}") {
 
             if (-not $应仅作仿真演练) {
+                Write-Host  -F 'Red' '正在删除 node_modules 文件夹。'
+                Write-Host
+
                 Remove-Item  -Recurse  -Force  -Path "${private:node_modules_的路径}"
 
                 if (-not $?) {
