@@ -133,11 +133,23 @@ PROCESS {
 
         } else {
 
-            # if (${script:应仅作仿真演练}) {
-            #     Write-Host  '   【仿真演练】 npx  browserslist@latest  --update-db'
-            # } else {
-            #     npx  browserslist@latest  --update-db
-            # }
+            # ───────────────────────────
+
+            if ($false) {
+                if (${script:应仅作仿真演练}) {
+                    Write-Host  -NoNewline  "   【仿真演练】`n    "
+                }
+
+                Write-Host  'npx  browserslist@latest  --update-db'
+
+                if (-not ${script:应仅作仿真演练}) {
+                    npx  browserslist@latest  --update-db
+                }
+
+                Write-Host
+            }
+
+            # ───────────────────────────
 
         }
 

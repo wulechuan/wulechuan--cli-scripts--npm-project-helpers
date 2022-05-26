@@ -264,14 +264,27 @@ function 完整流程  {
 
     else
 
-        if [ $ShouldDryRun -eq 1 ]; then
+        # ───────────────────────────
 
-            # ───────────────────────────
-            # npx  browserslist@latest  --update-db
-            [ 0 ]
-            # ───────────────────────────
+        # [ 0 ]        # 当本 else 语句块中没有其它语句时，这句必须存在。
 
+        # ───────────────────────────
+
+        if false; then
+            if [ $ShouldDryRun -eq 1 ]; then
+                echo  -en  "   【仿真演练】\n    "
+            fi
+
+            echo  'npx  browserslist@latest  --update-db'
+
+            if [ $ShouldDryRun -eq 0 ]; then
+                npx  browserslist@latest  --update-db
+            fi
+
+            echo
         fi
+
+        # ───────────────────────────
 
     fi
 
@@ -295,32 +308,30 @@ function 完整流程  {
 
     else
 
-        if [ $ShouldDryRun -eq 1 ]; then
+        # ───────────────────────────
+        # 此处不妨做些关于当前 npm 项目的必要交代。
+        # 例如注意事项、关键步骤等等。
+        # ───────────────────────────
 
-            # ───────────────────────────
-            # 此处不妨做些关于当前 npm 项目的必要交代。
-            # 例如注意事项、关键步骤等等。
-            # ───────────────────────────
+        # [ 0 ]        # 当本 else 语句块中没有其它语句时，这句必须存在。
 
-            [ 0 ]
+        # ───────────────────────────
 
-            echo -e "\e[33m以下是一个 JavaScript 对象。\e[0;0m"
-            echo
-            echo '{'
-            Write-吴乐川打印_JSON_键          -Indent 1 '爷爷' -ValueIsObject
-            Write-吴乐川打印_JSON_键          -Indent 2 '葫芦娃' -ValueIsObject
-            echo
-            Write-吴乐川打印_JSON_注释_并换行  -Indent 3 '// 实验证明，截止 2022-05-26 ，'
-            Write-吴乐川打印_JSON_注释_并换行  -Indent 3 '// 大娃必须是力娃子。'
-            Write-吴乐川打印_JSON_键          -Indent 3 '大娃'
-            Write-乐川打印_JSON_值_文本型      -IsValueOfLastKey '力娃子'
-            Write-吴乐川打印_JSON_某字典结束    -Indent 2
-            Write-吴乐川打印_JSON_某字典结束    -Indent 1
-            Write-吴乐川打印_JSON_某字典结束    -Indent 0
+        echo -e "\e[33m以下是一个 JavaScript 对象。\e[0;0m"
+        echo
+        echo '{'
+        Write-吴乐川打印_JSON_键          -Indent 1 '爷爷' -ValueIsObject
+        Write-吴乐川打印_JSON_键          -Indent 2 '葫芦娃' -ValueIsObject
+        echo
+        Write-吴乐川打印_JSON_注释_并换行  -Indent 3 '// 实验证明，截止 2022-05-26 ，'
+        Write-吴乐川打印_JSON_注释_并换行  -Indent 3 '// 大娃必须是力娃子。'
+        Write-吴乐川打印_JSON_键          -Indent 3 '大娃'
+        Write-吴乐川打印_JSON_值_文本型    -IsValueOfLastKey '力娃子'
+        Write-吴乐川打印_JSON_某字典结束    -Indent 2
+        Write-吴乐川打印_JSON_某字典结束    -Indent 1
+        Write-吴乐川打印_JSON_某字典结束    -Indent 0
 
-            # ───────────────────────────
-
-        fi
+        # ───────────────────────────
 
     fi
 

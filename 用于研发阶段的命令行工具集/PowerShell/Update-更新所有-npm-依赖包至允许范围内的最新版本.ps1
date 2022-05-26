@@ -141,11 +141,23 @@ PROCESS {
 
         } else {
 
-            # if (${script:应仅作仿真演练}) {
-            #     Write-Host  '   【仿真演练】 npx  browserslist@latest  --update-db'
-            # } else {
-            #     npx  browserslist@latest  --update-db
-            # }
+            # ───────────────────────────
+
+            if ($false) {
+                if (${script:应仅作仿真演练}) {
+                    Write-Host  -NoNewline  "   【仿真演练】`n    "
+                }
+
+                Write-Host  'npx  browserslist@latest  --update-db'
+
+                if (-not ${script:应仅作仿真演练}) {
+                    npx  browserslist@latest  --update-db
+                }
+
+                Write-Host
+            }
+
+            # ───────────────────────────
 
         }
 
@@ -173,6 +185,7 @@ PROCESS {
             Write-Host
 
             Write-Host '{'
+
             Write-吴乐川打印_JSON_键          -Indent 1 '爷爷' -ValueIsObject
             Write-吴乐川打印_JSON_键          -Indent 2 '葫芦娃' -ValueIsObject
             Write-Host
@@ -182,7 +195,8 @@ PROCESS {
             Write-吴乐川打印_JSON_值_文本型    -IsValueOfLastKey '力娃子'
             Write-吴乐川打印_JSON_某字典结束    -Indent 2
             Write-吴乐川打印_JSON_某字典结束    -Indent 1
-            Write-吴乐川打印_JSON_某字典结束    -Indent 0
+
+            Write-Host '}'
 
         }
 
