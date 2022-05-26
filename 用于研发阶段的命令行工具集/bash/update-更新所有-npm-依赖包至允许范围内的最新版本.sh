@@ -68,6 +68,7 @@ function 完整流程  {
         fi
 
         echo  '    npm  i \'
+        echo  '        @wulechuan/text-basic-typography@latest \'
         echo  '        chalk@latest \'
         echo  '        fs-extra@latest \'
         echo  '        jsonc-parser@latest'
@@ -82,6 +83,7 @@ function 完整流程  {
 
             # ───────────────────────────
             npm  i \
+                @wulechuan/text-basic-typography@latest \
                 chalk@latest \
                 fs-extra@latest \
                 jsonc-parser@latest

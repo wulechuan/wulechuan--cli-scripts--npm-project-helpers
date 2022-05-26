@@ -91,9 +91,10 @@ PROCESS {
                     # 如果 @wulechuan/cli-scripts--npm-project-helpers 工具集随附的 JavaScript 程序运行如期，
                     # 其将在此处插入当前 npm 项目的【产品级】依赖包的列表。    另，切勿改动该行。该行之部分文字是供 JavaScript 程序识别的特殊记号。
 
-                    'chalk'        = $null
-                    'fs-extra'     = $null
-                    'jsonc-parser' = $null
+                    '@wulechuan/text-basic-typography' = $null
+                    'chalk'                            = $null
+                    'fs-extra'                         = $null
+                    'jsonc-parser'                     = $null
                 }
             }
 
