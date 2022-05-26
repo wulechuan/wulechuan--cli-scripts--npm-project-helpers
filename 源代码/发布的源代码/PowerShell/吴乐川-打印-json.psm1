@@ -82,7 +82,7 @@ function Write-吴乐川打印_JSON_值_文本型 {
     )
 
     Write-Host -No    '"'
-    Write-Host -No -F 'White' "$valueOfString"
+    Write-Host -No -F 'Red' "$valueOfString"
     Write-Host -No    '"'
     if (-not $IsValueOfLastKey) {
         Write-Host -No ','

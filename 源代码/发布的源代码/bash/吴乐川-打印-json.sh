@@ -88,7 +88,7 @@ function Write-吴乐川打印_JSON_某字典结束 {
 
 
 
-function Write-JsonArrayEnd {
+function Write-吴乐川打印_JSON_值_某列表结束 {
     local indentLevel=0
 
     if [ "$1" == '-Indent' ]; then
@@ -110,7 +110,7 @@ function Write-JsonArrayEnd {
 
 
 
-function Write-乐川打印_JSON_值_文本型 {
+function Write-吴乐川打印_JSON_值_文本型 {
     local isValueOfLastKey=0
     local value=''
 
@@ -121,7 +121,7 @@ function Write-乐川打印_JSON_值_文本型 {
 
     value="$1"
 
-    echo -en "\"\e[39m${value}\e[0;0m\""
+    echo -en "\"\e[0;91m${value}\e[0;0m\""
 
     if [ ! $isValueOfLastKey ]; then
         echo -n ','
