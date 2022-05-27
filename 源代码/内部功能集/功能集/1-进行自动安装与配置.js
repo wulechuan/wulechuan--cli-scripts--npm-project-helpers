@@ -237,7 +237,23 @@ function 执行全套部署任务 ({
 
 
 
-        return 本工具集一切自动安装与配置任务之内部总接口({
+        return new Promise((落实, 落空) => {
+            const 等待的秒数 = 6
+
+            console.warn(`\n\n${
+                本工具集一切命令行消息之前缀
+            }\n\n    为避免与 “ ${
+                粉笔工具.whiteBright('@wulechuan/cli-scripts--git-push')
+            } ” 抢夺 ${
+                粉笔工具.blueBright('.vscode')
+            } 的 ${
+                粉笔工具.yellow('tasks.json')
+            } 文件，\n    故意等待 ${
+                粉笔工具.cyanBright(等待的秒数)
+            } 秒钟。\n\n`)
+
+            setTimeout(落实, 等待的秒数 * 1000)
+        }).then(() => 本工具集一切自动安装与配置任务之内部总接口({
             应开启调试功能,
 
             粉笔工具,
@@ -271,7 +287,7 @@ function 执行全套部署任务 ({
                     发布本工具集随附的命令行脚本时若覆盖旧有的命令行脚本文件则先行备份,
                 },
             },
-        })
+        }))
     }).catch(传入的工具集 => {
         if (!传入的工具集) { return }
 

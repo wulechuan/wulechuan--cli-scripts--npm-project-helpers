@@ -32,7 +32,7 @@ Promise.all([
     const 一整套测试任务集 = 一整套测试任务集_模块.default
 
     return new Promise((落实, 落空) => {
-        const 等待的秒数 = 3
+        const 等待的秒数 = 1
         应开启调试功能 && console.debug(`\n\n@wulechuan/cli-scripts--npm-project-helpers ： 故意等待 ${等待的秒数} 秒钟。\n\n`)
         setTimeout(落实, 等待的秒数 * 1000)
     }).then(() => 一整套测试任务集({
