@@ -619,49 +619,299 @@ function Write-吴乐川管理某_npm_项目__打印提示语__其他交代 {
 
 
 
-# function Update-吴乐川更新当前_npm_项目的某批依赖包 {
-#     local depsAreOfProductionLevel=0
+function Update-吴乐川更新当前_npm_项目的某批依赖包 {
+    function _打印针对当前处理的参数的错误信息 {
+        local ErrorMessage=$1
 
-#     if [ "$1" == '--这批依赖包之依赖类别' ]; then
-#         shift
+        echo -e "\e[0;31m在命令参数表中的 “ \e[0;97m${_ProcessingArgumentName}\e[0;31m ” 参数：\n    \e[0;33m${ErrorMessage}\e[0;0m"
+    }
 
-#         if [ "$1" == '本产品拟囊括这些软件之整体或部分' ]; then
-#             depsAreOfProductionLevel=1
-#             shift
-#         elif [ "$1" == '本产品仅会在研发阶段借助这些软件' ]; then
-#             depsAreOfProductionLevel=0
-#             shift
-#         else
-#             echo -e "\e[0;31m参数“\e[0;97m--这批依赖包之依赖类别\e[31m”的取值只能是下列之一：\e[0;0m"
-#             echo -e "    '本产品拟囊括这些软件之整体或部分'"
-#             echo -e "    '本产品仅会在研发阶段借助这些软件'"
-#             echo
+    function _打印针对当前处理的依赖包配置参数的错误信息 {
+        local ErrorMessage=$1
 
-#             exit 21
-#         fi
-#     fi
+        echo -e "\e[0;31m在命令参数表中第 \e[0;96m${_IndexOfProcessingConfiguration}\e[0;31m 次出现的 “ \e[0;97m${_ProcessingArgumentName}\e[0;31m ” 参数：\n    \e[0;33m${ErrorMessage}\e[0;0m"
+    }
 
 
 
-
-
-#     if [ $depsAreOfProductionLevel -eq 1 ]; then
-#         Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为最晚版本
-#     else
-#         Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为最晚版本
-#     fi
-
-#     echo -e "\e[41;97m 该功能尚未实现！\e[0;0m" # TODO
+    local DependenciesAreOfCateogryOfProduction='undefined' # 'true' 或其它值。
+    local ShouldDryRun='undefined' # 'true' 或其它值。
+    local DependencyVersionConfigurations=()
 
 
 
+    local _TemporaryArgumentValue
+    local _ProcessingArgumentName
+    local _IndexOfProcessingConfiguration=0
+    local _ProcessedArgumentsCount=0
+    local _CurrentArgumentOrArgumentPairHaveRecognized=0
+
+    while [[ ! -z "$1" && $_ProcessedArgumentsCount -lt 2048 ]]; do
+        echo "[DEBUG]:arg[${_ProcessedArgumentsCount}]='$1'"
+
+        _ProcessedArgumentsCount=$((_ProcessedArgumentsCount+1))
+        _CurrentArgumentOrArgumentPairHaveRecognized=0
+
+        # ---------------------------------------------------------------
+
+        _ProcessingArgumentName='--这批依赖包之依赖类别'
+        _TemporaryArgumentValue=''
+
+        if [ "$1" == "${_ProcessingArgumentName}" ]; then
+            _CurrentArgumentOrArgumentPairHaveRecognized=1
+
+            if [ "$DependenciesAreOfCateogryOfProduction" != 'undefined' ]; then
+                _打印针对当前处理的参数的错误信息  '不应重复出现。〔1〕。'
+                shift
+                return
+            fi
+
+            shift
+
+            if [[ "$1" =~ ^- ]]; then
+                _打印针对当前处理的参数的错误信息  '后面没有给出值。〔1〕。'
+                return
+            fi
+
+            if [ -z "$1" ]; then
+                _打印针对当前处理的参数的错误信息  '后面没有给出值。〔2〕。'
+                return
+            fi
+
+            _TemporaryArgumentValue="$1"
+            shift
+        elif [[ "$1" =~ ^--这批依赖包之依赖类别= ]]; then
+            _CurrentArgumentOrArgumentPairHaveRecognized=1
+
+            if [ "$DependenciesAreOfCateogryOfProduction" != 'undefined' ]; then
+                _打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
+                shift
+                return
+            fi
+
+            _TemporaryArgumentValue=${1:13}
+            shift
+
+            if [ "$_TemporaryArgumentValue" == '0' ]; then
+                _TemporaryArgumentValue='false'
+            elif [ -z "${_TemporaryArgumentValue}" ]; then
+                _打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔3〕。'
+                return
+            fi
+        fi
+
+        if [ ! -z "${_TemporaryArgumentValue}" ]; then
+            if [ "${_TemporaryArgumentValue}" == '本产品拟囊括这些软件之整体或部分' ]; then
+                DependenciesAreOfCateogryOfProduction='true'
+            elif [ "${_TemporaryArgumentValue}" == '本产品仅会在研发阶段借助这些软件' ]; then
+                DependenciesAreOfCateogryOfProduction='false'
+            else
+                _打印针对当前处理的参数的错误信息  '取值只能是下列之一：'
+                echo -e "        '本产品拟囊括这些软件之整体或部分'"
+                echo -e "        '本产品仅会在研发阶段借助这些软件'"
+                echo
+
+                return
+            fi
+        fi
+
+        # ---------------------------------------------------------------
+
+        _ProcessingArgumentName='--应仅作仿真演练'
+        _TemporaryArgumentValue=''
+
+        if [ "$1" == "${_ProcessingArgumentName}" ]; then
+            _CurrentArgumentOrArgumentPairHaveRecognized=1
+
+            if [ "$ShouldDryRun" != 'undefined' ]; then
+                _打印针对当前处理的参数的错误信息  "不应重复出现。〔1〕。已有参数将其配置为 “ \e[0;32m${ShouldDryRun}\e[0;33m ” 。"
+                shift
+                return
+            fi
+
+            ShouldDryRun='true'
+            shift
+
+            if [[ "$1" =~ ^- ]]; then continue; fi
+
+            if [[ -z "$1" ]]; then continue; fi
+
+            _TemporaryArgumentValue="$1"
+            shift
+        elif [[ "$1" =~ ^"${_ProcessingArgumentName}"= ]]; then
+            _CurrentArgumentOrArgumentPairHaveRecognized=1
+
+            if [ "$ShouldDryRun" != 'undefined' ]; then
+                _打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
+                shift
+                return
+            fi
+
+            _TemporaryArgumentValue=${1:${#_ProcessingArgumentName}+1}
+            shift
+
+            if [ "$_TemporaryArgumentValue" == '0' ]; then
+                _TemporaryArgumentValue='false'
+            elif [ -z "$_TemporaryArgumentValue" ]; then
+                _打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔1〕。'
+                return
+            fi
+        fi
+
+        if [ ! -z "${_TemporaryArgumentValue}" ]; then
+            if [ "${_TemporaryArgumentValue}" == 'true' ] || [ "${_TemporaryArgumentValue}" == 'true' ] || [[ "$_TemporaryArgumentValue" =~ ^[01]$ ]]; then
+                ShouldDryRun='true'
+            else
+                ShouldDryRun='false'
+            fi
+        fi
+
+        # ---------------------------------------------------------------
+
+        _ProcessingArgumentName='--某依赖包之版本配置'
+        _TemporaryArgumentValue=''
+
+        if [ "$1" == "${_ProcessingArgumentName}" ]; then
+            _CurrentArgumentOrArgumentPairHaveRecognized=1
+            _IndexOfProcessingConfiguration=$((_IndexOfProcessingConfiguration+1))
+
+            shift
+
+            if [[ "$1" =~ ^- ]]; then
+                _打印针对当前处理的依赖包配置参数的错误信息  '其后面没有给出值。〔1〕。'
+                return
+            fi
+
+            if [ -z "$1" ]; then
+                _打印针对当前处理的依赖包配置参数的错误信息  '其后面没有给出值。〔2〕。'
+                return
+            fi
+
+            _TemporaryArgumentValue="$1"
+            shift
+        elif [[ "$1" =~ ^"${_ProcessingArgumentName}"= ]]; then
+            _CurrentArgumentOrArgumentPairHaveRecognized=1
+            _IndexOfProcessingConfiguration=$((_IndexOfProcessingConfiguration+1))
+
+            _TemporaryArgumentValue=${1:${#_ProcessingArgumentName}+1}
+            shift
+
+            if [ "$_TemporaryArgumentValue" == '0' ]; then
+                _TemporaryArgumentValue='v0'
+            elif [ -z "${_TemporaryArgumentValue}" ]; then
+                _打印针对当前处理的依赖包配置参数的错误信息  '等号（=）后面没有给出值。〔1〕。'
+                return
+            fi
+        fi
+
+        if [ ! -z "${_TemporaryArgumentValue}" ]; then
+            DependencyVersionConfigurations+=( "${_TemporaryArgumentValue}" )
+        fi
+
+        if [ $_CurrentArgumentOrArgumentPairHaveRecognized -eq 0 ]; then
+            echo -e "[DEBUG]:while 语句循环体末尾准备 shift，\e[0;31m丢弃该参数'\e[0;97m$1\e[0;31m'\e[0;0m。"
+            shift
+        fi
+    done
 
 
-#     if [ $depsAreOfProductionLevel -eq 1 ]; then
-#         Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为特定版本
-#     else
-#         Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为特定版本
-#     fi
 
-#     echo -e "\e[41;97m 该功能尚未实现！\e[0;0m" # TODO
-# }
+    if true; then
+        echo
+        echo "[DEBUG]:应仅作仿真演练:   ${ShouldDryRun}"
+        echo "[DEBUG]:依赖包均为产品级: ${DependenciesAreOfCateogryOfProduction}"
+        echo "[DEBUG]:依赖包配置的总数: ${#DependencyVersionConfigurations[@]}"
+        echo
+    fi
+
+
+
+
+
+    local PackageGroupA_Descriptions_PerPackage=()
+    local PackageGroupA_CommandLineSnippet_PerPackage=()
+
+    local PackageGroupB_Descriptions_PerPackage=()
+    local PackageGroupB_CommandLineSnippet_PerPackage=()
+
+
+
+    local _ProcessingPackageName=''
+    local _ProcessingPackageVerionConfig=''
+    local _ProcessingPackageVerionLimitationReason=''
+    local _RestPartOfProcessingPackageConfig=''
+
+    _IndexOfProcessingConfiguration=0
+
+    for _ProcessingPackageConfig in "${DependencyVersionConfigurations[@]}"; do
+        _IndexOfProcessingConfiguration=$((_IndexOfProcessingConfiguration+1))
+        # echo -e "[DEBUG]:Processing Conifg [$_IndexOfProcessingConfiguration]:\n    \"${_ProcessingPackageConfig}\""
+
+        read _RestPartOfProcessingPackageConfig <<< "$_ProcessingPackageConfig"
+
+        _ProcessingPackageName="${_RestPartOfProcessingPackageConfig%% ||| *}"
+
+        read _RestPartOfProcessingPackageConfig <<< "${_RestPartOfProcessingPackageConfig:${#_ProcessingPackageName}+5}"
+
+        _ProcessingPackageVerionConfig="${_RestPartOfProcessingPackageConfig%% ||| *}"
+
+        read _RestPartOfProcessingPackageConfig <<< "${_RestPartOfProcessingPackageConfig:${#_ProcessingPackageVerionConfig}+5}"
+
+        read _ProcessingPackageName <<< "${_ProcessingPackageName}"
+        read _ProcessingPackageVerionConfig <<< "${_ProcessingPackageVerionConfig}"
+        read _ProcessingPackageVerionLimitationReason <<< "${_RestPartOfProcessingPackageConfig}"
+
+        echo -e "[DEBUG]:Processing Package"
+        echo -e "[DEBUG]:              \e[0;92m包名\e[0;0m： \e[0;91m\"\e[0;93m${_ProcessingPackageName}\e[0;91m\"\e[0;0m"
+        echo -e "[DEBUG]:          \e[0;92m版本配置\e[0;0m： \e[0;91m\"\e[0;93m${_ProcessingPackageVerionConfig}\e[0;91m\"\e[0;0m"
+        echo -e "[DEBUG]:    \e[0;92m版本设限之原因\e[0;0m： \e[0;91m\"\e[0;93m${_ProcessingPackageVerionLimitationReason}\e[0;91m\"\e[0;0m"
+    done
+
+    return
+
+
+
+
+
+    if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
+        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为最晚版本  --dry-run $ShouldDryRun
+    else
+        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为最晚版本  --dry-run $ShouldDryRun
+    fi
+
+    echo -e "\e[41;97m 该功能尚未实现！\e[0;0m" # TODO
+
+
+
+
+
+    if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
+        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为特定版本  --dry-run $ShouldDryRun
+    else
+        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为特定版本  --dry-run $ShouldDryRun
+    fi
+
+
+
+
+
+    if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
+        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为最晚版本  --dry-run $ShouldDryRun  --is-ending
+    else
+        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为最晚版本  --dry-run $ShouldDryRun  --is-ending
+    fi
+
+    echo -e "\e[41;97m 该功能尚未实现！\e[0;0m" # TODO
+
+
+
+
+
+    if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
+        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为特定版本  --dry-run $ShouldDryRun  --is-ending
+    else
+        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为特定版本  --dry-run $ShouldDryRun  --is-ending
+    fi
+
+    echo -e "\e[41;97m 该功能尚未实现！\e[0;0m" # TODO
+}

@@ -13,6 +13,13 @@
             "problemMatcher": []
         },
         {
+            "label": "研发",
+            "type": "shell",
+            "command": "bash  -c  'source  ./测试集/测试任务集/研发临时测试代码.sh'",
+            "group": "test",
+            "problemMatcher": []
+        },
+        {
             "label": "更新所有 npm 依赖包至允许范围内的最新版本（PowerShell）",
             "type": "shell",
             "command": "pwsh  -Command  '.\\用于研发阶段的命令行工具集\\PowerShell\\Update-更新所有-npm-依赖包至允许范围内的最新版本.ps1  -安装之前应先删除旧有的_node_modules_文件夹  -安装之前应先删除旧有的_package_lock_json_文件'",
