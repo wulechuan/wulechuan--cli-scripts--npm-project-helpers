@@ -862,7 +862,10 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
         _IndexOfProcessingConfiguration=$((_IndexOfProcessingConfiguration+1))
 
         if [ $SHOULD_DEBUG -eq 1 ]; then
-            echo -e "〔调试〕： Processing Conifg [$_IndexOfProcessingConfiguration]:\n    \"${_ProcessingPackageConfig}\""
+            echo
+            Write-Line
+            echo -e "〔调试〕： Processing Conifg [$_IndexOfProcessingConfiguration]:\n    \"\e[0;30;42m${_ProcessingPackageConfig}\e[0;0m\""
+            Write-Line
         fi
 
 
@@ -944,7 +947,6 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
 
         if [ $SHOULD_DEBUG -eq 1 ]; then
-            Write-Line
             echo -e "〔调试〕：               \e[0;92m包名\e[0;0m： \e[0;91m\"\e[0;93m${_ProcessingPackageName}\e[0;91m\"\e[0;0m"
             echo -e "〔调试〕：           \e[0;92m版本配置\e[0;0m： \e[0;91m\"\e[0;93m${_ProcessingPackageVerionConfig}\e[0;91m\"\e[0;0m"
             echo -e "〔调试〕：     \e[0;92m版本设限之原因\e[0;0m： \e[0;91m\"\e[0;93m${_ProcessingPackageVerionLockReason}\e[0;91m\"\e[0;0m"
@@ -973,10 +975,19 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
                 PackageGroupB_LongestPackageNameLength=$_ProcessingPackageNameLength
             fi
         fi
+
+
+
+        if [ $SHOULD_DEBUG -eq 1 ]; then
+            Write-Line
+            echo
+            echo
+        fi
     done
 
+
+
     if [ $SHOULD_DEBUG -eq 1 ]; then
-        Write-Line
         echo
         echo "〔调试〕： PackageGroupA_LongestPackageNameLength ${PackageGroupA_LongestPackageNameLength}"
         echo "〔调试〕： PackageGroupB_LongestPackageNameLength ${PackageGroupB_LongestPackageNameLength}"
