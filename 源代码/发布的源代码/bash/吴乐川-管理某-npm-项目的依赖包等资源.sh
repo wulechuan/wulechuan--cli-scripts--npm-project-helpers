@@ -620,13 +620,17 @@ function Write-吴乐川管理某_npm_项目__打印提示语__其他交代 {
 
 
 function Update-吴乐川更新当前_npm_项目的某批依赖包 {
+    local SHOULD_DEBUG=1
+
+
+
     function _打印针对当前处理的参数的错误信息 {
         local ErrorMessage=$1
 
         echo -e "\e[0;31m在命令参数表中的 “ \e[0;97m${_ProcessingArgumentName}\e[0;31m ” 参数：\n    \e[0;33m${ErrorMessage}\e[0;0m"
     }
 
-    function _打印针对当前处理的依赖包配置参数的错误信息 {
+    function _打印针对当前处理的依赖包原始配置参数的错误信息 {
         local ErrorMessage=$1
 
         echo -e "\e[0;31m在命令参数表中第 \e[0;96m${_IndexOfProcessingConfiguration}\e[0;31m 次出现的 “ \e[0;97m${_ProcessingArgumentName}\e[0;31m ” 参数：\n    \e[0;33m${ErrorMessage}\e[0;0m"
@@ -647,7 +651,9 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
     local _CurrentArgumentOrArgumentPairHaveRecognized=0
 
     while [[ ! -z "$1" && $_ProcessedArgumentsCount -lt 2048 ]]; do
-        echo "[DEBUG]:arg[${_ProcessedArgumentsCount}]='$1'"
+        if [ $SHOULD_DEBUG -eq 1 ]; then
+            echo "〔调试〕： arg[${_ProcessedArgumentsCount}]='$1'"
+        fi
 
         _ProcessedArgumentsCount=$((_ProcessedArgumentsCount+1))
         _CurrentArgumentOrArgumentPairHaveRecognized=0
@@ -778,12 +784,12 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             shift
 
             if [[ "$1" =~ ^- ]]; then
-                _打印针对当前处理的依赖包配置参数的错误信息  '其后面没有给出值。〔1〕。'
+                _打印针对当前处理的依赖包原始配置参数的错误信息  '其后面没有给出值。〔1〕。'
                 return
             fi
 
             if [ -z "$1" ]; then
-                _打印针对当前处理的依赖包配置参数的错误信息  '其后面没有给出值。〔2〕。'
+                _打印针对当前处理的依赖包原始配置参数的错误信息  '其后面没有给出值。〔2〕。'
                 return
             fi
 
@@ -796,10 +802,8 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             _TemporaryArgumentValue=${1:${#_ProcessingArgumentName}+1}
             shift
 
-            if [ "$_TemporaryArgumentValue" == '0' ]; then
-                _TemporaryArgumentValue='v0'
-            elif [ -z "${_TemporaryArgumentValue}" ]; then
-                _打印针对当前处理的依赖包配置参数的错误信息  '等号（=）后面没有给出值。〔1〕。'
+            if [ -z "${_TemporaryArgumentValue}" ]; then
+                _打印针对当前处理的依赖包原始配置参数的错误信息  '等号（=）后面没有给出值。〔1〕。'
                 return
             fi
         fi
@@ -809,18 +813,173 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
         fi
 
         if [ $_CurrentArgumentOrArgumentPairHaveRecognized -eq 0 ]; then
-            echo -e "[DEBUG]:while 语句循环体末尾准备 shift，\e[0;31m丢弃该参数'\e[0;97m$1\e[0;31m'\e[0;0m。"
+            # echo -e "〔调试〕： while 语句循环体末尾准备 shift，\e[0;31m丢弃该参数'\e[0;97m$1\e[0;31m'\e[0;0m。"
             shift
         fi
     done
 
+    _ProcessingArgumentName=''
+    _TemporaryArgumentValue=''
 
 
-    if true; then
+
+    if [ $SHOULD_DEBUG -eq 1 ]; then
         echo
-        echo "[DEBUG]:应仅作仿真演练:   ${ShouldDryRun}"
-        echo "[DEBUG]:依赖包均为产品级: ${DependenciesAreOfCateogryOfProduction}"
-        echo "[DEBUG]:依赖包配置的总数: ${#DependencyVersionConfigurations[@]}"
+        echo "〔调试〕： 应仅作仿真演练:   ${ShouldDryRun}"
+        echo "〔调试〕： 依赖包均为产品级: ${DependenciesAreOfCateogryOfProduction}"
+        echo "〔调试〕： 依赖包配置的总数: ${#DependencyVersionConfigurations[@]}"
+        echo
+    fi
+
+
+    function _打印一条红线 {
+        echo  -en  "\e[0;31m";  Write-Line-without-line-break 66;  echo  -e "\e[0;0m"
+    }
+
+
+    local PackageGroupA_PackageNames=()
+    local PackageGroupA_PackageVersionConfigs=()
+    local PackageGroupA_PackageVersionLockReasons=()
+    local PackageGroupA_LongestPackageNameLength=0
+
+    local PackageGroupB_PackageNames=()
+    local PackageGroupB_PackageVersionConfigs=()
+    local PackageGroupB_PackageVersionLockReasons=()
+    local PackageGroupB_LongestPackageNameLength=0
+
+
+
+    local _ProcessingPackageName=''
+    local _ProcessingPackageVerionConfig=''
+    local _ProcessingPackageVerionLockReason=''
+    local _RestPartOfProcessingPackageConfig=''
+    local _ProcessingPackageNameLength=0
+    local _ProcessingPackageHasLockedVersionRange=0
+
+    _IndexOfProcessingConfiguration=0
+
+    for _ProcessingPackageConfig in "${DependencyVersionConfigurations[@]}"; do
+        _IndexOfProcessingConfiguration=$((_IndexOfProcessingConfiguration+1))
+
+        if [ $SHOULD_DEBUG -eq 1 ]; then
+            echo -e "〔调试〕： Processing Conifg [$_IndexOfProcessingConfiguration]:\n    \"${_ProcessingPackageConfig}\""
+        fi
+
+
+
+        read _RestPartOfProcessingPackageConfig <<< "${_ProcessingPackageConfig}" # 可截去剩余部分的首尾空白。
+
+        _ProcessingPackageName="${_RestPartOfProcessingPackageConfig%% ||| *}"
+
+        read _RestPartOfProcessingPackageConfig <<< "${_RestPartOfProcessingPackageConfig:${#_ProcessingPackageName}+5}" # 可截去剩余部分的首尾空白。
+
+        _ProcessingPackageVerionConfig="${_RestPartOfProcessingPackageConfig%% ||| *}"
+
+        read _RestPartOfProcessingPackageConfig <<< "${_RestPartOfProcessingPackageConfig:${#_ProcessingPackageVerionConfig}+5}" # 可截去剩余部分的首尾空白。
+
+        read _ProcessingPackageName             <<< "${_ProcessingPackageName}"             # 可截去【包名】的首尾空白。
+        read _ProcessingPackageVerionConfig     <<< "${_ProcessingPackageVerionConfig}"     # 可截去【版本配置】的首尾空白。
+        read _ProcessingPackageVerionLockReason <<< "${_RestPartOfProcessingPackageConfig}" # 可截去【版本设限之原因】的首尾空白。
+
+
+
+
+        if [[ ! "$_ProcessingPackageName" =~ ^(@[a-z][a-z0-9_-]*\/)?[a-z][a-z0-9_-]*$ ]]; then
+            echo
+            _打印一条红线
+            echo -e "\e[0;31m第 \e[0;96m${_IndexOfProcessingConfiguration}\e[0;31m 个依赖包的名称不合规。该名称为 \"\e[0;97m${_ProcessingPackageName}\e[0;31m\" 。\e[0;0m"
+            _打印一条红线
+            echo
+
+            return
+        fi
+
+
+
+        if [ "$_ProcessingPackageVerionConfig" == '0' ]; then
+
+            _ProcessingPackageVerionConfig='^0'
+
+        elif [ -z "${_ProcessingPackageVerionConfig}" ] || [[ "${_ProcessingPackageVerionConfig}" =~ ^\$?null$ ]]; then
+
+            _ProcessingPackageVerionConfig='latest'
+
+        fi
+
+        _ProcessingPackageHasLockedVersionRange=1
+        if [ "${_ProcessingPackageVerionConfig}" == 'latest' ]; then
+            _ProcessingPackageHasLockedVersionRange=0
+        fi
+
+
+
+
+
+        if [ $_ProcessingPackageHasLockedVersionRange -eq 0 ] && [ ! -z "$_ProcessingPackageVerionLockReason" ]; then
+            echo
+            _打印一条红线
+            echo  -e  "\e[0;31m解析【npm 软件包版本配置】时，发行某配置有误。\e[0;0m"
+            _打印一条红线
+
+            echo  -e  "  \e[0;31m依赖包\e[0;0m"
+            echo  -e  "      \e[0;31m“ \e[0;33m${_ProcessingPackageName}\e[0;31m ”\e[0;0m"
+            echo  -e  "  \e[0;31m并未锁定安装版本之范围，却给出了相关原因。这不合规。\e[0;0m"
+            echo  -e  "  \e[0;31m凡不锁定版本的软件无所谓“版本锁定之原因”。\e[0;0m"
+            echo
+
+            echo  -e  "  \e[0;31m给出的所谓“原因”如下：\e[0;0m"
+            echo  -e  "      \"\e[0;33m${_ProcessingPackageVerionLockReason}\e[0;0m\""
+
+            echo  -e
+            echo  -e  "  \e[0;31m务必删去这一讲述“原因”的措辞。\e[0;0m"
+
+            _打印一条红线
+            echo
+
+            return
+        fi
+
+
+
+
+
+        if [ $SHOULD_DEBUG -eq 1 ]; then
+            Write-Line
+            echo -e "〔调试〕：               \e[0;92m包名\e[0;0m： \e[0;91m\"\e[0;93m${_ProcessingPackageName}\e[0;91m\"\e[0;0m"
+            echo -e "〔调试〕：           \e[0;92m版本配置\e[0;0m： \e[0;91m\"\e[0;93m${_ProcessingPackageVerionConfig}\e[0;91m\"\e[0;0m"
+            echo -e "〔调试〕：     \e[0;92m版本设限之原因\e[0;0m： \e[0;91m\"\e[0;93m${_ProcessingPackageVerionLockReason}\e[0;91m\"\e[0;0m"
+        fi
+
+
+
+
+
+        _ProcessingPackageNameLength=${#_ProcessingPackageName}
+
+        if [ $_ProcessingPackageHasLockedVersionRange -eq 0 ]; then
+            PackageGroupA_PackageNames+=( "$_ProcessingPackageName" )
+            PackageGroupA_PackageVersionConfigs+=( "$_ProcessingPackageVerionConfig" )
+            PackageGroupA_PackageVersionLockReasons+=( "$_ProcessingPackageVerionLockReason" )
+
+            if [ $_ProcessingPackageNameLength -gt $PackageGroupA_LongestPackageNameLength ]; then
+                PackageGroupA_LongestPackageNameLength=$_ProcessingPackageNameLength
+            fi
+        else
+            PackageGroupB_PackageNames+=( "$_ProcessingPackageName" )
+            PackageGroupB_PackageVersionConfigs+=( "$_ProcessingPackageVerionConfig" )
+            PackageGroupB_PackageVersionLockReasons+=( "版本并未设限。故谈不上什么原因。" )
+
+            if [ $_ProcessingPackageNameLength -gt $PackageGroupB_LongestPackageNameLength ]; then
+                PackageGroupB_LongestPackageNameLength=$_ProcessingPackageNameLength
+            fi
+        fi
+    done
+
+    if [ $SHOULD_DEBUG -eq 1 ]; then
+        Write-Line
+        echo
+        echo "〔调试〕： PackageGroupA_LongestPackageNameLength ${PackageGroupA_LongestPackageNameLength}"
+        echo "〔调试〕： PackageGroupB_LongestPackageNameLength ${PackageGroupB_LongestPackageNameLength}"
         echo
     fi
 
@@ -834,38 +993,6 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
     local PackageGroupB_Descriptions_PerPackage=()
     local PackageGroupB_CommandLineSnippet_PerPackage=()
 
-
-
-    local _ProcessingPackageName=''
-    local _ProcessingPackageVerionConfig=''
-    local _ProcessingPackageVerionLimitationReason=''
-    local _RestPartOfProcessingPackageConfig=''
-
-    _IndexOfProcessingConfiguration=0
-
-    for _ProcessingPackageConfig in "${DependencyVersionConfigurations[@]}"; do
-        _IndexOfProcessingConfiguration=$((_IndexOfProcessingConfiguration+1))
-        # echo -e "[DEBUG]:Processing Conifg [$_IndexOfProcessingConfiguration]:\n    \"${_ProcessingPackageConfig}\""
-
-        read _RestPartOfProcessingPackageConfig <<< "$_ProcessingPackageConfig"
-
-        _ProcessingPackageName="${_RestPartOfProcessingPackageConfig%% ||| *}"
-
-        read _RestPartOfProcessingPackageConfig <<< "${_RestPartOfProcessingPackageConfig:${#_ProcessingPackageName}+5}"
-
-        _ProcessingPackageVerionConfig="${_RestPartOfProcessingPackageConfig%% ||| *}"
-
-        read _RestPartOfProcessingPackageConfig <<< "${_RestPartOfProcessingPackageConfig:${#_ProcessingPackageVerionConfig}+5}"
-
-        read _ProcessingPackageName <<< "${_ProcessingPackageName}"
-        read _ProcessingPackageVerionConfig <<< "${_ProcessingPackageVerionConfig}"
-        read _ProcessingPackageVerionLimitationReason <<< "${_RestPartOfProcessingPackageConfig}"
-
-        echo -e "[DEBUG]:Processing Package"
-        echo -e "[DEBUG]:              \e[0;92m包名\e[0;0m： \e[0;91m\"\e[0;93m${_ProcessingPackageName}\e[0;91m\"\e[0;0m"
-        echo -e "[DEBUG]:          \e[0;92m版本配置\e[0;0m： \e[0;91m\"\e[0;93m${_ProcessingPackageVerionConfig}\e[0;91m\"\e[0;0m"
-        echo -e "[DEBUG]:    \e[0;92m版本设限之原因\e[0;0m： \e[0;91m\"\e[0;93m${_ProcessingPackageVerionLimitationReason}\e[0;91m\"\e[0;0m"
-    done
 
     return
 
