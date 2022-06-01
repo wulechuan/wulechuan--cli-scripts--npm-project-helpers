@@ -620,8 +620,19 @@ function Write-吴乐川管理某_npm_项目__打印提示语__其他交代 {
 
 
 function Update-吴乐川更新当前_npm_项目的某批依赖包 {
-    local PackageConfigSeparator='|||'
+    local PACKAGE_CONFIG_CONTENT_DEFAULT_SEPARATOR='|||'
     local SHOULD_DEBUG=1
+
+
+
+
+
+    # --内容分割记号          至多出现 1 次。    非空白文本。
+    # --这批依赖包之依赖类别   至多出现 1 次。    '本产品拟囊括这些软件之整体或部分' | '本产品仅会在研发阶段借助这些软件'
+    # --应仅作仿真演练        至多出现 1 次。    1 | 0 | true | false
+    # --某依赖包之版本配置    可多次出现。        非空白文本。
+
+
 
 
 
@@ -641,6 +652,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
 
 
+    local PackageConfigContentSeparator='undefined'
     local DependenciesAreOfCateogryOfProduction='undefined' # 'true' 或其它值。
     local ShouldDryRun='undefined' # 'true' 或其它值。
     local DependencyVersionConfigurations=()
@@ -663,19 +675,17 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
         # ---------------------------------------------------------------
 
-        _ProcessingArgumentName='--这批依赖包之依赖类别'
+        _ProcessingArgumentName='--内容分割记号'
         _TemporaryArgumentValue=''
 
-        if [ "$1" == "${_ProcessingArgumentName}" ]; then
+         if [ "$1" == "${_ProcessingArgumentName}" ]; then
             _CurrentArgumentOrArgumentPairHaveRecognized=1
+            shift
 
-            if [ "$DependenciesAreOfCateogryOfProduction" != 'undefined' ]; then
+            if [ "$PackageConfigContentSeparator" != 'undefined' ]; then
                 _打印针对当前处理的参数的错误信息  '不应重复出现。〔1〕。'
-                shift
                 return
             fi
-
-            shift
 
             if [[ "$1" =~ ^- ]]; then
                 _打印针对当前处理的参数的错误信息  '后面没有给出值。〔1〕。'
@@ -689,7 +699,63 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
             _TemporaryArgumentValue="$1"
             shift
-        elif [[ "$1" =~ ^--这批依赖包之依赖类别= ]]; then
+        elif [[ "$1" =~ ^"${_ProcessingArgumentName}"= ]]; then
+            _CurrentArgumentOrArgumentPairHaveRecognized=1
+
+            if [ "$PackageConfigContentSeparator" != 'undefined' ]; then
+                _打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
+                shift
+                return
+            fi
+
+            _TemporaryArgumentValue=${1:${#_ProcessingArgumentName}+1}
+            shift
+
+            if [ "$_TemporaryArgumentValue" == '0' ]; then
+                _打印针对当前处理的参数的错误信息  "给出值不合规。给出的值为 “ \e[0;33m${_TemporaryArgumentValue}\e[0;0m ” 。〔1〕。"
+                return
+            elif [ -z "${_TemporaryArgumentValue}" ]; then
+                _打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔3〕。'
+                return
+            fi
+        fi
+
+        if [ ! -z "$_TemporaryArgumentValue" ]; then
+            if [[ "${_TemporaryArgumentValue}" =~ "^[ \n\t]*$" ]]; then
+                _打印针对当前处理的参数的错误信息  "给出值不合规。给出的值为 “ \e[0;33m${_TemporaryArgumentValue}\e[0;0m ” 。〔2〕。"
+                return
+            else
+                PackageConfigContentSeparator="${_TemporaryArgumentValue}"
+            fi
+        fi
+
+        # ---------------------------------------------------------------
+
+        _ProcessingArgumentName='--这批依赖包之依赖类别'
+        _TemporaryArgumentValue=''
+
+        if [ "$1" == "${_ProcessingArgumentName}" ]; then
+            _CurrentArgumentOrArgumentPairHaveRecognized=1
+            shift
+
+            if [ "$DependenciesAreOfCateogryOfProduction" != 'undefined' ]; then
+                _打印针对当前处理的参数的错误信息  '不应重复出现。〔1〕。'
+                return
+            fi
+
+            if [[ "$1" =~ ^- ]]; then
+                _打印针对当前处理的参数的错误信息  '后面没有给出值。〔1〕。'
+                return
+            fi
+
+            if [ -z "$1" ]; then
+                _打印针对当前处理的参数的错误信息  '后面没有给出值。〔2〕。'
+                return
+            fi
+
+            _TemporaryArgumentValue="$1"
+            shift
+        elif [[ "$1" =~ ^"${_ProcessingArgumentName}"= ]]; then
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
             if [ "$DependenciesAreOfCateogryOfProduction" != 'undefined' ]; then
@@ -698,7 +764,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
                 return
             fi
 
-            _TemporaryArgumentValue=${1:13}
+            _TemporaryArgumentValue=${1:${#_ProcessingArgumentName}+1}
             shift
 
             if [ "$_TemporaryArgumentValue" == '0' ]; then
@@ -731,15 +797,14 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
         if [ "$1" == "${_ProcessingArgumentName}" ]; then
             _CurrentArgumentOrArgumentPairHaveRecognized=1
+            shift
 
             if [ "$ShouldDryRun" != 'undefined' ]; then
                 _打印针对当前处理的参数的错误信息  "不应重复出现。〔1〕。已有参数将其配置为 “ \e[0;32m${ShouldDryRun}\e[0;33m ” 。"
-                shift
                 return
             fi
 
             ShouldDryRun='true'
-            shift
 
             if [[ "$1" =~ ^- ]]; then continue; fi
 
@@ -824,13 +889,22 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
     _ProcessingArgumentName=''
     _TemporaryArgumentValue=''
 
+    if [ "${PackageConfigContentSeparator}" == 'undefined' ]; then
+        PackageConfigContentSeparator="${PACKAGE_CONFIG_CONTENT_DEFAULT_SEPARATOR}"
+    fi
+
+    if [ "${ShouldDryRun}" == 'undefined' ]; then
+        ShouldDryRun='false'
+    fi
+
 
 
     if [ $SHOULD_DEBUG -eq 1 ]; then
         echo
-        echo "〔调试〕： 应仅作仿真演练:   ${ShouldDryRun}"
-        echo "〔调试〕： 依赖包均为产品级: ${DependenciesAreOfCateogryOfProduction}"
-        echo "〔调试〕： 依赖包配置的总数: ${#DependencyVersionConfigurations[@]}"
+        echo "〔调试〕： 应仅作仿真演练：   ${ShouldDryRun}"
+        echo "〔调试〕： 依赖包均为产品级： ${DependenciesAreOfCateogryOfProduction}"
+        echo "〔调试〕： 依赖包配置的总数： ${#DependencyVersionConfigurations[@]}"
+        echo "〔调试〕： 内容分割记号：     '${PackageConfigContentSeparator}'"
         echo
     fi
 
@@ -846,11 +920,13 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
     local PackageGroupA_PackageNames=()
     local PackageGroupA_PackageVersionConfigs=()
     local PackageGroupA_PackageVersionLockReasons=()
+    local PackageGroupA_PackagesCount=0
     local PackageGroupA_LongestPackageNameLength=0
 
     local PackageGroupB_PackageNames=()
     local PackageGroupB_PackageVersionConfigs=()
     local PackageGroupB_PackageVersionLockReasons=()
+    local PackageGroupB_PackagesCount=0
     local PackageGroupB_LongestPackageNameLength=0
 
 
@@ -879,13 +955,13 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
         read _RestPartOfProcessingPackageConfig <<< "${_ProcessingPackageConfig}" # 可截去剩余部分的首尾空白。
 
-        _ProcessingPackageName="${_RestPartOfProcessingPackageConfig%%${PackageConfigSeparator}*}"
+        _ProcessingPackageName="${_RestPartOfProcessingPackageConfig%%${PackageConfigContentSeparator}*}"
 
-        read _RestPartOfProcessingPackageConfig <<< "${_RestPartOfProcessingPackageConfig:${#_ProcessingPackageName}+${#PackageConfigSeparator}}" # 可截去剩余部分的首尾空白。
+        read _RestPartOfProcessingPackageConfig <<< "${_RestPartOfProcessingPackageConfig:${#_ProcessingPackageName}+${#PackageConfigContentSeparator}}" # 可截去剩余部分的首尾空白。
 
-        _ProcessingPackageVerionConfig="${_RestPartOfProcessingPackageConfig%%${PackageConfigSeparator}*}"
+        _ProcessingPackageVerionConfig="${_RestPartOfProcessingPackageConfig%%${PackageConfigContentSeparator}*}"
 
-        read _RestPartOfProcessingPackageConfig <<< "${_RestPartOfProcessingPackageConfig:${#_ProcessingPackageVerionConfig}+${#PackageConfigSeparator}}" # 可截去剩余部分的首尾空白。
+        read _RestPartOfProcessingPackageConfig <<< "${_RestPartOfProcessingPackageConfig:${#_ProcessingPackageVerionConfig}+${#PackageConfigContentSeparator}}" # 可截去剩余部分的首尾空白。
 
         read _ProcessingPackageName             <<< "${_ProcessingPackageName}"             # 可截去【包名】的首尾空白。
         read _ProcessingPackageVerionConfig     <<< "${_ProcessingPackageVerionConfig}"     # 可截去【版本配置】的首尾空白。
@@ -1002,7 +1078,15 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
 
 
+    PackageGroupA_PackagesCount=${#PackageGroupA_PackageNames[@]}
+    PackageGroupB_PackagesCount=${#PackageGroupB_PackageNames[@]}
+
+
+
     if [ $SHOULD_DEBUG -eq 1 ]; then
+        echo
+        echo  -e  "〔调试〕： 甲类依赖包共计 \e[0;33m${PackageGroupA_PackagesCount}\e[0;0m 个。"
+        echo  -e  "〔调试〕： 乙类依赖包共计 \e[0;33m${PackageGroupB_PackagesCount}\e[0;0m 个。"
         echo
         echo  -e  "〔调试〕： 甲类依赖包名称最长者，名称长度为 \e[0;33m${PackageGroupA_LongestPackageNameLength}\e[0;0m"
         echo  -e  "〔调试〕： 乙类依赖包名称最长者，名称长度为 \e[0;33m${PackageGroupB_LongestPackageNameLength}\e[0;0m"
@@ -1043,6 +1127,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
     local _ColorOf_AtSign=''
     local _ColorOf_VersionConfig=''
 
+    local _ProcessingPackageIsLastOneInTheGroup=0
     local _ProcessingPackageNamePaddingLength=0
     local _ProcessingPackageNamePaddingText=''
     local _ProcessingPackageDescription=''
@@ -1050,6 +1135,17 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
     local _ProcessingPackageCommandLineSnippet_Colorful=''
 
 
+
+    function _为方框打印一段水平边线 {
+        if [[ ! "$1" =~ ^[1-9][0-9]*$ ]]; then
+            return
+        fi
+
+        local _temp_looping_index=0
+        for ((_temp_looping_index=0; _temp_looping_index<=$1; _temp_looping_index++)); do
+            echo -n '═'
+        done
+    }
 
 
 
@@ -1060,6 +1156,12 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
     _IndexOfProcessingConfiguration=0
 
     for _ProcessingPackageName in "${PackageGroupA_PackageNames[@]}"; do
+        if [ $((PackageGroupA_PackagesCount-_IndexOfProcessingConfiguration)) -gt 1 ]; then
+            _ProcessingPackageIsLastOneInTheGroup=0
+        else
+            _ProcessingPackageIsLastOneInTheGroup=1
+        fi
+
         _ProcessingPackageNameLength=${#_ProcessingPackageName}
 
         _ProcessingPackageVerionConfig=${PackageGroupA_PackageVersionConfigs[${_IndexOfProcessingConfiguration}]}
@@ -1071,7 +1173,15 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
         _ProcessingPackageCommandLineSnippet="${_ProcessingPackageName}@${_ProcessingPackageVerionConfig}"
         _ProcessingPackageCommandLineSnippet_Colorful="${_ProcessingPackageNamePaddingText}${_ColorOf_PacakgeName}${_ProcessingPackageName}${_ColorOf_AtSign}@${_ColorOf_VersionConfig}${_ProcessingPackageVerionConfig}\e[0;0m"
 
-        _ProcessingPackageDescription="${_ProcessingPackageCommandLineSnippet_Colorful}"
+        _ProcessingPackageDescription=''
+
+        _ProcessingPackageDescription+="${_GlobalIndentation}${_ProcessingPackageCommandLineSnippet_Colorful}"
+
+        if [ $_ProcessingPackageIsLastOneInTheGroup -eq 0 ]; then
+            _ProcessingPackageDescription+=' \'
+        else
+            _ProcessingPackageDescription+=';'
+        fi
 
         PackageGroupA_CommandLineSnippet_PerPackage+=( "${_ProcessingPackageCommandLineSnippet}" )
         PackageGroupA_Descriptions_PerPackage+=( "${_ProcessingPackageDescription}" )
@@ -1101,7 +1211,17 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
     _IndexOfProcessingConfiguration=0
 
+    local _DescriptionFrameWidthInEnglishChars=60
+    local _DescriptionFrameInnerWidth1=$((PackageGroupB_LongestPackageNameLength-3))
+    local _DescriptionFrameInnerWidth2=$((_DescriptionFrameWidthInEnglishChars-5-$_DescriptionFrameInnerWidth1))
+
     for _ProcessingPackageName in "${PackageGroupB_PackageNames[@]}"; do
+        if [ $((PackageGroupB_PackagesCount-_IndexOfProcessingConfiguration)) -gt 1 ]; then
+            _ProcessingPackageIsLastOneInTheGroup=0
+        else
+            _ProcessingPackageIsLastOneInTheGroup=1
+        fi
+
         _ProcessingPackageNameLength=${#_ProcessingPackageName}
 
         _ProcessingPackageVerionConfig=${PackageGroupB_PackageVersionConfigs[${_IndexOfProcessingConfiguration}]}
@@ -1113,11 +1233,31 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
         _ProcessingPackageCommandLineSnippet="${_ProcessingPackageName}@${_ProcessingPackageVerionConfig}"
         _ProcessingPackageCommandLineSnippet_Colorful="${_ProcessingPackageNamePaddingText}${_ColorOf_PacakgeName}${_ProcessingPackageName}${_ColorOf_AtSign}@${_ColorOf_VersionConfig}${_ProcessingPackageVerionConfig}\e[0;0m"
 
+        # ╔╦╗═╬╚╩╝║
+
         _ProcessingPackageDescription=''
-        _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ==\e[0;0m"
-        _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ${_ProcessingPackageVerionLockReason}\e[0;0m"
-        _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ==\e[0;0m"
+
+        _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ╔$(_为方框打印一段水平边线 ${_DescriptionFrameInnerWidth1})╦$(_为方框打印一段水平边线 ${_DescriptionFrameInnerWidth2})╗\e[0;0m"
+
+        for _temp_looping_index in {1..2}; do
+            _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameInnerWidth1}+1}║${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameInnerWidth2}+1}║\e[0;0m"
+        done
+
+        for _temp_looping_index in {1..1}; do
+            _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameInnerWidth1}+1} ${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameInnerWidth2}+1}║\e[0;0m"
+        done
+
+        _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║ 该软件锁定版本范围之原因：${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameWidthInEnglishChars}-29}║\e[0;0m"
+        _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║     ${_ProcessingPackageVerionLockReason}\e[0;0m"
+        _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ╚$(_为方框打印一段水平边线 ${_DescriptionFrameInnerWidth1})╦$(_为方框打印一段水平边线 ${_DescriptionFrameInnerWidth2})╝\e[0;0m"
+
         _ProcessingPackageDescription+="\n${_GlobalIndentation}${_ProcessingPackageCommandLineSnippet_Colorful}"
+
+        if [ $_ProcessingPackageIsLastOneInTheGroup -eq 0 ]; then
+            _ProcessingPackageDescription+=' \'
+        else
+            _ProcessingPackageDescription+=';'
+        fi
 
         PackageGroupB_CommandLineSnippet_PerPackage+=( "${_ProcessingPackageCommandLineSnippet}" )
         PackageGroupB_Descriptions_PerPackage+=( "${_ProcessingPackageDescription}" )

@@ -14,9 +14,35 @@
         },
         {
             "label": "研发",
+            "dependsOrder": "sequence",
+            "group": {
+                "isDefault": false,
+                "kind": "test"
+            },
+            "problemMatcher": [],
+            "dependsOn": [
+                "研发 PowerShell",
+                "研发 Bash"
+            ]
+        },
+        {
+            "label": "研发 PowerShell",
+            "type": "shell",
+            "command": "pwsh  -Command  '.\\测试集\\测试任务集\\研发临时测试代码.ps1'",
+            "group": {
+                "isDefault": false,
+                "kind": "test"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "研发 Bash",
             "type": "shell",
             "command": "bash  -c  'source  ./测试集/测试任务集/研发临时测试代码.sh'",
-            "group": "test",
+            "group": {
+                "isDefault": false,
+                "kind": "test"
+            },
             "problemMatcher": []
         },
         {
