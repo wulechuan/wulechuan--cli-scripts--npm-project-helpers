@@ -116,7 +116,7 @@ function Get-吴乐川求一行文本视觉宽度等效英语字母数 {
 
         TextFullWidth=$((TextFullWidth+CharWidth))
 
-        # echo -e "〔调试〕： \e[0;33m'$Char' 的等效宽度： \e[0;91m${CharWidth}\e[0;0m  ${TextFullWidth}"
+        # echo -e "〔调试〕： \e[0;33m'$Char'\e[0;0m 的等效宽度： \e[0;91m${CharWidth}\e[0;0m  ${TextFullWidth}"
     done
 
     echo $TextFullWidth
