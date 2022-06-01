@@ -1142,7 +1142,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
         fi
 
         local _temp_looping_index=0
-        for ((_temp_looping_index=0; _temp_looping_index<=$1; _temp_looping_index++)); do
+        for ((_temp_looping_index=0; _temp_looping_index<$1; _temp_looping_index++)); do
             echo -n '═'
         done
     }
@@ -1211,7 +1211,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
     _IndexOfProcessingConfiguration=0
 
-    local _DescriptionFrameWidthInEnglishChars=60
+    local _DescriptionFrameWidthInEnglishChars=62
     local _DescriptionFrameInnerWidth1=$((PackageGroupB_LongestPackageNameLength-3))
     local _DescriptionFrameInnerWidth2=$((_DescriptionFrameWidthInEnglishChars-5-$_DescriptionFrameInnerWidth1))
 
@@ -1240,14 +1240,14 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
         _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ╔$(_为方框打印一段水平边线 ${_DescriptionFrameInnerWidth1})╦$(_为方框打印一段水平边线 ${_DescriptionFrameInnerWidth2})╗\e[0;0m"
 
         for _temp_looping_index in {1..2}; do
-            _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameInnerWidth1}+1}║${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameInnerWidth2}+1}║\e[0;0m"
+            _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameInnerWidth1}}║${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameInnerWidth2}}║\e[0;0m"
         done
 
         for _temp_looping_index in {1..1}; do
-            _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameInnerWidth1}+1} ${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameInnerWidth2}+1}║\e[0;0m"
+            _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameInnerWidth1}} ${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameInnerWidth2}}║\e[0;0m"
         done
 
-        _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║ 该软件锁定版本范围之原因：${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameWidthInEnglishChars}-29}║\e[0;0m"
+        _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║ 该软件锁定版本范围之原因：${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameWidthInEnglishChars}-31}║\e[0;0m"
         _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║     ${_ProcessingPackageVerionLockReason}\e[0;0m"
         _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ╚$(_为方框打印一段水平边线 ${_DescriptionFrameInnerWidth1})╦$(_为方框打印一段水平边线 ${_DescriptionFrameInnerWidth2})╝\e[0;0m"
 
