@@ -19,7 +19,7 @@ Update-吴乐川更新当前_npm_项目的某批依赖包 \
     --某依赖包之版本配置='vuex ||| ~3.4 |||  ' \
     --某依赖包之版本配置='@zhong-hua/package-a ||| null ' \
     --某依赖包之版本配置='@zhong-hua/package-cde ||| 0 ||| 这是仅限版本零，而不是不设限。' \
-    --某依赖包之版本配置='@zhong-hua/package-ddeeffgg' \
+    --某依赖包之版本配置='@zhong-hua/package-fghi' \
     --某依赖包之版本配置='@jun-yong-fei-ji/jian-ji-ji    |||  20   |||   出征。' \
     --某依赖包之版本配置='@dao-dan/dong-feng    |||  17   |||   从来就没有什么救世主，' \
     --某依赖包之版本配置='@dao-dan/dong-feng    |||  41   |||   也没有神仙皇帝。' \

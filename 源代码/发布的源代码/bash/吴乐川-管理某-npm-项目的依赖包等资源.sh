@@ -1023,28 +1023,31 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
     #     echo
     # fi
 
+    local _GlobalIndentation="${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:4}"
 
 
 
 
-    local PackageGroupA_Descriptions_PerPackage=()
+
     local PackageGroupA_CommandLineSnippet_PerPackage=()
+    local PackageGroupA_Descriptions_PerPackage=()
 
-    local PackageGroupB_Descriptions_PerPackage=()
     local PackageGroupB_CommandLineSnippet_PerPackage=()
+    local PackageGroupB_Descriptions_PerPackage=()
 
 
 
 
+
+    local _ColorOf_PacakgeName=''
+    local _ColorOf_AtSign=''
+    local _ColorOf_VersionConfig=''
 
     local _ProcessingPackageNamePaddingLength=0
     local _ProcessingPackageNamePaddingText=''
     local _ProcessingPackageDescription=''
     local _ProcessingPackageCommandLineSnippet=''
-
-    local _ColorOf_PacakgeName=''
-    local _ColorOf_AtSign=''
-    local _ColorOf_VersionConfig=''
+    local _ProcessingPackageCommandLineSnippet_Colorful=''
 
 
 
@@ -1065,10 +1068,16 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
         _ProcessingPackageNamePaddingLength=$((PackageGroupA_LongestPackageNameLength-_ProcessingPackageNameLength))
         _ProcessingPackageNamePaddingText="${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:$_ProcessingPackageNamePaddingLength}"
 
-        _ProcessingPackageCommandLineSnippet="${_ProcessingPackageNamePaddingText}${_ColorOf_PacakgeName}${_ProcessingPackageName}${_ColorOf_AtSign}@${_ColorOf_VersionConfig}${_ProcessingPackageVerionConfig}\e[0;0m"
+        _ProcessingPackageCommandLineSnippet="${_ProcessingPackageName}@${_ProcessingPackageVerionConfig}"
+        _ProcessingPackageCommandLineSnippet_Colorful="${_ProcessingPackageNamePaddingText}${_ColorOf_PacakgeName}${_ProcessingPackageName}${_ColorOf_AtSign}@${_ColorOf_VersionConfig}${_ProcessingPackageVerionConfig}\e[0;0m"
+
+        _ProcessingPackageDescription="${_ProcessingPackageCommandLineSnippet_Colorful}"
+
+        PackageGroupA_CommandLineSnippet_PerPackage+=( "${_ProcessingPackageCommandLineSnippet}" )
+        PackageGroupA_Descriptions_PerPackage+=( "${_ProcessingPackageDescription}" )
 
         if [ $SHOULD_DEBUG -eq 1 ]; then
-            echo  -e  "〔调试〕： 甲类包的命令行片段：\"\e[0;30;43m${_ProcessingPackageCommandLineSnippet}\e[0;0m\""
+            echo  -e  "〔调试〕： 甲类包的命令行片段： ${_ProcessingPackageCommandLineSnippet_Colorful}"
         fi
 
         _IndexOfProcessingConfiguration=$((_IndexOfProcessingConfiguration+1))
@@ -1101,10 +1110,25 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
         _ProcessingPackageNamePaddingLength=$((PackageGroupB_LongestPackageNameLength-_ProcessingPackageNameLength))
         _ProcessingPackageNamePaddingText="${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:$_ProcessingPackageNamePaddingLength}"
 
-        _ProcessingPackageCommandLineSnippet="${_ProcessingPackageNamePaddingText}${_ColorOf_PacakgeName}${_ProcessingPackageName}${_ColorOf_AtSign}@${_ColorOf_VersionConfig}${_ProcessingPackageVerionConfig}\e[0;0m"
+        _ProcessingPackageCommandLineSnippet="${_ProcessingPackageName}@${_ProcessingPackageVerionConfig}"
+        _ProcessingPackageCommandLineSnippet_Colorful="${_ProcessingPackageNamePaddingText}${_ColorOf_PacakgeName}${_ProcessingPackageName}${_ColorOf_AtSign}@${_ColorOf_VersionConfig}${_ProcessingPackageVerionConfig}\e[0;0m"
+
+        _ProcessingPackageDescription=''
+        _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ==\e[0;0m"
+        _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ${_ProcessingPackageVerionLockReason}\e[0;0m"
+        _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ==\e[0;0m"
+        _ProcessingPackageDescription+="\n${_GlobalIndentation}${_ProcessingPackageCommandLineSnippet_Colorful}"
+
+        PackageGroupB_CommandLineSnippet_PerPackage+=( "${_ProcessingPackageCommandLineSnippet}" )
+        PackageGroupB_Descriptions_PerPackage+=( "${_ProcessingPackageDescription}" )
 
         if [ $SHOULD_DEBUG -eq 1 ]; then
-            echo  -e  "〔调试〕： 乙类包的命令行片段：\"\e[0;30;44m${_ProcessingPackageCommandLineSnippet}\e[0;0m\""
+            echo
+            Write-Line
+            # echo  -e  "〔调试〕： 乙类包的命令行片段： ${_ProcessingPackageCommandLineSnippet_Colorful}"
+            echo  -e  "〔调试〕： 乙类包的描述片段： "
+            Write-Line
+            echo  -e  "${_ProcessingPackageDescription}"
         fi
 
         _IndexOfProcessingConfiguration=$((_IndexOfProcessingConfiguration+1))
@@ -1112,7 +1136,6 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
     return
 
-    local _GlobalIndentation="${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:4}"
 
 
 
