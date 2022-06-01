@@ -621,7 +621,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__其他交代 {
 
 function Update-吴乐川更新当前_npm_项目的某批依赖包 {
     local PACKAGE_CONFIG_CONTENT_DEFAULT_SEPARATOR='|||'
-    local SHOULD_DEBUG=1
+    local SHOULD_DEBUG=0
 
 
 
@@ -1274,7 +1274,14 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
         _IndexOfProcessingConfiguration=$((_IndexOfProcessingConfiguration+1))
     done
 
-    return
+
+
+
+
+    local NPMCommand='npm'
+
+    local NPMSubCommand=''
+    local NPMFullCommandLine=''
 
 
 
@@ -1286,19 +1293,52 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
         Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为最晚版本  --dry-run $ShouldDryRun
     fi
 
-    echo -e "\e[41;97m 该功能尚未实现！\e[0;0m" # TODO
-
-
-
-
-
-    if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
-        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为特定版本  --dry-run $ShouldDryRun
+    if [ $PackageGroupA_PackagesCount -eq 0 ]; then
+        echo  -e  "暂无。"
     else
-        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为特定版本  --dry-run $ShouldDryRun
+        NPMSubCommand=''
+        NPMFullCommandLine=''
+
+        if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
+            NPMSubCommand='i'
+        else
+            NPMSubCommand='i  -D'
+        fi
+
+        NPMFullCommandLine="${NPMCommand}  ${NPMSubCommand}"
+        echo  -e  "\e[0;92m${NPMFullCommandLine} \\ \e[0;0m"
+
+
+
+        _IndexOfProcessingConfiguration=0
+        for _ProcessingPackageCommandLineSnippet in "${PackageGroupA_CommandLineSnippet_PerPackage[@]}"; do
+            _ProcessingPackageDescription=${PackageGroupA_Descriptions_PerPackage[$_IndexOfProcessingConfiguration]}
+
+            NPMFullCommandLine+="  ${_ProcessingPackageCommandLineSnippet}"
+            echo  -e  "${_ProcessingPackageDescription}"
+
+            _IndexOfProcessingConfiguration=$((_IndexOfProcessingConfiguration+1))
+        done
+
+
+
+        echo
+        if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
+            echo  -e  "\e[0;31m`Write-Line`\e[0;0m"
+        else
+            echo  -e  "\e[0;32m`Write-Line`\e[0;0m"
+        fi
+        echo
+
+
+
+        if [ $ShouldDryRun -eq 1 ]; then
+            echo  -e  "   \e[0;33m【仿真演练】\e[0;0m"
+            echo  -e  "    \e[0;97m${NPMFullCommandLine}\e[0;0m"
+        else
+            echo  "TODO 执行命令： ${NPMFullCommandLine}"
+        fi
     fi
-
-
 
 
 
@@ -1315,10 +1355,61 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
 
     if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
+        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为特定版本  --dry-run $ShouldDryRun
+    else
+        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为特定版本  --dry-run $ShouldDryRun
+    fi
+
+    if [ $PackageGroupB_PackagesCount -eq 0 ]; then
+        echo  -e  "暂无。"
+    else
+        NPMSubCommand=''
+        NPMFullCommandLine=''
+
+        if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
+            NPMSubCommand='i'
+        else
+            NPMSubCommand='i  -D'
+        fi
+
+        NPMFullCommandLine="${NPMCommand}  ${NPMSubCommand}"
+        echo  -e  "\e[0;92m${NPMFullCommandLine} \\ \e[0;0m"
+
+
+
+        _IndexOfProcessingConfiguration=0
+        for _ProcessingPackageCommandLineSnippet in "${PackageGroupB_CommandLineSnippet_PerPackage[@]}"; do
+            _ProcessingPackageDescription=${PackageGroupB_Descriptions_PerPackage[$_IndexOfProcessingConfiguration]}
+
+            NPMFullCommandLine+="  ${_ProcessingPackageCommandLineSnippet}"
+            echo  -e  "${_ProcessingPackageDescription}"
+
+            _IndexOfProcessingConfiguration=$((_IndexOfProcessingConfiguration+1))
+        done
+
+
+
+        echo
+        if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
+            echo  -e  "\e[0;31m`Write-Line`\e[0;0m"
+        else
+            echo  -e  "\e[0;32m`Write-Line`\e[0;0m"
+        fi
+        echo
+
+
+
+        if [ $ShouldDryRun -eq 1 ]; then
+            echo  -e  "   \e[0;33m【仿真演练】\e[0;0m"
+            echo  -e  "    \e[0;97m${NPMFullCommandLine}\e[0;0m"
+        else
+            echo  "TODO 执行命令： ${NPMFullCommandLine}"
+        fi
+    fi
+
+    if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
         Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为特定版本  --dry-run $ShouldDryRun  --is-ending
     else
         Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为特定版本  --dry-run $ShouldDryRun  --is-ending
     fi
-
-    echo -e "\e[41;97m 该功能尚未实现！\e[0;0m" # TODO
 }
