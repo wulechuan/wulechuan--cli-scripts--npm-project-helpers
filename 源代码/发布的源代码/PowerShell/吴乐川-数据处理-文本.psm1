@@ -199,28 +199,29 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
 
 
         [string[]]${private:临时字词表} = @()
-        [string]  ${private:临时字或临时词组} = ''
+        [string]  ${private:临时字词} = ''
 
         ("${private:原始全文}" -split '', 0).ForEach{
             if ($_) {
                 if ("$_" -eq "`n") {
                     ${private:临时字词表} += @( $_ )
                 } elseif (Assert-吴乐川判断字符系中日韩文字 $_) {
-                    if ($(${private:临时字或临时词组} -replace '^\s+|\s+$')) {
-                        ${private:临时字词表} += @( "$(${private:临时字或临时词组} -replace '\s+$')" )
-                        ${private:临时字或临时词组} = ''
+                    if ($(${private:临时字词} -replace '^\s+|\s+$')) {
+                        ${private:临时字词表} += @( "$(${private:临时字词} -replace '\s+$')" )
                     }
+
+                    ${private:临时字词} = ''
 
                     ${private:临时字词表} += @( $_ )
                 } else {
-                    ${private:临时字或临时词组} += $_
+                    ${private:临时字词} += $_
                 }
             }
         }
 
-        if (${private:临时字或临时词组}) {
-            ${private:临时字词表} += @( "$(${private:临时字或临时词组} -replace '\s+$')" )
-            ${private:临时字或临时词组} = ''
+        if (${private:临时字词}) {
+            ${private:临时字词表} += @( "$(${private:临时字词} -replace '\s+$')" )
+            ${private:临时字词} = ''
         }
         # ${private:临时字词表}.ForEach{ "'$_'"} # 用于调试的语句
 
@@ -234,17 +235,17 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
             if ("$_" -eq "`n") {
                 ${private:字词表} += @( "$_" )
             } else {
-                ${private:临时字或临时词组} = "$_" -replace '^\s+|\s+$' # 等效于其他编程语言的 trim() 。
+                ${private:临时字词} = "$_" -replace '^\s+|\s+$' # 等效于其他编程语言的 trim() 。
 
-                if (${private:临时字或临时词组}.Length -gt 0) {
-                    if (${private:临时字或临时词组}.Length -eq 1) {
-                        if (Assert-吴乐川判断字符系中日韩文字 "${private:临时字或临时词组}") {
-                            ${private:字词表} += @( "${private:临时字或临时词组}" )
+                if (${private:临时字词}.Length -gt 0) {
+                    if (${private:临时字词}.Length -eq 1) {
+                        if (Assert-吴乐川判断字符系中日韩文字 "${private:临时字词}") {
+                            ${private:字词表} += @( "${private:临时字词}" )
                         } else {
-                            ${private:字词表} += @( "${private:临时字或临时词组} " ) # 后面带一个空格。
+                            ${private:字词表} += @( "${private:临时字词} " ) # 后面带一个空格。
                         }
                     } else {
-                        ("${private:临时字或临时词组}" -split '\s+').ForEach{
+                        ("${private:临时字词}" -split '\s+').ForEach{
                             ${private:字词表} += @( "$_ " ) # 后面带一个空格。
                         }
                     }
@@ -341,6 +342,7 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
 
                     if (${private:上次取到的最末一个字是汉字} -and (-not ${private:本次刚取到的是汉字})) {
                         ${private:本次刚取到的字词} = " ${private:本次刚取到的字词}" # 汉字后面的非汉字内容，前面加一个空格。
+                        ${private:本次刚取到的字词的等效宽度} += 1
                     }
 
                     ${private:新行若再添一两个词的等效宽度} = ${private:新行等效宽度} + ${private:本次刚取到的字词的等效宽度}
