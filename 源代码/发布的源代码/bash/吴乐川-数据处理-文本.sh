@@ -128,7 +128,7 @@ function Get-吴乐川求一行文本视觉宽度等效英语字母数 {
 
 function ConvertTo-吴乐川将文本转换为多行文本 {
     local HAN_CHARACTER_PER_LINE_DEFAULT_MAX_COUNT=30
-    local SHOULD_DEBUG=1
+    local SHOULD_DEBUG=0
 
 
 
@@ -368,7 +368,7 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
 
     local _IFS_BACKUP_="$IFS"
     IFS=''
-    local LINE_BREAK='\n'
+    local LINE_BREAK="\\$(echo -n n)"
 
 
 
@@ -382,21 +382,60 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
     local TemporaryWord=''
     local WordList=()
     local WordIndex=0
+    local TemporaryWordIsHanCharacter=0
+    local LastCharWasBackSlash='false'
+    local ThisCharIsBackSlash='false'
 
     for ((LoopIndex=0; LoopIndex<$OriginalCharCount; LoopIndex++)); do
         Char=${OriginalText:${LoopIndex}:1}
-        # echo  -e  "    〔调试〕： 第 $((LoopIndex+1)) 字： \e[0;91m'\e[0;33m${Char}\e[0;91m'\e[0;0m"
 
-        if [ "$Char" == $LINE_BREAK ] || [ "$Char" == ' ' ] || [ "`Assert-吴乐川判断字符系中日韩文字 "$Char"`" == '1' ]; then
+
+
+        if [ "$LastCharWasBackSlash" == 'true' ]; then
+            # if [ $SHOULD_DEBUG -eq 1 ]; then
+            #     if [ "$Char" == '\' ]; then
+            #         echo  -e  "〔调试〕： 第 $((LoopIndex+1)) 字的前面一个字是反斜杠。第 $((LoopIndex+1)) 字本身是 \e[0;91m'\e[0;33m${Char}${Char}\e[0;91m'\e[0;0m"
+            #     else
+            #         echo  -e  "〔调试〕： 第 $((LoopIndex+1)) 字的前面一个字是反斜杠。第 $((LoopIndex+1)) 字本身是 \e[0;91m'\e[0;33m${Char}\e[0;91m'\e[0;0m"
+            #     fi
+            # fi
+
+            Char="\\${Char}"
+            ThisCharIsBackSlash='false'
+        else
+            if [ "$Char" == '\' ]; then
+                Char="\\"
+                ThisCharIsBackSlash='true'
+                # if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： 第 $((LoopIndex+1)) 字是反斜杠。 \e[0;91m'\e[0;33m${Char}${Char}\e[0;91m'\e[0;0m"; fi
+                LastCharWasBackSlash="$ThisCharIsBackSlash"
+                continue
+            else
+                ThisCharIsBackSlash='false'
+            fi
+        fi
+
+        LastCharWasBackSlash="$ThisCharIsBackSlash"
+
+
+
+        TemporaryWordIsHanCharacter=`Assert-吴乐川判断字符系中日韩文字 "$Char"`
+
+        # if [ $SHOULD_DEBUG -eq 1 ]; then
+        #     if [ "$TemporaryWordIsHanCharacter" == '1' ]; then
+        #         echo  -e  "〔调试〕： 第 $((LoopIndex+1)) 字： \e[0;91m'\e[0;33m${Char}\e[0;91m'\e[0;0m （是汉字）"
+        #     else
+        #         echo  -e  "〔调试〕： 第 $((LoopIndex+1)) 字： \e[0;94m'\e[0;92m${Char}\e[0;94m'\e[0;0m"
+        #     fi
+        # fi
+
+
+
+        if [ "$Char" == $LINE_BREAK ] || [ "$Char" == ' ' ] || [ "$TemporaryWordIsHanCharacter" == '1' ]; then
             if [[ "$TemporaryWord" =~ [^\s] ]]; then
                 TemporaryWord=$(echo $TemporaryWord) # 掐头去尾。等效于其他编程语言的 trim() 。
                 WordIndex=$((WordIndex+1));
                 # if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： 第 ${WordIndex} 词： \e[0;91m'\e[0;33m${TemporaryWord}\e[0;91m'\e[0;0m"; fi
-                if [ "$Char" == ' ' ]; then
-                    WordList+=( "$TemporaryWord" )
-                else
-                    WordList+=( "$TemporaryWord" )
-                fi
+                WordList+=( "$TemporaryWord" )
             fi
 
             TemporaryWord=''
@@ -429,6 +468,8 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
 
 
     # local CountOfWords=${#WordList[@]} # 这样取词数不可靠！原因不明。
+
+
 
     # if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： 临时字词表："; fi
 
@@ -531,17 +572,18 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
             # ────────────────────────────────────────────────────────────────────────────────
 
             if [ "$ProcessingWord" == $LINE_BREAK ]; then
+                # if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： \e[0;91m~~ 遇到换行符 ~~。\e[0;0m"; fi
                 LineEndedBecauseOfLineBreakSign='true'
             else
                 LineEndedBecauseOfLineBreakSign='false'
             fi
 
             if [ "$LineEndedBecauseOfLineBreakSign" == 'true' ]; then
-                if [ "$ShouldNotBreakLineBeforeNextWord" == 'false' ]; then
+                if [ "$ShouldNotBreakLineBeforeNextWord" == 'true' ]; then
                     ProcessingWord=''
                     LineEndedBecauseOfLineBreakSign='false'
                 else
-                    if [ $SHOULD_DEBUG -eq 1 ]; then cho  -e  "〔调试〕： \e[0;91m-- 遇到换行符 --。\e[0;0m"; fi
+                    # if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： \e[0;91m~~ 遇到的该换行符确实应换行。 ~~。\e[0;0m"; fi
                     break
                 fi
             fi
@@ -644,6 +686,12 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
         echo  -e  "${FORMATTED_CONTENT}"
         echo  -e  '〔调试〕：────────────────────────────────────────────────────────────────────────────────'
         echo
+        echo
+        echo
+        echo
+        echo
+    else
+        echo  -e  "${FORMATTED_CONTENT}"
     fi
 
 
