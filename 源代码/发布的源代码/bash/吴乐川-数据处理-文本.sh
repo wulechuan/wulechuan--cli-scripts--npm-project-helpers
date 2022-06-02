@@ -1,11 +1,11 @@
-function Assert-吴乐川判断字符系中日韩文字 {
+function Assert-吴乐川判断字符系中日韩文字_直接回显结论 {
     local Char="$1"
     local ResultReceiver
-    Assert-_吴乐川判断字符系中日韩文字  ResultReceiver  "$Char"
+    Assert-吴乐川判断字符系中日韩文字_须采用接收器变量  ResultReceiver  "$Char"
     echo  $ResultReceiver
 }
 
-function Assert-_吴乐川判断字符系中日韩文字 {
+function Assert-吴乐川判断字符系中日韩文字_须采用接收器变量 {
     local Char="$2"
 
     if [ ${#Char} -eq 0 ]; then
@@ -50,9 +50,9 @@ function Assert-_吴乐川判断字符系中日韩文字 {
     ]] || [[
         "$Char" =~ [“”‘’…：，；？！、。（）〈〉《》「」『』【】〒〓〔〕〖〗〝〞｛｝〃々〆〇〡〢〣〤〥〦〧〨〩]
     ]]; then
-        eval "$1=1"
+        eval "$1=true"
     else
-        eval "$1=0"
+        eval "$1=false"
     fi
 }
 
@@ -60,18 +60,18 @@ function Assert-_吴乐川判断字符系中日韩文字 {
 
 
 
-function Assert-吴乐川判断排版时该字词之前不宜换行 {
+function Assert-吴乐川判断排版时该字词之前不宜换行_直接回显结论 {
     local Char="$1"
     local ResultReceiver
-    Assert-_吴乐川判断排版时该字词之前不宜换行  ResultReceiver  "$Char"
+    Assert-吴乐川判断排版时该字词之前不宜换行_须采用接收器变量  ResultReceiver  "$Char"
     echo  $ResultReceiver
 }
 
-function Assert-_吴乐川判断排版时该字词之前不宜换行 {
+function Assert-吴乐川判断排版时该字词之前不宜换行_须采用接收器变量 {
     local Char="$2"
 
     if [ ${#Char} -eq 0 ]; then
-        eval "$1=0"
+        eval "$1=false"
         return
     fi
 
@@ -89,9 +89,9 @@ function Assert-_吴乐川判断排版时该字词之前不宜换行 {
         "$Char" == ']' || \
         "$Char" == '}'
     ]]; then
-        eval "$1=1"
+        eval "$1=true"
     else
-        eval "$1=0"
+        eval "$1=false"
     fi
 }
 
@@ -99,32 +99,41 @@ function Assert-_吴乐川判断排版时该字词之前不宜换行 {
 
 
 
-function Get-吴乐川求一行文本视觉宽度等效英语字母数 {
+function Get-吴乐川求一行文本视觉宽度等效英语字母数_直接回显结论 {
     local Text="$1"
+    local ResultReceiver
+    Assert-吴乐川求一行文本视觉宽度等效英语字母数_须采用接收器变量  ResultReceiver  "$Text"
+    echo  $ResultReceiver
+}
+
+function Get-吴乐川求一行文本视觉宽度等效英语字母数_须采用接收器变量 {
+    local Text="$2"
     if [ "$Text" == '0' ]; then
-        echo 1
+        eval "$1=1"
         return
     fi
 
     if [ -z "$Text" ]; then
-        echo 0
+        eval "$1=0"
         return
     fi
 
     local TextCharCount="${#Text}"
 
-    local _temp_looping_index=0
+    local LoopIndex=0
 
     local Char=''
     local CharWidth=0
     local TextFullWidth=0
+    local CharIsHan='false'
 
-    for ((_temp_looping_index=0; _temp_looping_index<$TextCharCount; _temp_looping_index++)); do
-        Char=${Text:$_temp_looping_index:1}
+    for ((LoopIndex=0; LoopIndex<$TextCharCount; LoopIndex++)); do
+        Char=${Text:$LoopIndex:1}
 
         CharWidth=1
 
-        if [ "`Assert-吴乐川判断字符系中日韩文字 $Char`" == '1' ] && [[ ! "$Char" =~ [\“\”\‘\’…] ]]; then
+        Assert-吴乐川判断字符系中日韩文字_须采用接收器变量  CharIsHan  "$Char"
+        if [ "$CharIsHan" == 'true' ] && [[ ! "$Char" =~ [\“\”\‘\’…] ]]; then
             CharWidth=2
         fi
 
@@ -133,7 +142,7 @@ function Get-吴乐川求一行文本视觉宽度等效英语字母数 {
         # echo -e "〔调试〕： \e[0;33m'$Char'\e[0;0m 的等效宽度： \e[0;91m${CharWidth}\e[0;0m  ${TextFullWidth}"
     done
 
-    echo $TextFullWidth
+    eval "$1=$TextFullWidth"
 }
 
 
