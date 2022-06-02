@@ -6,26 +6,6 @@ source  ./源代码/发布的源代码/bash/吴乐川-管理某-npm-项目的依
 
 
 function 测试之主程序 {
-    # function _为方框打印一段水平边线 {
-    #     if [[ ! "$1" =~ ^[1-9][0-9]*$ ]]; then
-    #         return
-    #     fi
-
-    #     local _temp_looping_index=0
-    #     for ((_temp_looping_index=0; _temp_looping_index<$1; _temp_looping_index++)); do
-    #         echo -n '0'
-    #     done
-    # }
-
-    # _为方框打印一段水平边线 '2'
-    # echo
-    # echo
-    # echo
-
-
-
-
-
     local _result=''
 
 
@@ -34,7 +14,7 @@ function 测试之主程序 {
 
     if true; then
         ConvertTo-吴乐川将文本转换为多行文本 '大漠沙如雪' --英语单词在行尾时其后应保留一个空格 1 '  燕山月似钩' ' 。 ' \
-            '文档对象模型（DOM）将 web 页面与到脚本或编程语言连接起来。通常是指 JavaScript，但将 HTML、SVG 或 XML 文档建模为对象并不是 JavaScript 语言的一部分。DOM 模型用一个逻辑树来表示一个文档，树的每个分支的终点都是一个节点（node），每个节点都包含着对象（object）。DOM 的方法（method）让你可以用特定方式操作这个树，用这些方法你可以改变文档的结构、样式或者内容。节点可以关联上事件处理器，一旦某一事件被触发了，那些事件处理器就会被执行。'
+            '文档对象模型（DOM）将 web 页面与到脚本或编程语言连接起来。通常是指 JavaScript，但将 HTML、SVG 或 XML 文档建模为对象并不是 JavaScript 语言的一部分。DOM 模型用一个逻辑树来表示一个文档，树的每个分支的终点都是一个节点（node），每个节点都包含着对象（object）。DOM 的方法（method）让你可以用特定方式操作这个树，用这些方法你可以改变文档的结构、样式或者内容。节点可以关联上事件处理器，一旦某一事件被触发了，那些事件处理器就会被执行。 Aliquip proident nulla ex cillum magna. Anim culpa dolor ullamco nulla culpa labore. Lorem dolor proident qui aliquip nulla. Do ex external link 1 (www.bing.com) anim tempor do veniam duis nulla ut culpa tempor dolore. Labore dolore ex anim fake self-page link 2 (do not follow) id. Anim et ex ex labore cupidatat anim proident laboris amet fugiat aute ad. Reprehenderit dolore cupidatat sit elit esse anim est aute.'
     fi
     return
 
@@ -55,7 +35,7 @@ function 测试之主程序 {
             echo '相同'
         fi
 
-        for Char in 吴 乐 川 가 “ ” \" \' 힣 ࠀ `echo -e "\u07ff"` `echo -e "\u0800"` 1 2 3 A B C っ オ た ジ ヤ; do
+        for Char in 吴 乐 川 “ ” \" \' 가 힣 ࠀ `echo -e "\u07ff"` `echo -e "\u0800"` 1 2 3 A B C っ オ た ジ ヤ; do
             _result=`Assert-吴乐川判断字符系中日韩文字 $Char`
             echo "'$Char' 是中日韩文字或标点： ${_result}"
         done

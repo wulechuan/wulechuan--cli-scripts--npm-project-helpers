@@ -110,7 +110,7 @@ function Get-吴乐川求一行文本视觉宽度等效英语字母数 {
 
         CharWidth=1
 
-        if [ `Assert-吴乐川判断字符系中日韩文字 $Char` -eq 1 ] && [[ ! "$Char" =~ [\“\”\‘\’…] ]]; then
+        if [ "`Assert-吴乐川判断字符系中日韩文字 $Char`" == '1' ] && [[ ! "$Char" =~ [\“\”\‘\’…] ]]; then
             CharWidth=2
         fi
 
@@ -360,6 +360,237 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
         echo  -e  "〔调试〕： 原文本中的每个换行符在产生的内容中应改作两个换行符：\n           \e[0;33m${ShouldDoubleOriginalLineBreaks}\e[0;0m"
         echo
         echo  -e  "〔调试〕： 原文本： \e[0;91m'\e[0;33m${OriginalText}\e[0;91m'\e[0;0m"
+        echo
+    fi
+
+
+
+    local OriginalCharCount=${#OriginalText}
+
+    local LoopIndex=0
+
+    local Char=''
+    local TemporaryWord=''
+    local WordList=()
+
+    for ((LoopIndex=0; LoopIndex<$OriginalCharCount; LoopIndex++)); do
+        Char=${OriginalText:${LoopIndex}:1}
+
+        if [ "$Char" != "\n" ] && [ "`Assert-吴乐川判断字符系中日韩文字 "$Char"`" == '0' ]; then
+            TemporaryWord+="$Char"
+        else
+            if [[ "$TemporaryWord" =~ [^\s] ]]; then
+                TemporaryWord=$(echo $TemporaryWord) # 掐头去尾。等效于其他编程语言的 trim() 。
+                WordList+=( "$TemporaryWord" )
+            fi
+
+            TemporaryWord=''
+
+            WordList+=( "$Char" ) # 汉字、日本字、朝鲜字、汉语标点或换行符。
+        fi
+    done
+
+    if [ ! -z "$TemporaryWord" ]; then
+        if [[ "$TemporaryWord" =~ [^\s] ]]; then
+            TemporaryWord=$(echo $TemporaryWord) # 掐头去尾。等效于其他编程语言的 trim() 。
+            WordList+=( "$TemporaryWord" )
+        fi
+
+        TemporaryWord=''
+    fi
+
+    # if [ $SHOULD_DEBUG -eq 1 ]; then
+    #     echo  -e  "〔调试〕： 临时字词表：\n${WordList[@]}"
+    #     LoopIndex=0
+    #     for TemporaryWord in ${WordList[@]}; do
+    #         LoopIndex=$((LoopIndex+1))
+    #         echo  -e  "    〔调试〕： 第 ${LoopIndex} 词： '${TemporaryWord}'"
+    #     done
+    # fi
+
+
+
+    local CountOfWords=${#WordList[@]}
+    local CountOfLines=0
+    local MaxEnglishCharCountPerLine=$((HanCharacterPerLineMaxCount*2))
+
+    local IndexOfNextWord=0
+    local TextOfProcessingLine=''
+    local WidthOfProcessingLine=0
+    local WidthOfProcessingLineIfAddOneMoreOrTwoWords=0
+    local WordCountOfProcessingLine=0
+    local LineEndedBecauseOfLineBreakSign='false'
+
+    local ProcessingWord=''
+    local WidthOfProcessingWord=0
+    local ProcessingWordIsHanCharacter='false'
+    local ShouldNotBreakLineBeforeProcessingWord='false'
+    local LastWordWasHanCharacter='false'
+
+    local NextWord=''
+    local ShouldNotBreakLineBeforeNextWord='false'
+    local WidthOfNextWord=0
+
+    local FORMATTED_CONTENT=''
+
+
+
+    while [ $IndexOfNextWord -lt $CountOfWords ]; do
+
+        TextOfProcessingLine=''
+        WidthOfProcessingLine=0
+        WordCountOfProcessingLine=0
+        LastWordWasHanCharacter='false'
+
+        while [ $WidthOfProcessingLine -lt $MaxEnglishCharCountPerLine ] && [ $IndexOfNextWord -lt $CountOfWords ]; do
+
+            # ────────────────────────────────────────────────────────────────────────────────
+            # 取词。
+            # ────────────────────────────────────────────────────────────────────────────────
+
+            ProcessingWord="${WordList[$IndexOfNextWord]}"
+
+            if [ "$(Assert-吴乐川判断排版时该字词之前不宜换行  "$ProcessingWord")" == '1' ]; then
+                ShouldNotBreakLineBeforeProcessingWord='true'
+            else
+                ShouldNotBreakLineBeforeProcessingWord='false'
+            fi
+
+
+
+            IndexOfNextWord=$((IndexOfNextWord+1))
+
+
+
+            # ────────────────────────────────────────────────────────────────────────────────
+            # 尽量再取一词。
+            # ────────────────────────────────────────────────────────────────────────────────
+
+            ShouldNotBreakLineBeforeNextWord='false'
+
+            if [ $IndexOfNextWord -lt $CountOfWords ]; then
+                NextWord="${WordList[$IndexOfNextWord]}"
+
+                if [ "$(Assert-吴乐川判断排版时该字词之前不宜换行  "$NextWord")" == '1' ]; then
+                    ShouldNotBreakLineBeforeNextWord='true'
+                else
+                    ShouldNotBreakLineBeforeNextWord='false'
+                fi
+            fi
+
+
+
+            # ────────────────────────────────────────────────────────────────────────────────
+            # 如果遭遇原文自带的换行符，则尽量换行。
+            # 所谓“尽量”，是指当发现后面一个符号之前不宜换行时，
+            # 则应舍弃原文中的这一换行符。以免出现不适宜的排版换行。
+            # ────────────────────────────────────────────────────────────────────────────────
+
+            if [ "$ProcessingWord" == "\n" ]; then
+                LineEndedBecauseOfLineBreakSign='true'
+            else
+                LineEndedBecauseOfLineBreakSign='false'
+            fi
+
+            if [ "$LineEndedBecauseOfLineBreakSign" == 'true' ]; then
+                if [ "$ShouldNotBreakLineBeforeNextWord" == 'false' ]; then
+                    ProcessingWord=''
+                    LineEndedBecauseOfLineBreakSign='false'
+                fi
+            fi
+
+
+
+            # ────────────────────────────────────────────────────────────────────────────────
+            # 为统计做准备。
+            # ────────────────────────────────────────────────────────────────────────────────
+
+            WidthOfProcessingWord=`Get-吴乐川求一行文本视觉宽度等效英语字母数  "$ProcessingWord"`
+
+            ProcessingWordIsHanCharacter='false'
+            if [ ${#ProcessingWord} -eq 1 ] && [ "`Assert-吴乐川判断字符系中日韩文字  "$ProcessingWord"`" == '1' ]; then
+                ProcessingWordIsHanCharacter='true'
+            fi
+
+
+
+            # ────────────────────────────────────────────────────────────────────────────────
+            # 如果本行现有内容再加一词或两词会满溢，则提前结束本行。
+            # ────────────────────────────────────────────────────────────────────────────────
+
+            if [ "$ShouldNotBreakLineBeforeProcessingWord" == 'false' ]; then
+
+                if [ "$LastWordWasHanCharacter" == 'true' ] && [ "$ProcessingWordIsHanCharacter" == 'false' ]; then
+                    ProcessingWord=" ${ProcessingWord}"
+                    WidthOfProcessingWord=$((WidthOfProcessingWord+1))
+                fi
+
+                WidthOfProcessingLineIfAddOneMoreOrTwoWords=$((WidthOfProcessingLine+WidthOfProcessingWord))
+
+                if [ "$ShouldNotBreakLineBeforeNextWord" == 'true' ]; then
+                    WidthOfNextWord=`Get-吴乐川求一行文本视觉宽度等效英语字母数  "$NextWord"`
+
+                    WidthOfProcessingLineIfAddOneMoreOrTwoWords=$((WidthOfProcessingLineIfAddOneMoreOrTwoWords+WidthOfNextWord))
+                fi
+
+                if [ $WidthOfProcessingLineIfAddOneMoreOrTwoWords -gt $MaxEnglishCharCountPerLine ]; then
+                    if [ $WordCountOfProcessingLine -gt 0 ]; then
+                        IndexOfNextWord=$((IndexOfNextWord-1))
+                        break
+                    fi
+                fi
+            fi
+
+
+
+            TextOfProcessingLine+="$ProcessingWord"
+            WidthOfProcessingLine=$((WidthOfProcessingLine+WidthOfProcessingWord))
+            WordCountOfProcessingLine=$((WordCountOfProcessingLine+1))
+            LastWordWasHanCharacter="$ProcessingWordIsHanCharacter"
+
+        done
+
+
+
+        TextOfProcessingLine=`echo $TextOfProcessingLine` # 掐头去尾。等效于其他编程语言的 trim() 。
+
+        if [ "$LastWordWasHanCharacter" == 'false' ] && [ "$ShouldAddASpaceAfterLastEnglishWordPerLine" == 'true' ]; then
+            TextOfProcessingLine+=' '
+        fi
+
+
+
+        if [ $CountOfLines -gt 0 ]; then
+            FORMATTED_CONTENT+="\n"
+        fi
+
+
+
+        FORMATTED_CONTENT+="$TextOfProcessingLine"
+        CountOfLines=$((CountOfLines+1))
+
+
+
+        if [ "$LineEndedBecauseOfLineBreakSign" == 'true' ] && [ "$ShouldDoubleOriginalLineBreaks" == 'true' ]; then
+            FORMATTED_CONTENT+="\n"
+            CountOfLines=$((CountOfLines+1))
+        fi
+
+
+
+    done
+
+
+
+
+
+    if [ $SHOULD_DEBUG -eq 1 ]; then
+        echo
+        echo  -e  '〔调试〕：────────────────────────────────────────────────────────────────────────────────'
+        echo  -e  "〔调试〕： 行数： $CountOfLines"
+        echo  -e  '〔调试〕：────────────────────────────────────────────────────────────────────────────────'
+        echo  -e  "${FORMATTED_CONTENT}"
+        echo  -e  '〔调试〕：────────────────────────────────────────────────────────────────────────────────'
         echo
     fi
 }
