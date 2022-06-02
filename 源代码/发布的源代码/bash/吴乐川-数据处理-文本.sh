@@ -205,7 +205,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
 
 
-    function _打印针对当前处理的参数的错误信息 {
+    function Write-_吴乐川打印针对当前处理的参数的错误信息 {
         echo -e "\e[0;31m在命令参数表中的 “ \e[0;97m${_ProcessingArgumentName}\e[0;31m ” 参数：\n    \e[0;33m${1}\e[0;0m"
     }
 
@@ -249,17 +249,17 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             # echo  -e  "已经遇到 “ \e[0;91m${_ProcessingArgumentName}\e[0;0m ”。其后还有 \e[0;96m$#\e[0;0m 个参数未处理。"
 
             if [ "${ResultReceiverVarName_FullText}" != '*|undefined|*' ]; then
-                _打印针对当前处理的参数的错误信息  '不应重复出现。〔1〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔1〕。'
                 return
             fi
 
             if [[ "$1" =~ ^- ]]; then
-                _打印针对当前处理的参数的错误信息  '后面没有给出值。〔1〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔1〕。'
                 return
             fi
 
             if [ -z "$1" ]; then
-                _打印针对当前处理的参数的错误信息  '后面没有给出值。〔2〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔2〕。'
                 return
             fi
 
@@ -269,7 +269,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
             if [ "${ResultReceiverVarName_FullText}" != '*|undefined|*' ]; then
-                _打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
                 shift
                 return
             fi
@@ -278,14 +278,14 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             shift
 
             if [ -z "${_TemporaryArgumentValue}" ]; then
-                _打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔3〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔3〕。'
                 return
             fi
         fi
 
         if [ ! -z "${_TemporaryArgumentValue}" ]; then
             if [[ ! "${_TemporaryArgumentValue}" =~ ^[a-zA-Z_-][0-9a-zA-Z_-]*$ ]]; then
-                _打印针对当前处理的参数的错误信息  "给出值不合规。给出的值为 “ \e[0;33m${_TemporaryArgumentValue}\e[0;0m ” 。〔2〕。"
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规。给出的值为 “ \e[0;33m${_TemporaryArgumentValue}\e[0;0m ” 。〔2〕。"
                 return
             else
                 ResultReceiverVarName_FullText=$_TemporaryArgumentValue
@@ -304,17 +304,17 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             # echo  -e  "已经遇到 “ \e[0;91m${_ProcessingArgumentName}\e[0;0m ”。其后还有 \e[0;96m$#\e[0;0m 个参数未处理。"
 
             if [ "${ResultReceiverVarName_TextLinesArray}" != '*|undefined|*' ]; then
-                _打印针对当前处理的参数的错误信息  '不应重复出现。〔1〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔1〕。'
                 return
             fi
 
             if [[ "$1" =~ ^- ]]; then
-                _打印针对当前处理的参数的错误信息  '后面没有给出值。〔1〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔1〕。'
                 return
             fi
 
             if [ -z "$1" ]; then
-                _打印针对当前处理的参数的错误信息  '后面没有给出值。〔2〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔2〕。'
                 return
             fi
 
@@ -324,7 +324,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
             if [ "${ResultReceiverVarName_TextLinesArray}" != '*|undefined|*' ]; then
-                _打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
                 shift
                 return
             fi
@@ -333,14 +333,14 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             shift
 
             if [ -z "${_TemporaryArgumentValue}" ]; then
-                _打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔3〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔3〕。'
                 return
             fi
         fi
 
         if [ ! -z "${_TemporaryArgumentValue}" ]; then
             if [[ ! "${_TemporaryArgumentValue}" =~ ^[a-zA-Z_-][0-9a-zA-Z_-]*$ ]]; then
-                _打印针对当前处理的参数的错误信息  "给出值不合规。给出的值为 “ \e[0;33m${_TemporaryArgumentValue}\e[0;0m ” 。〔2〕。"
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规。给出的值为 “ \e[0;33m${_TemporaryArgumentValue}\e[0;0m ” 。〔2〕。"
                 return
             else
                 ResultReceiverVarName_TextLinesArray=$_TemporaryArgumentValue
@@ -359,17 +359,17 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             # echo  -e  "已经遇到 “ \e[0;91m${_ProcessingArgumentName}\e[0;0m ”。其后还有 \e[0;96m$#\e[0;0m 个参数未处理。"
 
             if [ "${ResultReceiverVarName_CountOfLines}" != '*|undefined|*' ]; then
-                _打印针对当前处理的参数的错误信息  '不应重复出现。〔1〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔1〕。'
                 return
             fi
 
             if [[ "$1" =~ ^- ]]; then
-                _打印针对当前处理的参数的错误信息  '后面没有给出值。〔1〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔1〕。'
                 return
             fi
 
             if [ -z "$1" ]; then
-                _打印针对当前处理的参数的错误信息  '后面没有给出值。〔2〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔2〕。'
                 return
             fi
 
@@ -379,7 +379,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
             if [ "${ResultReceiverVarName_CountOfLines}" != '*|undefined|*' ]; then
-                _打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
                 shift
                 return
             fi
@@ -388,14 +388,14 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             shift
 
             if [ -z "${_TemporaryArgumentValue}" ]; then
-                _打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔3〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔3〕。'
                 return
             fi
         fi
 
         if [ ! -z "${_TemporaryArgumentValue}" ]; then
             if [[ ! "${_TemporaryArgumentValue}" =~ ^[a-zA-Z_-][0-9a-zA-Z_-]*$ ]]; then
-                _打印针对当前处理的参数的错误信息  "给出值不合规。给出的值为 “ \e[0;33m${_TemporaryArgumentValue}\e[0;0m ” 。〔2〕。"
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规。给出的值为 “ \e[0;33m${_TemporaryArgumentValue}\e[0;0m ” 。〔2〕。"
                 return
             else
                 ResultReceiverVarName_CountOfLines=$_TemporaryArgumentValue
@@ -412,17 +412,17 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             shift
 
             if [ "${HanCharacterPerLineMaxCount}" != 'undefined' ]; then
-                _打印针对当前处理的参数的错误信息  '不应重复出现。〔1〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔1〕。'
                 return
             fi
 
             if [[ "$1" =~ ^- ]]; then
-                _打印针对当前处理的参数的错误信息  '后面没有给出值。〔1〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔1〕。'
                 return
             fi
 
             if [ -z "$1" ]; then
-                _打印针对当前处理的参数的错误信息  '后面没有给出值。〔2〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔2〕。'
                 return
             fi
 
@@ -432,7 +432,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
             if [ "${HanCharacterPerLineMaxCount}" != 'undefined' ]; then
-                _打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
                 shift
                 return
             fi
@@ -443,14 +443,14 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             if [ "$_TemporaryArgumentValue" == '0' ]; then
                 HanCharacterPerLineMaxCount=0
             elif [ -z "${_TemporaryArgumentValue}" ]; then
-                _打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔3〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔3〕。'
                 return
             fi
         fi
 
         if [ ! -z "$_TemporaryArgumentValue" ]; then
             if [[ ! "${_TemporaryArgumentValue}" =~ ^[1-9][0-9]*$ ]]; then
-                _打印针对当前处理的参数的错误信息  "给出值不合规。给出的值为 “ \e[0;33m${_TemporaryArgumentValue}\e[0;0m ” 。〔2〕。"
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规。给出的值为 “ \e[0;33m${_TemporaryArgumentValue}\e[0;0m ” 。〔2〕。"
                 return
             else
                 HanCharacterPerLineMaxCount=$_TemporaryArgumentValue
@@ -467,7 +467,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             shift
 
             if [ "${ShouldAddASpaceAfterLastEnglishWordPerLine}" != 'undefined' ]; then
-                _打印针对当前处理的参数的错误信息  "不应重复出现。〔1〕。已有参数将其配置为 “ \e[0;32m${ShouldAddASpaceAfterLastEnglishWordPerLine}\e[0;33m ” 。"
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "不应重复出现。〔1〕。已有参数将其配置为 “ \e[0;32m${ShouldAddASpaceAfterLastEnglishWordPerLine}\e[0;33m ” 。"
                 return
             fi
 
@@ -483,7 +483,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
             if [ "${ShouldAddASpaceAfterLastEnglishWordPerLine}" != 'undefined' ]; then
-                _打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
                 shift
                 return
             fi
@@ -494,7 +494,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             if [ "$_TemporaryArgumentValue" == '0' ]; then
                 _TemporaryArgumentValue='false'
             elif [ -z "$_TemporaryArgumentValue" ]; then
-                _打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔1〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔1〕。'
                 return
             fi
         fi
@@ -517,7 +517,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             shift
 
             if [ "${ShouldDoubleOriginalLineBreaks}" != 'undefined' ]; then
-                _打印针对当前处理的参数的错误信息  "不应重复出现。〔1〕。已有参数将其配置为 “ \e[0;32m${ShouldDoubleOriginalLineBreaks}\e[0;33m ” 。"
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "不应重复出现。〔1〕。已有参数将其配置为 “ \e[0;32m${ShouldDoubleOriginalLineBreaks}\e[0;33m ” 。"
                 return
             fi
 
@@ -533,7 +533,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
             if [ "${ShouldDoubleOriginalLineBreaks}" != 'undefined' ]; then
-                _打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
                 shift
                 return
             fi
@@ -544,7 +544,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             if [ "${_TemporaryArgumentValue}" == '0' ]; then
                 _TemporaryArgumentValue='false'
             elif [ -z "${_TemporaryArgumentValue}" ]; then
-                _打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔1〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔1〕。'
                 return
             fi
         fi

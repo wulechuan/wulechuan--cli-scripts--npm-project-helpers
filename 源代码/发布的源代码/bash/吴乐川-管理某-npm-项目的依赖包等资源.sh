@@ -636,11 +636,11 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
 
 
-    function _打印针对当前处理的参数的错误信息 {
+    function Write-_吴乐川打印针对当前处理的参数的错误信息 {
         echo -e "\e[0;31m在命令参数表中的 “ \e[0;97m${_ProcessingArgumentName}\e[0;31m ” 参数：\n    \e[0;33m${1}\e[0;0m"
     }
 
-    function _打印针对当前处理的依赖包原始配置参数的错误信息 {
+    function Write-_吴乐川打印针对当前处理的依赖包原始配置参数的错误信息 {
         echo -e "\e[0;31m在命令参数表中第 \e[0;96m${_IndexOfProcessingConfiguration}\e[0;31m 次出现的 “ \e[0;97m${_ProcessingArgumentName}\e[0;31m ” 参数：\n    \e[0;33m${1}\e[0;0m"
     }
 
@@ -680,17 +680,17 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             shift
 
             if [ "$PackageConfigContentSeparator" != 'undefined' ]; then
-                _打印针对当前处理的参数的错误信息  '不应重复出现。〔1〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔1〕。'
                 return
             fi
 
             if [[ "$1" =~ ^- ]]; then
-                _打印针对当前处理的参数的错误信息  '后面没有给出值。〔1〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔1〕。'
                 return
             fi
 
             if [ -z "$1" ]; then
-                _打印针对当前处理的参数的错误信息  '后面没有给出值。〔2〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔2〕。'
                 return
             fi
 
@@ -700,7 +700,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
             if [ "$PackageConfigContentSeparator" != 'undefined' ]; then
-                _打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
                 shift
                 return
             fi
@@ -709,17 +709,17 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             shift
 
             if [ "$_TemporaryArgumentValue" == '0' ]; then
-                _打印针对当前处理的参数的错误信息  "给出值不合规。给出的值为 “ \e[0;33m${_TemporaryArgumentValue}\e[0;0m ” 。〔1〕。"
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规。给出的值为 “ \e[0;33m${_TemporaryArgumentValue}\e[0;0m ” 。〔1〕。"
                 return
             elif [ -z "${_TemporaryArgumentValue}" ]; then
-                _打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔3〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔3〕。'
                 return
             fi
         fi
 
         if [ ! -z "$_TemporaryArgumentValue" ]; then
             if [[ "${_TemporaryArgumentValue}" =~ "^[ \n\t]*$" ]]; then
-                _打印针对当前处理的参数的错误信息  "给出值不合规。给出的值为 “ \e[0;33m${_TemporaryArgumentValue}\e[0;0m ” 。〔2〕。"
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规。给出的值为 “ \e[0;33m${_TemporaryArgumentValue}\e[0;0m ” 。〔2〕。"
                 return
             else
                 PackageConfigContentSeparator="${_TemporaryArgumentValue}"
@@ -736,17 +736,17 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             shift
 
             if [ "$DependenciesAreOfCateogryOfProduction" != 'undefined' ]; then
-                _打印针对当前处理的参数的错误信息  '不应重复出现。〔1〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔1〕。'
                 return
             fi
 
             if [[ "$1" =~ ^- ]]; then
-                _打印针对当前处理的参数的错误信息  '后面没有给出值。〔1〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔1〕。'
                 return
             fi
 
             if [ -z "$1" ]; then
-                _打印针对当前处理的参数的错误信息  '后面没有给出值。〔2〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔2〕。'
                 return
             fi
 
@@ -756,7 +756,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
             if [ "$DependenciesAreOfCateogryOfProduction" != 'undefined' ]; then
-                _打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
                 shift
                 return
             fi
@@ -767,7 +767,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             if [ "$_TemporaryArgumentValue" == '0' ]; then
                 _TemporaryArgumentValue='false'
             elif [ -z "${_TemporaryArgumentValue}" ]; then
-                _打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔3〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔3〕。'
                 return
             fi
         fi
@@ -778,7 +778,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             elif [ "${_TemporaryArgumentValue}" == '本产品仅会在研发阶段借助这些软件' ]; then
                 DependenciesAreOfCateogryOfProduction='false'
             else
-                _打印针对当前处理的参数的错误信息  '取值只能是下列之一：'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '取值只能是下列之一：'
                 echo -e "        '本产品拟囊括这些软件之整体或部分'"
                 echo -e "        '本产品仅会在研发阶段借助这些软件'"
                 echo
@@ -797,7 +797,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             shift
 
             if [ "$ShouldDryRun" != 'undefined' ]; then
-                _打印针对当前处理的参数的错误信息  "不应重复出现。〔1〕。已有参数将其配置为 “ \e[0;32m${ShouldDryRun}\e[0;33m ” 。"
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "不应重复出现。〔1〕。已有参数将其配置为 “ \e[0;32m${ShouldDryRun}\e[0;33m ” 。"
                 return
             fi
 
@@ -813,7 +813,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
             if [ "$ShouldDryRun" != 'undefined' ]; then
-                _打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
                 shift
                 return
             fi
@@ -824,7 +824,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             if [ "$_TemporaryArgumentValue" == '0' ]; then
                 _TemporaryArgumentValue='false'
             elif [ -z "$_TemporaryArgumentValue" ]; then
-                _打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔1〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔1〕。'
                 return
             fi
         fi
@@ -849,12 +849,12 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             shift
 
             if [[ "$1" =~ ^- ]]; then
-                _打印针对当前处理的依赖包原始配置参数的错误信息  '其后面没有给出值。〔1〕。'
+                Write-_吴乐川打印针对当前处理的依赖包原始配置参数的错误信息  '其后面没有给出值。〔1〕。'
                 return
             fi
 
             if [ -z "$1" ]; then
-                _打印针对当前处理的依赖包原始配置参数的错误信息  '其后面没有给出值。〔2〕。'
+                Write-_吴乐川打印针对当前处理的依赖包原始配置参数的错误信息  '其后面没有给出值。〔2〕。'
                 return
             fi
 
@@ -868,7 +868,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             shift
 
             if [ -z "${_TemporaryArgumentValue}" ]; then
-                _打印针对当前处理的依赖包原始配置参数的错误信息  '等号（=）后面没有给出值。〔1〕。'
+                Write-_吴乐川打印针对当前处理的依赖包原始配置参数的错误信息  '等号（=）后面没有给出值。〔1〕。'
                 return
             fi
         fi
@@ -907,7 +907,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
 
 
-    function _打印一条红线 {
+    function Write-_吴乐川打印一条红线 {
         echo  -en  "\e[0;31m";  Write-Line-without-line-break 66;  echo  -e "\e[0;0m"
     }
 
@@ -970,9 +970,9 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
         if [[ ! "$_ProcessingPackageName" =~ ^(@[a-z][a-z0-9_-]*\/)?[a-z][a-z0-9_-]*$ ]]; then
             echo
-            _打印一条红线
+            Write-_吴乐川打印一条红线
             echo -e "\e[0;31m第 \e[0;96m${_IndexOfProcessingConfiguration}\e[0;31m 个依赖包的名称不合规。该名称为 \"\e[0;97m${_ProcessingPackageName}\e[0;31m\" 。\e[0;0m"
-            _打印一条红线
+            Write-_吴乐川打印一条红线
             echo
 
             return
@@ -1001,9 +1001,9 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
         if [ $_ProcessingPackageHasLockedVersionRange -eq 0 ] && [ ! -z "$_ProcessingPackageVerionLockReason" ]; then
             echo
-            _打印一条红线
+            Write-_吴乐川打印一条红线
             echo  -e  "\e[0;31m解析【npm 软件包版本配置】时，发行某配置有误。\e[0;0m"
-            _打印一条红线
+            Write-_吴乐川打印一条红线
 
             echo  -e  "  \e[0;31m依赖包\e[0;0m"
             echo  -e  "      \e[0;31m“ \e[0;33m${_ProcessingPackageName}\e[0;31m ”\e[0;0m"
@@ -1017,7 +1017,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             echo  -e
             echo  -e  "  \e[0;31m务必删去这一讲述“原因”的措辞。\e[0;0m"
 
-            _打印一条红线
+            Write-_吴乐川打印一条红线
             echo
 
             return
@@ -1134,7 +1134,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
 
 
-    function _为方框打印一段水平边线 {
+    function Write-_吴乐川为方框打印一段水平边线 {
         if [[ ! "$1" =~ ^[1-9][0-9]*$ ]]; then
             return
         fi
@@ -1244,7 +1244,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
         _ProcessingPackageDescription=''
 
-        _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ╔$(_为方框打印一段水平边线 ${_DescriptionFrameInnerWidth1})╦$(_为方框打印一段水平边线 ${_DescriptionFrameInnerWidth2})╗\e[0;0m"
+        _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ╔$(Write-_吴乐川为方框打印一段水平边线 ${_DescriptionFrameInnerWidth1})╦$(Write-_吴乐川为方框打印一段水平边线 ${_DescriptionFrameInnerWidth2})╗\e[0;0m"
 
         for _temp_looping_index in {1..2}; do
             _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameInnerWidth1}}║${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameInnerWidth2}}║\e[0;0m"
@@ -1291,7 +1291,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
         # ────────────────────────────────────────────────────────────────────────────────
 
-        _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ╚$(_为方框打印一段水平边线 ${_DescriptionFrameInnerWidth1})╦$(_为方框打印一段水平边线 ${_DescriptionFrameInnerWidth2})╝\e[0;0m"
+        _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ╚$(Write-_吴乐川为方框打印一段水平边线 ${_DescriptionFrameInnerWidth1})╦$(Write-_吴乐川为方框打印一段水平边线 ${_DescriptionFrameInnerWidth2})╝\e[0;0m"
 
         _ProcessingPackageDescription+="\n${_GlobalIndentation}${_ProcessingPackageCommandLineSnippet_Colorful}"
 
