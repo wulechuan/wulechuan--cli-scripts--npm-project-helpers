@@ -121,3 +121,245 @@ function Get-吴乐川求一行文本视觉宽度等效英语字母数 {
 
     echo $TextFullWidth
 }
+
+
+
+
+
+function ConvertTo-吴乐川将文本转换为多行文本 {
+    local HAN_CHARACTER_PER_LINE_DEFAULT_MAX_COUNT=30
+    local SHOULD_DEBUG=1
+
+
+
+
+
+    # --内容分割记号          至多出现 1 次。    非空白文本。
+    # --这批依赖包之依赖类别   至多出现 1 次。    '本产品拟囊括这些软件之整体或部分' | '本产品仅会在研发阶段借助这些软件'
+    # --应仅作仿真演练        至多出现 1 次。    1 | 0 | true | false
+    # --某依赖包之版本配置    可多次出现。        非空白文本。
+
+
+
+
+
+    function _打印针对当前处理的参数的错误信息 {
+        echo -e "\e[0;31m在命令参数表中的 “ \e[0;97m${_ProcessingArgumentName}\e[0;31m ” 参数：\n    \e[0;33m${1}\e[0;0m"
+    }
+
+
+
+
+
+    local OriginalText=''
+    local HanCharacterPerLineMaxCount='undefined'
+    local ShouldAddASpaceAfterLastEnglishWordPerLine='undefined' # 'true' 或其它值。
+    local ShouldDoubleOriginalLineBreaks='undefined' # 'true' 或其它值。
+
+
+
+    local _TemporaryArgumentValue
+    local _ProcessingArgumentName
+    local _ProcessedArgumentsCount=0
+    local _CurrentArgumentOrArgumentPairHaveRecognized=0
+
+    while [[ ! -z "$1" && $_ProcessedArgumentsCount -lt 2048 ]]; do
+        if [ $SHOULD_DEBUG -eq 1 ]; then
+            echo "〔调试〕： arg[${_ProcessedArgumentsCount}]='$1'"
+        fi
+
+        _ProcessedArgumentsCount=$((_ProcessedArgumentsCount+1))
+        _CurrentArgumentOrArgumentPairHaveRecognized=0
+
+        # ---------------------------------------------------------------
+
+        _ProcessingArgumentName='--单行等效汉字字数上限'
+        _TemporaryArgumentValue=''
+
+         if [ "$1" == "${_ProcessingArgumentName}" ]; then
+            _CurrentArgumentOrArgumentPairHaveRecognized=1
+            shift
+
+            if [ "${HanCharacterPerLineMaxCount}" != 'undefined' ]; then
+                _打印针对当前处理的参数的错误信息  '不应重复出现。〔1〕。'
+                return
+            fi
+
+            if [[ "$1" =~ ^- ]]; then
+                _打印针对当前处理的参数的错误信息  '后面没有给出值。〔1〕。'
+                return
+            fi
+
+            if [ -z "$1" ]; then
+                _打印针对当前处理的参数的错误信息  '后面没有给出值。〔2〕。'
+                return
+            fi
+
+            _TemporaryArgumentValue="$1"
+            shift
+        elif [[ "$1" =~ ^"${_ProcessingArgumentName}"= ]]; then
+            _CurrentArgumentOrArgumentPairHaveRecognized=1
+
+            if [ "${HanCharacterPerLineMaxCount}" != 'undefined' ]; then
+                _打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
+                shift
+                return
+            fi
+
+            _TemporaryArgumentValue=${1:${#_ProcessingArgumentName}+1}
+            shift
+
+            if [ "$_TemporaryArgumentValue" == '0' ]; then
+                HanCharacterPerLineMaxCount=0
+            elif [ -z "${_TemporaryArgumentValue}" ]; then
+                _打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔3〕。'
+                return
+            fi
+        fi
+
+        if [ ! -z "$_TemporaryArgumentValue" ]; then
+            if [[ ! "${_TemporaryArgumentValue}" =~ ^[1-9][0-9]*$ ]]; then
+                _打印针对当前处理的参数的错误信息  "给出值不合规。给出的值为 “ \e[0;33m${_TemporaryArgumentValue}\e[0;0m ” 。〔2〕。"
+                return
+            else
+                HanCharacterPerLineMaxCount=$_TemporaryArgumentValue
+            fi
+        fi
+
+        # ---------------------------------------------------------------
+
+        _ProcessingArgumentName='--英语单词在行尾时其后应保留一个空格'
+        _TemporaryArgumentValue=''
+
+        if [ "$1" == "${_ProcessingArgumentName}" ]; then
+            _CurrentArgumentOrArgumentPairHaveRecognized=1
+            shift
+
+            if [ "${ShouldAddASpaceAfterLastEnglishWordPerLine}" != 'undefined' ]; then
+                _打印针对当前处理的参数的错误信息  "不应重复出现。〔1〕。已有参数将其配置为 “ \e[0;32m${ShouldAddASpaceAfterLastEnglishWordPerLine}\e[0;33m ” 。"
+                return
+            fi
+
+            ShouldAddASpaceAfterLastEnglishWordPerLine='true'
+
+            if [[ "$1" =~ ^- ]]; then continue; fi
+
+            if [[ -z "$1" ]]; then continue; fi
+
+            _TemporaryArgumentValue="$1"
+            shift
+        elif [[ "$1" =~ ^"${_ProcessingArgumentName}"= ]]; then
+            _CurrentArgumentOrArgumentPairHaveRecognized=1
+
+            if [ "${ShouldAddASpaceAfterLastEnglishWordPerLine}" != 'undefined' ]; then
+                _打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
+                shift
+                return
+            fi
+
+            _TemporaryArgumentValue=${1:${#_ProcessingArgumentName}+1}
+            shift
+
+            if [ "$_TemporaryArgumentValue" == '0' ]; then
+                _TemporaryArgumentValue='false'
+            elif [ -z "$_TemporaryArgumentValue" ]; then
+                _打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔1〕。'
+                return
+            fi
+        fi
+
+        if [ ! -z "${_TemporaryArgumentValue}" ]; then
+            if [ "${_TemporaryArgumentValue}" == 'true' ] || [ "${_TemporaryArgumentValue}" == 'true' ] || [[ "$_TemporaryArgumentValue" =~ ^[01]$ ]]; then
+                ShouldAddASpaceAfterLastEnglishWordPerLine='true'
+            else
+                ShouldAddASpaceAfterLastEnglishWordPerLine='false'
+            fi
+        fi
+
+        # ---------------------------------------------------------------
+
+        _ProcessingArgumentName='--原文本中的每个换行符在产生的内容中应改作两个换行符'
+        _TemporaryArgumentValue=''
+
+        if [ "$1" == "${_ProcessingArgumentName}" ]; then
+            _CurrentArgumentOrArgumentPairHaveRecognized=1
+            shift
+
+            if [ "${ShouldDoubleOriginalLineBreaks}" != 'undefined' ]; then
+                _打印针对当前处理的参数的错误信息  "不应重复出现。〔1〕。已有参数将其配置为 “ \e[0;32m${ShouldDoubleOriginalLineBreaks}\e[0;33m ” 。"
+                return
+            fi
+
+            ShouldDoubleOriginalLineBreaks='true'
+
+            if [[ "$1" =~ ^- ]]; then continue; fi
+
+            if [[ -z "$1" ]]; then continue; fi
+
+            _TemporaryArgumentValue="$1"
+            shift
+        elif [[ "$1" =~ ^"${_ProcessingArgumentName}"= ]]; then
+            _CurrentArgumentOrArgumentPairHaveRecognized=1
+
+            if [ "${ShouldDoubleOriginalLineBreaks}" != 'undefined' ]; then
+                _打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
+                shift
+                return
+            fi
+
+            _TemporaryArgumentValue=${1:${#_ProcessingArgumentName}+1}
+            shift
+
+            if [ "${_TemporaryArgumentValue}" == '0' ]; then
+                _TemporaryArgumentValue='false'
+            elif [ -z "${_TemporaryArgumentValue}" ]; then
+                _打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔1〕。'
+                return
+            fi
+        fi
+
+        if [ ! -z "${_TemporaryArgumentValue}" ]; then
+            if [ "${_TemporaryArgumentValue}" == 'true' ] || [ "${_TemporaryArgumentValue}" == 'true' ] || [[ "$_TemporaryArgumentValue" =~ ^[01]$ ]]; then
+                ShouldDoubleOriginalLineBreaks='true'
+            else
+                ShouldDoubleOriginalLineBreaks='false'
+            fi
+        fi
+
+        # ---------------------------------------------------------------
+
+        if [ $_CurrentArgumentOrArgumentPairHaveRecognized -eq 0 ]; then
+            OriginalText+="$1"
+            shift
+        fi
+    done
+
+    _ProcessingArgumentName=''
+    _TemporaryArgumentValue=''
+
+    if [[ "${HanCharacterPerLineMaxCount}" == '0' || "${HanCharacterPerLineMaxCount}" == 'undefined' ]]; then
+        HanCharacterPerLineMaxCount=$HAN_CHARACTER_PER_LINE_DEFAULT_MAX_COUNT
+    fi
+
+    if [ "${ShouldAddASpaceAfterLastEnglishWordPerLine}" == 'undefined' ]; then
+        ShouldAddASpaceAfterLastEnglishWordPerLine='false'
+    fi
+
+    if [ "${ShouldDoubleOriginalLineBreaks}" == 'undefined' ]; then
+        ShouldDoubleOriginalLineBreaks='false'
+    fi
+
+
+
+    if [ $SHOULD_DEBUG -eq 1 ]; then
+        echo
+        echo  -e  "〔调试〕： 单行等效汉字字数上限：\n           \e[0;33m${HanCharacterPerLineMaxCount}\e[0;0m"
+        echo
+        echo  -e  "〔调试〕： 英语单词在行尾时其后应保留一个空格：\n           \e[0;33m${ShouldAddASpaceAfterLastEnglishWordPerLine}\e[0;0m"
+        echo
+        echo  -e  "〔调试〕： 原文本中的每个换行符在产生的内容中应改作两个换行符：\n           \e[0;33m${ShouldDoubleOriginalLineBreaks}\e[0;0m"
+        echo
+        echo  -e  "〔调试〕： 原文本： \e[0;91m'\e[0;33m${OriginalText}\e[0;91m'\e[0;0m"
+        echo
+    fi
+}

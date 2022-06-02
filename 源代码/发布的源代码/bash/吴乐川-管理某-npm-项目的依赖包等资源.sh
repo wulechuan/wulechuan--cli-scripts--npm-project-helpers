@@ -637,15 +637,11 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
 
     function _打印针对当前处理的参数的错误信息 {
-        local ErrorMessage=$1
-
-        echo -e "\e[0;31m在命令参数表中的 “ \e[0;97m${_ProcessingArgumentName}\e[0;31m ” 参数：\n    \e[0;33m${ErrorMessage}\e[0;0m"
+        echo -e "\e[0;31m在命令参数表中的 “ \e[0;97m${_ProcessingArgumentName}\e[0;31m ” 参数：\n    \e[0;33m${1}\e[0;0m"
     }
 
     function _打印针对当前处理的依赖包原始配置参数的错误信息 {
-        local ErrorMessage=$1
-
-        echo -e "\e[0;31m在命令参数表中第 \e[0;96m${_IndexOfProcessingConfiguration}\e[0;31m 次出现的 “ \e[0;97m${_ProcessingArgumentName}\e[0;31m ” 参数：\n    \e[0;33m${ErrorMessage}\e[0;0m"
+        echo -e "\e[0;31m在命令参数表中第 \e[0;96m${_IndexOfProcessingConfiguration}\e[0;31m 次出现的 “ \e[0;97m${_ProcessingArgumentName}\e[0;31m ” 参数：\n    \e[0;33m${1}\e[0;0m"
     }
 
 
@@ -661,9 +657,10 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
     local _TemporaryArgumentValue
     local _ProcessingArgumentName
-    local _IndexOfProcessingConfiguration=0
     local _ProcessedArgumentsCount=0
     local _CurrentArgumentOrArgumentPairHaveRecognized=0
+
+    local _IndexOfProcessingConfiguration=0
 
     while [[ ! -z "$1" && $_ProcessedArgumentsCount -lt 2048 ]]; do
         if [ $SHOULD_DEBUG -eq 1 ]; then
@@ -901,10 +898,10 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
     if [ $SHOULD_DEBUG -eq 1 ]; then
         echo
-        echo "〔调试〕： 应仅作仿真演练：   ${ShouldDryRun}"
-        echo "〔调试〕： 依赖包均为产品级： ${DependenciesAreOfCateogryOfProduction}"
-        echo "〔调试〕： 依赖包配置的总数： ${#DependencyVersionConfigurations[@]}"
-        echo "〔调试〕： 内容分割记号：     '${PackageConfigContentSeparator}'"
+        echo "〔调试〕： 应仅作仿真演练：   \e[0;33m${ShouldDryRun}\e[0;0m"
+        echo "〔调试〕： 依赖包均为产品级： \e[0;33m${DependenciesAreOfCateogryOfProduction}\e[0;0m"
+        echo "〔调试〕： 依赖包配置的总数： \e[0;33m${#DependencyVersionConfigurations[@]}\e[0;0m"
+        echo "〔调试〕： 内容分割记号：     \e[0;33m'${PackageConfigContentSeparator}'\e[0;0m"
         echo
     fi
 
