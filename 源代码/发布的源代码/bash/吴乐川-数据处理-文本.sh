@@ -134,10 +134,9 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
 
 
 
-    # --内容分割记号          至多出现 1 次。    非空白文本。
-    # --这批依赖包之依赖类别   至多出现 1 次。    '本产品拟囊括这些软件之整体或部分' | '本产品仅会在研发阶段借助这些软件'
-    # --应仅作仿真演练        至多出现 1 次。    1 | 0 | true | false
-    # --某依赖包之版本配置    可多次出现。        非空白文本。
+    # --单行等效汉字字数上限                                  至多出现 1 次。    正整数。
+    # --英语单词在行尾时其后应保留一个空格                      至多出现 1 次。    1 | 0 | true | false
+    # --原文本中的每个换行符在产生的内容中应改作两个换行符        至多出现 1 次。    1 | 0 | true | false
 
 
 
@@ -164,9 +163,9 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
     local _CurrentArgumentOrArgumentPairHaveRecognized=0
 
     while [[ ! -z "$1" && $_ProcessedArgumentsCount -lt 2048 ]]; do
-        if [ $SHOULD_DEBUG -eq 1 ]; then
-            echo "〔调试〕： arg[${_ProcessedArgumentsCount}]='$1'"
-        fi
+        # if [ $SHOULD_DEBUG -eq 1 ]; then
+        #     echo "〔调试〕： arg[${_ProcessedArgumentsCount}]='$1'"
+        # fi
 
         _ProcessedArgumentsCount=$((_ProcessedArgumentsCount+1))
         _CurrentArgumentOrArgumentPairHaveRecognized=0
@@ -351,17 +350,27 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
 
 
 
-    if [ $SHOULD_DEBUG -eq 1 ]; then
-        echo
-        echo  -e  "〔调试〕： 单行等效汉字字数上限：\n           \e[0;33m${HanCharacterPerLineMaxCount}\e[0;0m"
-        echo
-        echo  -e  "〔调试〕： 英语单词在行尾时其后应保留一个空格：\n           \e[0;33m${ShouldAddASpaceAfterLastEnglishWordPerLine}\e[0;0m"
-        echo
-        echo  -e  "〔调试〕： 原文本中的每个换行符在产生的内容中应改作两个换行符：\n           \e[0;33m${ShouldDoubleOriginalLineBreaks}\e[0;0m"
-        echo
-        echo  -e  "〔调试〕： 原文本： \e[0;91m'\e[0;33m${OriginalText}\e[0;91m'\e[0;0m"
-        echo
-    fi
+    # if [ $SHOULD_DEBUG -eq 1 ]; then
+    #     echo
+    #     echo  -e  "〔调试〕： 单行等效汉字字数上限：\n           \e[0;33m${HanCharacterPerLineMaxCount}\e[0;0m"
+    #     echo
+    #     echo  -e  "〔调试〕： 英语单词在行尾时其后应保留一个空格：\n           \e[0;33m${ShouldAddASpaceAfterLastEnglishWordPerLine}\e[0;0m"
+    #     echo
+    #     echo  -e  "〔调试〕： 原文本中的每个换行符在产生的内容中应改作两个换行符：\n           \e[0;33m${ShouldDoubleOriginalLineBreaks}\e[0;0m"
+    #     echo
+    #     echo  -e  "〔调试〕： 原文本： \e[0;91m'\e[0;33m${OriginalText}\e[0;91m'\e[0;0m"
+    #     echo
+    # fi
+
+
+
+
+
+    local _IFS_BACKUP_="$IFS"
+    IFS=''
+    local LINE_BREAK='\n'
+
+
 
 
 
@@ -372,49 +381,76 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
     local Char=''
     local TemporaryWord=''
     local WordList=()
+    local WordIndex=0
 
     for ((LoopIndex=0; LoopIndex<$OriginalCharCount; LoopIndex++)); do
         Char=${OriginalText:${LoopIndex}:1}
+        # echo  -e  "    〔调试〕： 第 $((LoopIndex+1)) 字： \e[0;91m'\e[0;33m${Char}\e[0;91m'\e[0;0m"
 
-        if [ "$Char" != "\n" ] && [ "`Assert-吴乐川判断字符系中日韩文字 "$Char"`" == '0' ]; then
-            TemporaryWord+="$Char"
-        else
+        if [ "$Char" == $LINE_BREAK ] || [ "$Char" == ' ' ] || [ "`Assert-吴乐川判断字符系中日韩文字 "$Char"`" == '1' ]; then
             if [[ "$TemporaryWord" =~ [^\s] ]]; then
                 TemporaryWord=$(echo $TemporaryWord) # 掐头去尾。等效于其他编程语言的 trim() 。
-                WordList+=( "$TemporaryWord" )
+                WordIndex=$((WordIndex+1));
+                # if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： 第 ${WordIndex} 词： \e[0;91m'\e[0;33m${TemporaryWord}\e[0;91m'\e[0;0m"; fi
+                if [ "$Char" == ' ' ]; then
+                    WordList+=( "$TemporaryWord" )
+                else
+                    WordList+=( "$TemporaryWord" )
+                fi
             fi
 
             TemporaryWord=''
 
-            WordList+=( "$Char" ) # 汉字、日本字、朝鲜字、汉语标点或换行符。
+            # if [ $SHOULD_DEBUG -eq 1 ] && [ "$Char" == $LINE_BREAK ]; then
+            #     echo  -e  "〔调试〕： \e[0;91m'遇到了换行符 “${Char}”\e[0;0m"
+            # fi
+
+            if [ "$Char" != ' ' ]; then
+                WordIndex=$((WordIndex+1));
+                # if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： 第 ${WordIndex} 词： \e[0;91m'\e[0;33m${Char}\e[0;91m'\e[0;0m"; fi
+                WordList+=( "$Char" ) # 汉字、日本字、朝鲜字、汉语标点或换行符。
+            fi
+        else
+            TemporaryWord+="$Char"
         fi
     done
 
     if [ ! -z "$TemporaryWord" ]; then
         if [[ "$TemporaryWord" =~ [^\s] ]]; then
             TemporaryWord=$(echo $TemporaryWord) # 掐头去尾。等效于其他编程语言的 trim() 。
+            WordIndex=$((WordIndex+1));
+            # if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： 第 ${WordIndex} 词： \e[0;91m'\e[0;33m${TemporaryWord}\e[0;91m'\e[0;0m"; fi
             WordList+=( "$TemporaryWord" )
         fi
 
         TemporaryWord=''
     fi
 
-    # if [ $SHOULD_DEBUG -eq 1 ]; then
-    #     echo  -e  "〔调试〕： 临时字词表：\n${WordList[@]}"
-    #     LoopIndex=0
-    #     for TemporaryWord in ${WordList[@]}; do
-    #         LoopIndex=$((LoopIndex+1))
-    #         echo  -e  "    〔调试〕： 第 ${LoopIndex} 词： '${TemporaryWord}'"
-    #     done
-    # fi
+
+
+    # local CountOfWords=${#WordList[@]} # 这样取词数不可靠！原因不明。
+
+    # if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： 临时字词表："; fi
+
+    local CountOfWords=0
+    for TemporaryWord in ${WordList[@]}; do
+        CountOfWords=$((CountOfWords+1))
+
+        # if [ $SHOULD_DEBUG -eq 1 ]; then
+        #     echo  -e  "    〔调试〕： 第 ${CountOfWords} 词： '${TemporaryWord}'"
+        # fi
+    done
+
+    # if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： 共计 \e[0;91m${CountOfWords}\e[0;0m 词（字）。"; fi
 
 
 
-    local CountOfWords=${#WordList[@]}
+
+
     local CountOfLines=0
     local MaxEnglishCharCountPerLine=$((HanCharacterPerLineMaxCount*2))
 
-    local IndexOfNextWord=0
+    local IndexOfProcessingWord=0
     local TextOfProcessingLine=''
     local WidthOfProcessingLine=0
     local WidthOfProcessingLineIfAddOneMoreOrTwoWords=0
@@ -435,20 +471,20 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
 
 
 
-    while [ $IndexOfNextWord -lt $CountOfWords ]; do
+    while [ $IndexOfProcessingWord -lt $CountOfWords ]; do
 
         TextOfProcessingLine=''
         WidthOfProcessingLine=0
         WordCountOfProcessingLine=0
         LastWordWasHanCharacter='false'
 
-        while [ $WidthOfProcessingLine -lt $MaxEnglishCharCountPerLine ] && [ $IndexOfNextWord -lt $CountOfWords ]; do
+        while [ $WidthOfProcessingLine -lt $MaxEnglishCharCountPerLine ] && [ $IndexOfProcessingWord -lt $CountOfWords ]; do
 
             # ────────────────────────────────────────────────────────────────────────────────
             # 取词。
             # ────────────────────────────────────────────────────────────────────────────────
 
-            ProcessingWord="${WordList[$IndexOfNextWord]}"
+            ProcessingWord="${WordList[$IndexOfProcessingWord]}"
 
             if [ "$(Assert-吴乐川判断排版时该字词之前不宜换行  "$ProcessingWord")" == '1' ]; then
                 ShouldNotBreakLineBeforeProcessingWord='true'
@@ -456,9 +492,17 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
                 ShouldNotBreakLineBeforeProcessingWord='false'
             fi
 
+            # if [ $SHOULD_DEBUG -eq 1 ]; then
+            #     if [ "$ShouldNotBreakLineBeforeProcessingWord" == 'true' ]; then
+            #         echo  -e  "〔调试〕： \e[0;91m取到的字前面不宜换行。\e[0;0m 取到的第 \e[0;96m$((IndexOfProcessingWord+1))\e[0;0m 字： \e[0;33m'${ProcessingWord}'\e[0;0m"
+            #     else
+            #         echo  -e  "〔调试〕： \e[0;92m取到的字前面允许换行。\e[0;0m 取到的第 \e[0;96m$((IndexOfProcessingWord+1))\e[0;0m 字： \e[0;94m'${ProcessingWord}'\e[0;0m"
+            #     fi
+            # fi
 
 
-            IndexOfNextWord=$((IndexOfNextWord+1))
+
+            IndexOfProcessingWord=$((IndexOfProcessingWord+1))
 
 
 
@@ -468,8 +512,8 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
 
             ShouldNotBreakLineBeforeNextWord='false'
 
-            if [ $IndexOfNextWord -lt $CountOfWords ]; then
-                NextWord="${WordList[$IndexOfNextWord]}"
+            if [ $IndexOfProcessingWord -lt $CountOfWords ]; then
+                NextWord="${WordList[$IndexOfProcessingWord]}"
 
                 if [ "$(Assert-吴乐川判断排版时该字词之前不宜换行  "$NextWord")" == '1' ]; then
                     ShouldNotBreakLineBeforeNextWord='true'
@@ -486,7 +530,7 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
             # 则应舍弃原文中的这一换行符。以免出现不适宜的排版换行。
             # ────────────────────────────────────────────────────────────────────────────────
 
-            if [ "$ProcessingWord" == "\n" ]; then
+            if [ "$ProcessingWord" == $LINE_BREAK ]; then
                 LineEndedBecauseOfLineBreakSign='true'
             else
                 LineEndedBecauseOfLineBreakSign='false'
@@ -496,6 +540,9 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
                 if [ "$ShouldNotBreakLineBeforeNextWord" == 'false' ]; then
                     ProcessingWord=''
                     LineEndedBecauseOfLineBreakSign='false'
+                else
+                    if [ $SHOULD_DEBUG -eq 1 ]; then cho  -e  "〔调试〕： \e[0;91m-- 遇到换行符 --。\e[0;0m"; fi
+                    break
                 fi
             fi
 
@@ -510,6 +557,11 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
             ProcessingWordIsHanCharacter='false'
             if [ ${#ProcessingWord} -eq 1 ] && [ "`Assert-吴乐川判断字符系中日韩文字  "$ProcessingWord"`" == '1' ]; then
                 ProcessingWordIsHanCharacter='true'
+            fi
+
+            if [ "$LastWordWasHanCharacter" == 'false' ] && [ $WordCountOfProcessingLine -gt 0 ]; then
+                ProcessingWord=" $ProcessingWord"
+                WidthOfProcessingWord=$((WidthOfProcessingWord+1))
             fi
 
 
@@ -535,7 +587,7 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
 
                 if [ $WidthOfProcessingLineIfAddOneMoreOrTwoWords -gt $MaxEnglishCharCountPerLine ]; then
                     if [ $WordCountOfProcessingLine -gt 0 ]; then
-                        IndexOfNextWord=$((IndexOfNextWord-1))
+                        IndexOfProcessingWord=$((IndexOfProcessingWord-1))
                         break
                     fi
                 fi
@@ -587,10 +639,16 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
     if [ $SHOULD_DEBUG -eq 1 ]; then
         echo
         echo  -e  '〔调试〕：────────────────────────────────────────────────────────────────────────────────'
-        echo  -e  "〔调试〕： 行数： $CountOfLines"
+        echo  -e  "〔调试〕： 行数： ${CountOfLines} 。       单行换算成汉字的字数上限： ${HanCharacterPerLineMaxCount} 字"
         echo  -e  '〔调试〕：────────────────────────────────────────────────────────────────────────────────'
         echo  -e  "${FORMATTED_CONTENT}"
         echo  -e  '〔调试〕：────────────────────────────────────────────────────────────────────────────────'
         echo
     fi
+
+
+
+
+
+    IFS="$_IFS_BACKUP_"
 }
