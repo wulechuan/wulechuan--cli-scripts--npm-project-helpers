@@ -1262,7 +1262,7 @@ function Update-_吴乐川管理某_npm_项目__新装或升级依赖包__内部
 
                     Write-Host  -NoNewline  "    ${private:当下处理的乙类条目须补足的空白}"
 
-                    if ($true) {
+                    if ($false) {
                         Write-Host  -NoNewline  -F 'Yellow'                  "${private:当下处理的乙类条目之软件名称}"
                         Write-Host  -NoNewline  -F 'Red'                     '@'
                         Write-Host  -NoNewline  -F 'Black'  -B 'DarkYellow'  "${private:当下处理的乙类条目之版本配置}"
