@@ -1,13 +1,20 @@
 function Assert-吴乐川判断字符系中日韩文字 {
     local Char="$1"
+    local ResultReceiver
+    Assert-_吴乐川判断字符系中日韩文字  ResultReceiver  "$Char"
+    echo  $ResultReceiver
+}
+
+function Assert-_吴乐川判断字符系中日韩文字 {
+    local Char="$2"
 
     if [ ${#Char} -eq 0 ]; then
-        echo '空内容'
+        eval "$1='空内容'"
         return
     fi
 
     if [ ${#Char} -gt 1 ]; then
-        echo "'${Char}'：不止一个字符"
+        eval "$1='“${Char}”：不止一个字符'"
         return
     fi
 
@@ -43,9 +50,9 @@ function Assert-吴乐川判断字符系中日韩文字 {
     ]] || [[
         "$Char" =~ [“”‘’…：，；？！、。（）〈〉《》「」『』【】〒〓〔〕〖〗〝〞｛｝〃々〆〇〡〢〣〤〥〦〧〨〩]
     ]]; then
-        echo 1
+        eval "$1=1"
     else
-        echo 0
+        eval "$1=0"
     fi
 }
 
@@ -55,9 +62,16 @@ function Assert-吴乐川判断字符系中日韩文字 {
 
 function Assert-吴乐川判断排版时该字词之前不宜换行 {
     local Char="$1"
+    local ResultReceiver
+    Assert-_吴乐川判断排版时该字词之前不宜换行  ResultReceiver  "$Char"
+    echo  $ResultReceiver
+}
+
+function Assert-_吴乐川判断排版时该字词之前不宜换行 {
+    local Char="$2"
 
     if [ ${#Char} -eq 0 ]; then
-        echo 0
+        eval "$1=0"
         return
     fi
 
@@ -75,9 +89,9 @@ function Assert-吴乐川判断排版时该字词之前不宜换行 {
         "$Char" == ']' || \
         "$Char" == '}'
     ]]; then
-        echo 1
+        eval "$1=1"
     else
-        echo 0
+        eval "$1=0"
     fi
 }
 

@@ -13,28 +13,37 @@ function 测试之主程序 {
 
 
     if true; then
+        echo -e "\n──────────────────────────────────────────\n开始： `date`\n──────────────────────────────────────────\n"
+        _result=''
+
         ConvertTo-吴乐川将文本转换为多行文本 '大漠沙如雪' --英语单词在行尾时其后应保留一个空格 false '  燕山月似钩' ' 。 ' \
             '文档对象模型（DOM）将 web 页面与到脚本或编程语言连接起来。通常是指 JavaScript，但将 HTML、SVG 或 XML 文档建模为对象并不是 JavaScript 语言的一部分。DOM 模型用一个逻辑树来表示一个文档，树的每个分支的终点都是一个节点（node），每个节点都包含着对象（object）。DOM 的方法（method）让你可以用特定方式操作这个树，用这些方法你可以改变文档的结构、样式或者内容。节点可以关联上事件处理器，一旦某一事件被触发了，那些事件处理器就会被执行。 ' \
             "Aliquip proident nulla ex cillum magna. Anim culpa dolor ullamco nulla culpa labore. Lo\nrem dolor proident qui aliquip nulla. Do ex external link 1 (www.bing.com) anim tempor do veniam duis nulla ut culpa tempor dolore. Labore dolore ex anim fake self-page link 2 (do not follow) id. Anim et ex ex labore cupidatat anim proident laboris amet fugiat aute ad.\n Reprehenderit dolore cupidatat sit elit esse anim est aute." \
             --原文本中的每个换行符在产生的内容中应改作两个换行符 true \
             "\n总有一天中国人会有自己的高性能计算机芯片。" \
             --单行等效汉字字数上限 32
+        echo -e "\n──────────────────────────────────────────\n结束： `date`\n──────────────────────────────────────────\n"
     fi
 
-    if true; then
+
+
+    if false; then
+        _result=''
+
         ConvertTo-吴乐川将文本转换为多行文本 \
             'paxk 1 ute ad.\n Reprehenderit dolore cupst aute.' \
             "\n总\\\\有一天中国人会有自己的高性能计算机芯片。" \
             --原文本中的每个换行符在产生的内容中应改作两个换行符 true \
             --单行等效汉字字数上限 19
     fi
-    return
 
 
 
 
 
     if false; then
+        _result=''
+
         if [ ࠀ ==  `echo -e "\u0800"` ]; then
             echo '相同'
         fi
@@ -48,16 +57,23 @@ function 测试之主程序 {
         fi
 
         for Char in 吴 乐 川 “ ” \" \' 가 힣 ࠀ `echo -e "\u07ff"` `echo -e "\u0800"` 1 2 3 A B C っ オ た ジ ヤ; do
-            _result=`Assert-吴乐川判断字符系中日韩文字 $Char`
+            # _result=`Assert-吴乐川判断字符系中日韩文字 $Char`
+            Assert-_吴乐川判断字符系中日韩文字 _result $Char
             echo "'$Char' 是中日韩文字或标点： ${_result}"
         done
+        
+        Assert-_吴乐川判断字符系中日韩文字 _result '吴乐川'
+            echo "'$Char' 是中日韩文字或标点： ${_result}"
     fi
 
 
 
     if false; then
+        _result=''
+
         for Char in \} ： ， ； ？ ！ 、 。 ） 〉 》 」 』 】 〗 〕 ｝ ” ’ … · A B C 吴 乐 川; do
-            _result=`Assert-吴乐川判断排版时该字词之前不宜换行 $Char`
+            # _result=`Assert-吴乐川判断排版时该字词之前不宜换行 $Char`
+            Assert-_吴乐川判断排版时该字词之前不宜换行 _result $Char
             echo "'$Char' 前面不宜换行： ${_result}"
         done
     fi
@@ -114,7 +130,7 @@ function 测试之主程序 {
 
 
 
-    if true; then
+    if false; then
         echo
         echo
         echo
