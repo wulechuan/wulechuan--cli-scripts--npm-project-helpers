@@ -670,7 +670,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
         _ProcessedArgumentsCount=$((_ProcessedArgumentsCount+1))
         _CurrentArgumentOrArgumentPairHaveRecognized=0
 
-        # ---------------------------------------------------------------
+        # ────────────────────────────────────────────────────────────────────────────────
 
         _ProcessingArgumentName='--内容分割记号'
         _TemporaryArgumentValue=''
@@ -726,7 +726,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             fi
         fi
 
-        # ---------------------------------------------------------------
+        # ────────────────────────────────────────────────────────────────────────────────
 
         _ProcessingArgumentName='--这批依赖包之依赖类别'
         _TemporaryArgumentValue=''
@@ -787,7 +787,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             fi
         fi
 
-        # ---------------------------------------------------------------
+        # ────────────────────────────────────────────────────────────────────────────────
 
         _ProcessingArgumentName='--应仅作仿真演练'
         _TemporaryArgumentValue=''
@@ -837,7 +837,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             fi
         fi
 
-        # ---------------------------------------------------------------
+        # ────────────────────────────────────────────────────────────────────────────────
 
         _ProcessingArgumentName='--某依赖包之版本配置'
         _TemporaryArgumentValue=''
@@ -1209,9 +1209,18 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
     _IndexOfProcessingConfiguration=0
 
-    local _DescriptionFrameWidthInEnglishChars=62
+    local _DescriptionFrameWidthInHanCharsCount=30
+    local _DescriptionContentLineMaxHanCharsCount=$((_DescriptionFrameWidthInHanCharsCount-1-1-2-1))
+    local _DescriptionFrameWidthInEnglishCharsCount=$((_DescriptionFrameWidthInHanCharsCount*2))
     local _DescriptionFrameInnerWidth1=$((PackageGroupB_LongestPackageNameLength-3))
-    local _DescriptionFrameInnerWidth2=$((_DescriptionFrameWidthInEnglishChars-5-$_DescriptionFrameInnerWidth1))
+    local _DescriptionFrameInnerWidth2=$((_DescriptionFrameWidthInEnglishCharsCount-3-$_DescriptionFrameInnerWidth1))
+    local _DescriptionContentPerLineTextsArray
+    local _DescriptionContentProcessingLineText=''
+    local _DescriptionContentProcessingLineLength=0
+    local _DescriptionContentProcessingLinePaddingCount=0
+    local _DescriptionContentProcessingLinePaddingTextAndTailFrame=''
+
+    local _IFS_BACKUP_="$IFS"
 
     for _ProcessingPackageName in "${PackageGroupB_PackageNames[@]}"; do
         if [ $((PackageGroupB_PackagesCount-_IndexOfProcessingConfiguration)) -gt 1 ]; then
@@ -1245,8 +1254,43 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameInnerWidth1}} ${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameInnerWidth2}}║\e[0;0m"
         done
 
-        _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║ 该软件锁定版本范围之原因：${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameWidthInEnglishChars}-31}║\e[0;0m"
-        _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║     ${_ProcessingPackageVerionLockReason}\e[0;0m"
+        _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║ 该软件锁定版本范围之原因：${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameWidthInEnglishCharsCount}-29}║\e[0;0m"
+
+        # ────────────────────────────────────────────────────────────────────────────────
+
+        if false; then
+            _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║     ${_ProcessingPackageVerionLockReason}\e[0;0m"
+        else
+            # _DescriptionContentPerLineTextsArray=()
+
+            ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变量 \
+                --单行等效汉字字数上限 $((_DescriptionContentLineMaxHanCharsCount)) \
+                --用以接收排好版的文本的逐行文本列表的变量名 _DescriptionContentPerLineTextsArray \
+                "${_ProcessingPackageVerionLockReason}"
+
+            IFS='' # 很关键。
+
+            for _DescriptionContentProcessingLineText in ${_DescriptionContentPerLineTextsArray[@]}; do
+                if [ "$_DescriptionContentProcessingLineText" == '\n' ]; then
+                    _DescriptionContentProcessingLineLength=0
+                else
+                    Get-吴乐川求一行文本视觉宽度等效英语字母数_须采用接收器变量  _DescriptionContentProcessingLineLength  "$_DescriptionContentProcessingLineText"
+                fi
+
+                _DescriptionContentProcessingLinePaddingCount=$((_DescriptionFrameWidthInEnglishCharsCount-2-5-1-_DescriptionContentProcessingLineLength))
+                _DescriptionContentProcessingLinePaddingTextAndTailFrame=''
+                if [ $_DescriptionContentProcessingLinePaddingCount -gt 0 ]; then
+                    _DescriptionContentProcessingLinePaddingTextAndTailFrame="${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:$_DescriptionContentProcessingLinePaddingCount} ║"
+                fi
+
+                _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║     ${_DescriptionContentProcessingLineText}${_DescriptionContentProcessingLinePaddingTextAndTailFrame}"
+            done
+
+            IFS="$_IFS_BACKUP_"
+        fi
+
+        # ────────────────────────────────────────────────────────────────────────────────
+
         _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ╚$(_为方框打印一段水平边线 ${_DescriptionFrameInnerWidth1})╦$(_为方框打印一段水平边线 ${_DescriptionFrameInnerWidth2})╝\e[0;0m"
 
         _ProcessingPackageDescription+="\n${_GlobalIndentation}${_ProcessingPackageCommandLineSnippet_Colorful}"
