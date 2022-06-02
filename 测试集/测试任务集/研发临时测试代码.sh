@@ -9,13 +9,13 @@ function 测试之主程序 {
     local ResultReciever=''
     local Text=''
     local Char=''
+    local LoopIndex=0
 
 
 
 
 
-    if false; then
-        echo -e "\n──────────────────────────────────────────\n开始： `date`\n──────────────────────────────────────────\n"
+    if true; then
         ResultReciever=''
 
         ConvertTo-吴乐川将文本转换为多行文本 '大漠沙如雪' --英语单词在行尾时其后应保留一个空格 false '  燕山月似钩' ' 。 ' \
@@ -23,11 +23,12 @@ function 测试之主程序 {
             "Aliquip proident nulla ex cillum magna. Anim culpa dolor ullamco nulla culpa labore. Lo\nrem dolor proident qui aliquip nulla. Do ex external link 1 (www.bing.com) anim tempor do veniam duis nulla ut culpa tempor dolore. Labore dolore ex anim fake self-page link 2 (do not follow) id. Anim et ex ex labore cupidatat anim proident laboris amet fugiat aute ad.\n Reprehenderit dolore cupidatat sit elit esse anim est aute." \
             --原文本中的每个换行符在产生的内容中应改作两个换行符 true \
             "\n总有一天中国人会有自己的高性能计算机芯片。" \
-            --单行等效汉字字数上限 32
-        echo -e "\n──────────────────────────────────────────\n结束： `date`\n──────────────────────────────────────────\n"
+            --单行等效汉字字数上限 24
     fi
 
-
+    echo
+    echo
+    echo
 
     if false; then
         ResultReciever=''
@@ -39,11 +40,23 @@ function 测试之主程序 {
             --单行等效汉字字数上限 19
     fi
 
-
-
-
+    echo
+    echo
+    echo
 
     if true; then
+        ResultReciever=''
+        Text='页面与到脚本或编程语言连接起来。通常是指页面与到脚本或编程语言连接起来。通常是指'
+        for LoopIndex in {1..60}; do Text+='abcd '; done
+
+        ConvertTo-吴乐川将文本转换为多行文本 "$Text" --单行等效汉字字数上限 40
+    fi
+
+
+
+
+
+    if false; then
         ResultReciever=''
 
         # if [ ࠀ ==  `echo -e "\u0800"` ]; then
@@ -72,10 +85,10 @@ function 测试之主程序 {
 
 
 
-    if true; then
+    if false; then
         ResultReciever=''
 
-        for Char in \} ： ， ； ？ ！ 、 。 ） 〉 》 」 』 】 〗 〕 ｝ ” ’ … · A B C 吴 乐 川; do
+        for Char in `echo }` ： ， ； ？ ！ 、 。 ） 〉 》 」 』 】 〗 〕 ｝ ” ’ … · A B C 吴 乐 川; do
             # ResultReciever=`Assert-吴乐川判断排版时该字词之前不宜换行_直接回显结论 $Char`
             Assert-吴乐川判断排版时该字词之前不宜换行_须采用接收器变量  ResultReciever  $Char
             echo "'$Char' 前面不宜换行： ${ResultReciever}"
@@ -86,7 +99,7 @@ function 测试之主程序 {
 
 
 
-    if true; then
+    if false; then
         ResultReciever=''
 
         # Get-吴乐川求一行文本视觉宽度等效英语字母数_直接回显结论  '‘吴乐川ABC'
@@ -184,5 +197,12 @@ function 测试之主程序 {
 
 
 
+__WLC_time_start__=`date`
+echo -e "\n──────────────────────────────────────────\n开始： ${__WLC_time_start__}\n──────────────────────────────────────────\n"
 测试之主程序
+__WLC_time_end__=`date`
+echo -e "\n──────────────────────────────────────────\n开始： ${__WLC_time_start__}\n结束： ${__WLC_time_end__}\n──────────────────────────────────────────\n"
 unset -f 测试之主程序
+unset __WLC_time_start__
+unset __WLC_time_end__
+ 

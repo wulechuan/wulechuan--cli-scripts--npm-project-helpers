@@ -391,7 +391,8 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
 
     local _IFS_BACKUP_="$IFS"
     IFS=''
-    local LINE_BREAK="\\$(echo -n n)"
+    # local LINE_BREAK="\\$(echo -n n)"
+    local LINE_BREAK="\n"
 
 
 
@@ -441,10 +442,11 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
 
 
 
-        TemporaryWordIsHanCharacter=`Assert-吴乐川判断字符系中日韩文字 "$Char"`
+        # TemporaryWordIsHanCharacter=`Assert-吴乐川判断字符系中日韩文字_直接回显结论  "$Char"`
+        Assert-吴乐川判断字符系中日韩文字_须采用接收器变量  TemporaryWordIsHanCharacter  "$Char"
 
         # if [ $SHOULD_DEBUG -eq 1 ]; then
-        #     if [ "$TemporaryWordIsHanCharacter" == '1' ]; then
+        #     if [ "$TemporaryWordIsHanCharacter" == 'true' ]; then
         #         echo  -e  "〔调试〕： 第 $((LoopIndex+1)) 字： \e[0;91m'\e[0;33m${Char}\e[0;91m'\e[0;0m （是汉字）"
         #     else
         #         echo  -e  "〔调试〕： 第 $((LoopIndex+1)) 字： \e[0;94m'\e[0;92m${Char}\e[0;94m'\e[0;0m"
@@ -453,9 +455,10 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
 
 
 
-        if [ "$Char" == $LINE_BREAK ] || [ "$Char" == ' ' ] || [ "$TemporaryWordIsHanCharacter" == '1' ]; then
+        if [ "$Char" == $LINE_BREAK ] || [ "$Char" == ' ' ] || [ "$TemporaryWordIsHanCharacter" == 'true' ]; then
             if [[ "$TemporaryWord" =~ [^\s] ]]; then
-                TemporaryWord=$(echo $TemporaryWord) # 掐头去尾。等效于其他编程语言的 trim() 。
+                read TemporaryWord <<< $TemporaryWord # 掐头去尾。等效于其他编程语言的 trim() 。
+                # TemporaryWord=$(echo $TemporaryWord) # 掐头去尾。等效于其他编程语言的 trim() 。
                 WordIndex=$((WordIndex+1));
                 # if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： 第 ${WordIndex} 词： \e[0;91m'\e[0;33m${TemporaryWord}\e[0;91m'\e[0;0m"; fi
                 WordList+=( "$TemporaryWord" )
@@ -479,7 +482,8 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
 
     if [ ! -z "$TemporaryWord" ]; then
         if [[ "$TemporaryWord" =~ [^\s] ]]; then
-            TemporaryWord=$(echo $TemporaryWord) # 掐头去尾。等效于其他编程语言的 trim() 。
+            read TemporaryWord <<< $TemporaryWord # 掐头去尾。等效于其他编程语言的 trim() 。
+            # TemporaryWord=$(echo $TemporaryWord) # 掐头去尾。等效于其他编程语言的 trim() 。
             WordIndex=$((WordIndex+1));
             # if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： 第 ${WordIndex} 词： \e[0;91m'\e[0;33m${TemporaryWord}\e[0;91m'\e[0;0m"; fi
             WordList+=( "$TemporaryWord" )
@@ -550,11 +554,13 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
 
             ProcessingWord="${WordList[$IndexOfProcessingWord]}"
 
-            if [ "$(Assert-吴乐川判断排版时该字词之前不宜换行  "$ProcessingWord")" == '1' ]; then
-                ShouldNotBreakLineBeforeProcessingWord='true'
-            else
-                ShouldNotBreakLineBeforeProcessingWord='false'
-            fi
+            # if [ "$(Assert-吴乐川判断排版时该字词之前不宜换行_直接回显结论  "$ProcessingWord")" == 'true' ]; then
+            #     ShouldNotBreakLineBeforeProcessingWord='true'
+            # else
+            #     ShouldNotBreakLineBeforeProcessingWord='false'
+            # fi
+
+            Assert-吴乐川判断排版时该字词之前不宜换行_须采用接收器变量  ShouldNotBreakLineBeforeProcessingWord  "$ProcessingWord"
 
             # if [ $SHOULD_DEBUG -eq 1 ]; then
             #     if [ "$ShouldNotBreakLineBeforeProcessingWord" == 'true' ]; then
@@ -579,11 +585,13 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
             if [ $IndexOfProcessingWord -lt $CountOfWords ]; then
                 NextWord="${WordList[$IndexOfProcessingWord]}"
 
-                if [ "$(Assert-吴乐川判断排版时该字词之前不宜换行  "$NextWord")" == '1' ]; then
-                    ShouldNotBreakLineBeforeNextWord='true'
-                else
-                    ShouldNotBreakLineBeforeNextWord='false'
-                fi
+                # if [ "$(Assert-吴乐川判断排版时该字词之前不宜换行_直接回显结论  "$NextWord")" == 'true' ]; then
+                #     ShouldNotBreakLineBeforeNextWord='true'
+                # else
+                #     ShouldNotBreakLineBeforeNextWord='false'
+                # fi
+
+                Assert-吴乐川判断排版时该字词之前不宜换行_须采用接收器变量  ShouldNotBreakLineBeforeNextWord  "$NextWord"
             fi
 
 
@@ -617,11 +625,18 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
             # 为统计做准备。
             # ────────────────────────────────────────────────────────────────────────────────
 
-            WidthOfProcessingWord=`Get-吴乐川求一行文本视觉宽度等效英语字母数  "$ProcessingWord"`
+            # WidthOfProcessingWord=`Get-吴乐川求一行文本视觉宽度等效英语字母数_直接回显结论  "$ProcessingWord"`
+
+            Get-吴乐川求一行文本视觉宽度等效英语字母数_须采用接收器变量  WidthOfProcessingWord  "$ProcessingWord"
 
             ProcessingWordIsHanCharacter='false'
-            if [ ${#ProcessingWord} -eq 1 ] && [ "`Assert-吴乐川判断字符系中日韩文字  "$ProcessingWord"`" == '1' ]; then
-                ProcessingWordIsHanCharacter='true'
+
+            if [ ${#ProcessingWord} -eq 1 ]; then
+                # if [ "`Assert-吴乐川判断字符系中日韩文字_直接回显结论  "$ProcessingWord"`" == 'true' ]; then
+                #     ProcessingWordIsHanCharacter='true'
+                # fi
+
+                Assert-吴乐川判断字符系中日韩文字_须采用接收器变量  ProcessingWordIsHanCharacter  "$ProcessingWord"
             fi
 
             if [ "$LastWordWasHanCharacter" == 'false' ] && [ $WordCountOfProcessingLine -gt 0 ]; then
@@ -645,7 +660,9 @@ function ConvertTo-吴乐川将文本转换为多行文本 {
                 WidthOfProcessingLineIfAddOneMoreOrTwoWords=$((WidthOfProcessingLine+WidthOfProcessingWord))
 
                 if [ "$ShouldNotBreakLineBeforeNextWord" == 'true' ]; then
-                    WidthOfNextWord=`Get-吴乐川求一行文本视觉宽度等效英语字母数  "$NextWord"`
+                    # WidthOfNextWord=`Get-吴乐川求一行文本视觉宽度等效英语字母数_直接回显结论  "$NextWord"`
+
+                    Get-吴乐川求一行文本视觉宽度等效英语字母数_须采用接收器变量  WidthOfNextWord  "$NextWord"
 
                     WidthOfProcessingLineIfAddOneMoreOrTwoWords=$((WidthOfProcessingLineIfAddOneMoreOrTwoWords+WidthOfNextWord))
                 fi
