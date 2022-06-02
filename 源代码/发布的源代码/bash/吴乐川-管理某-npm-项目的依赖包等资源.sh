@@ -1240,9 +1240,15 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
         _ProcessingPackageCommandLineSnippet="${_ProcessingPackageName}@${_ProcessingPackageVerionConfig}"
         _ProcessingPackageCommandLineSnippet_Colorful="${_ProcessingPackageNamePaddingText}${_ColorOf_PacakgeName}${_ProcessingPackageName}${_ColorOf_AtSign}@${_ColorOf_VersionConfig}${_ProcessingPackageVerionConfig}\e[0;0m"
 
-        # ╔╦╗═╬╚╩╝║
-
         _ProcessingPackageDescription=''
+
+
+
+
+
+        # ────────────────────────────────────────────────────────────────────────────────
+        # ────────────────────────────────  ╔╦╗═╬╚╩╝║  ───────────────────────────────────
+        # ────────────────────────────────────────────────────────────────────────────────
 
         _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ╔$(Write-_吴乐川为方框打印一段水平边线 ${_DescriptionFrameInnerWidth1})╦$(Write-_吴乐川为方框打印一段水平边线 ${_DescriptionFrameInnerWidth2})╗\e[0;0m"
 
@@ -1256,7 +1262,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
         _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║ 该软件锁定版本范围之原因：${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameWidthInEnglishCharsCount}-29}║\e[0;0m"
 
-        # ────────────────────────────────────────────────────────────────────────────────
+        # ───────────────────  ╔╦╗═╬╚╩╝║  ──────────────────
 
         if false; then
             _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║     ${_ProcessingPackageVerionLockReason}\e[0;0m"
@@ -1268,7 +1274,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
                 --用以接收排好版的文本的逐行文本列表的变量名 _DescriptionContentPerLineTextsArray \
                 "${_ProcessingPackageVerionLockReason}"
 
-            IFS='' # 很关键。
+            # IFS='' # 很关键。
 
             for _DescriptionContentProcessingLineText in ${_DescriptionContentPerLineTextsArray[@]}; do
                 if [ "$_DescriptionContentProcessingLineText" == '\n' ]; then
@@ -1277,7 +1283,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
                     Get-吴乐川求一行文本视觉宽度等效英语字母数_须采用接收器变量  _DescriptionContentProcessingLineLength  "$_DescriptionContentProcessingLineText"
                 fi
 
-                _DescriptionContentProcessingLinePaddingCount=$((_DescriptionFrameWidthInEnglishCharsCount-2-5-1-_DescriptionContentProcessingLineLength))
+                _DescriptionContentProcessingLinePaddingCount=$((_DescriptionFrameWidthInEnglishCharsCount-1-5-_DescriptionContentProcessingLineLength-1-1))
                 _DescriptionContentProcessingLinePaddingTextAndTailFrame=''
                 if [ $_DescriptionContentProcessingLinePaddingCount -gt 0 ]; then
                     _DescriptionContentProcessingLinePaddingTextAndTailFrame="${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:$_DescriptionContentProcessingLinePaddingCount} ║"
@@ -1286,12 +1292,20 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
                 _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║     ${_DescriptionContentProcessingLineText}${_DescriptionContentProcessingLinePaddingTextAndTailFrame}"
             done
 
-            IFS="$_IFS_BACKUP_"
+            # IFS="$_IFS_BACKUP_"
         fi
 
-        # ────────────────────────────────────────────────────────────────────────────────
+        # ───────────────────  ╔╦╗═╬╚╩╝║  ──────────────────
 
         _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ╚$(Write-_吴乐川为方框打印一段水平边线 ${_DescriptionFrameInnerWidth1})╦$(Write-_吴乐川为方框打印一段水平边线 ${_DescriptionFrameInnerWidth2})╝\e[0;0m"
+
+        # ────────────────────────────────────────────────────────────────────────────────
+        # ────────────────────────────────  ╔╦╗═╬╚╩╝║  ───────────────────────────────────
+        # ────────────────────────────────────────────────────────────────────────────────
+
+
+
+
 
         _ProcessingPackageDescription+="\n${_GlobalIndentation}${_ProcessingPackageCommandLineSnippet_Colorful}"
 

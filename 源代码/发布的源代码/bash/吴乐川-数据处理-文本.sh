@@ -625,10 +625,10 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
 
 
-    local _IFS_BACKUP_="$IFS"
-    IFS=''
     # local LINE_BREAK="\\$(echo -n n)"
     local LINE_BREAK="\n"
+    local _IFS_BACKUP_="$IFS"
+    IFS=''
 
 
 
@@ -693,8 +693,8 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
         if [ "$Char" == $LINE_BREAK ] || [ "$Char" == ' ' ] || [ "$TemporaryWordIsHanCharacter" == 'true' ]; then
             if [[ "$TemporaryWord" =~ [^\s] ]]; then
-                read TemporaryWord <<< $TemporaryWord # 掐头去尾。等效于其他编程语言的 trim() 。
-                # TemporaryWord=$(echo $TemporaryWord) # 掐头去尾。等效于其他编程语言的 trim() 。
+                read -r TemporaryWord <<< $TemporaryWord  # 掐头去尾。等效于其他编程语言的 trim() 。
+                # TemporaryWord=$(echo    $TemporaryWord) # 掐头去尾。等效于其他编程语言的 trim() 。
                 WordIndex=$((WordIndex+1));
                 # if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： 第 ${WordIndex} 词： \e[0;91m'\e[0;33m${TemporaryWord}\e[0;91m'\e[0;0m"; fi
                 WordList+=( "$TemporaryWord" )
@@ -718,8 +718,8 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
     if [ ! -z "$TemporaryWord" ]; then
         if [[ "$TemporaryWord" =~ [^\s] ]]; then
-            read TemporaryWord <<< $TemporaryWord # 掐头去尾。等效于其他编程语言的 trim() 。
-            # TemporaryWord=$(echo $TemporaryWord) # 掐头去尾。等效于其他编程语言的 trim() 。
+            read -r TemporaryWord <<< $TemporaryWord  # 掐头去尾。等效于其他编程语言的 trim() 。
+            # TemporaryWord=$(echo    $TemporaryWord) # 掐头去尾。等效于其他编程语言的 trim() 。
             WordIndex=$((WordIndex+1));
             # if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： 第 ${WordIndex} 词： \e[0;91m'\e[0;33m${TemporaryWord}\e[0;91m'\e[0;0m"; fi
             WordList+=( "$TemporaryWord" )
@@ -755,7 +755,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
     local MaxEnglishCharCountPerLine=$((HanCharacterPerLineMaxCount*2))
 
     local IndexOfProcessingWord=0
-    local TextOfProcessingLine=''
+    local TextsOfProcessingLine=''
     local WidthOfProcessingLine=0
     local WidthOfProcessingLineIfAddOneMoreOrTwoWords=0
     local WordCountOfProcessingLine=0
@@ -787,7 +787,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
     while [ $IndexOfProcessingWord -lt $CountOfWords ]; do
 
-        TextOfProcessingLine=''
+        TextsOfProcessingLine=''
         WidthOfProcessingLine=0
         WordCountOfProcessingLine=0
         LastWordWasHanCharacter='false'
@@ -923,7 +923,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
 
 
-            TextOfProcessingLine+="$ProcessingWord"
+            TextsOfProcessingLine+="$ProcessingWord"
             WidthOfProcessingLine=$((WidthOfProcessingLine+WidthOfProcessingWord))
             WordCountOfProcessingLine=$((WordCountOfProcessingLine+1))
             LastWordWasHanCharacter="$ProcessingWordIsHanCharacter"
@@ -932,10 +932,11 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
 
 
-        TextOfProcessingLine=`echo $TextOfProcessingLine` # 掐头去尾。等效于其他编程语言的 trim() 。
+        read -r TextsOfProcessingLine <<< $TextsOfProcessingLine  # 掐头去尾。等效于其他编程语言的 trim() 。
+        # TextsOfProcessingLine=$(echo    $TextsOfProcessingLine) # 掐头去尾。等效于其他编程语言的 trim() 。
 
         if [ "$LastWordWasHanCharacter" == 'false' ] && [ "$ShouldAddASpaceAfterLastEnglishWordPerLine" == 'true' ]; then
-            TextOfProcessingLine+=' '
+            TextsOfProcessingLine+=' '
         fi
 
 
@@ -946,13 +947,12 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
 
 
-        FORMATTED_FULL_TEXT+="$TextOfProcessingLine"
+        FORMATTED_FULL_TEXT+="$TextsOfProcessingLine"
         CountOfLines=$((CountOfLines+1))
 
         if [ ! -z "${ResultReceiverVarName_TextLinesArray}" ]; then
-            eval "$ResultReceiverVarName_TextLinesArray+=( \"$TextOfProcessingLine\" )"
+            eval "$ResultReceiverVarName_TextLinesArray+=( \"$TextsOfProcessingLine\" )"
         fi
-
 
 
 
@@ -963,8 +963,6 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
                 eval "$ResultReceiverVarName_TextLinesArray+=( '\n' )"
             fi
         fi
-
-
 
     done
 
