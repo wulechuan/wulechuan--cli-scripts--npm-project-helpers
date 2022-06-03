@@ -155,7 +155,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_直接回显结论 {
     local _IFS_BACKUP_="$IFS"
 
     ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变量 \
-        --用以接收排好版的文本的逐行文本列表的变量名 ResultReceiver_TheLinesArray \
+        --用以接收排好版的逐行文本列表的变量名 ResultReceiver_TheLinesArray \
         --用以接收排好版的文本的行数的变量名 ResultReceiver_TheLinesCount \
         $*
 
@@ -189,12 +189,18 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
 
 
-    # --用以接收排好版的文本的全文的变量名                                       变量名。
-    # --用以接收排好版的文本的逐行文本列表的变量名                                变量名。
+    # --用以接收排好版的文本的全文的变量名                                  变量名。
+    # --用以接收排好版的逐行文本列表的变量名                                变量名。
+    # --外界预备好用以接收排好版的逐行文本的一系列变量之名称之公共前缀          变量名。
     #
-    #   以上两个参数，必须至少出现一个。可以同时出现。且任何一个参数均不可多次出现。
+    #   以上 3 个参数，必须至少给出一个。可以同时给出。且任何一个参数均不可多次给出。
+    #
+    #   又，且如果给出了 “ --外界预备好用以接收排好版的逐行文本的一系列变量之名称之公共前缀 ”，
+    #   则必须配合给出 “ --外界预备好用以接收排好版的逐行文本的一系列变量的总数 ” 和
+    #   “ --用以接收排好版的文本的行数的变量名 ”。即，这三者须同时给出。
     #
     #
+    # --外界预备好用以接收排好版的逐行文本的一系列变量的总数       至多出现 1 次。    正整数。
     # --用以接收排好版的文本的行数的变量名                      至多出现 1 次。    变量名。
     #
     # --单行等效汉字字数上限                                  至多出现 1 次。    正整数。
@@ -206,7 +212,14 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
 
     function Write-_吴乐川打印针对当前处理的参数的错误信息 {
-        echo -e "\e[0;31m在命令参数表中的 “ \e[0;97m${_ProcessingArgumentName}\e[0;31m ” 参数：\n    \e[0;33m${1}\e[0;0m"
+        echo -e "\e[0;91m在函数"
+        echo -e "    \e[0;91m“ \e[0;97mConvertTo-吴乐川将文本转换为多行文本_须采用接收器变量\e[0;91m ”"
+        echo -e "\e[0;91m的命令参数表中，名为\e[0;0m"
+        echo -e "    \e[0;91m“ \e[0;97m${_ProcessingArgumentName}\e[0;91m ”"
+        echo -e "\e[0;91m的参数有如下问题：\e[0;0m"
+        echo -e "    \e[0;91m\e[0;91m${1}\e[0;0m"
+        echo
+        echo
     }
 
 
@@ -215,12 +228,14 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
     local ResultReceiverVarName_FullText='*|undefined|*'
     local ResultReceiverVarName_TextLinesArray='*|undefined|*'
+    local ResultReceiverVarsNamePrefix_PerTextLine='*|undefined|*'
     local ResultReceiverVarName_CountOfLines='*|undefined|*'
 
+    local CountOfOuterScopePreparedVarsForPerLineText='*|undefined|*'
     local OriginalText=''
-    local HanCharacterPerLineMaxCount='undefined'
-    local ShouldAddASpaceAfterLastEnglishWordPerLine='undefined' # 'true' 或其它值。
-    local ShouldDoubleOriginalLineBreaks='undefined' # 'true' 或其它值。
+    local HanCharacterPerLineMaxCount='*|undefined|*'
+    local ShouldAddASpaceAfterLastEnglishWordPerLine='*|undefined|*' # 'true' 或其它值。
+    local ShouldDoubleOriginalLineBreaks='*|undefined|*' # 'true' 或其它值。
 
 
 
@@ -249,17 +264,17 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             # echo  -e  "已经遇到 “ \e[0;91m${_ProcessingArgumentName}\e[0;0m ”。其后还有 \e[0;96m$#\e[0;0m 个参数未处理。"
 
             if [ "${ResultReceiverVarName_FullText}" != '*|undefined|*' ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔1〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔1〕。'
                 return
             fi
 
             if [[ "$1" =~ ^- ]]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔1〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值〔1〕。'
                 return
             fi
 
             if [ -z "$1" ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔2〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值〔2〕。'
                 return
             fi
 
@@ -269,7 +284,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
             if [ "${ResultReceiverVarName_FullText}" != '*|undefined|*' ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔2〕。'
                 shift
                 return
             fi
@@ -278,14 +293,14 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             shift
 
             if [ -z "${_TemporaryArgumentValue}" ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔3〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值〔3〕。'
                 return
             fi
         fi
 
         if [ ! -z "${_TemporaryArgumentValue}" ]; then
             if [[ ! "${_TemporaryArgumentValue}" =~ ^[a-zA-Z_-][0-9a-zA-Z_-]*$ ]]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规。给出的值为 “ \e[0;33m${_TemporaryArgumentValue}\e[0;0m ” 。〔2〕。"
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔2〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}\e[0;91m ” 。"
                 return
             else
                 ResultReceiverVarName_FullText=$_TemporaryArgumentValue
@@ -294,7 +309,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
         # ---------------------------------------------------------------
 
-        _ProcessingArgumentName='--用以接收排好版的文本的逐行文本列表的变量名'
+        _ProcessingArgumentName='--用以接收排好版的逐行文本列表的变量名'
         _TemporaryArgumentValue=''
 
         if [ "$1" == "${_ProcessingArgumentName}" ]; then
@@ -304,17 +319,17 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             # echo  -e  "已经遇到 “ \e[0;91m${_ProcessingArgumentName}\e[0;0m ”。其后还有 \e[0;96m$#\e[0;0m 个参数未处理。"
 
             if [ "${ResultReceiverVarName_TextLinesArray}" != '*|undefined|*' ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔1〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔1〕。'
                 return
             fi
 
             if [[ "$1" =~ ^- ]]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔1〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值〔1〕。'
                 return
             fi
 
             if [ -z "$1" ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔2〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值〔2〕。'
                 return
             fi
 
@@ -324,7 +339,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
             if [ "${ResultReceiverVarName_TextLinesArray}" != '*|undefined|*' ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔2〕。'
                 shift
                 return
             fi
@@ -333,17 +348,72 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             shift
 
             if [ -z "${_TemporaryArgumentValue}" ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔3〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值〔3〕。'
                 return
             fi
         fi
 
         if [ ! -z "${_TemporaryArgumentValue}" ]; then
             if [[ ! "${_TemporaryArgumentValue}" =~ ^[a-zA-Z_-][0-9a-zA-Z_-]*$ ]]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规。给出的值为 “ \e[0;33m${_TemporaryArgumentValue}\e[0;0m ” 。〔2〕。"
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔2〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}\e[0;91m ” 。"
                 return
             else
                 ResultReceiverVarName_TextLinesArray=$_TemporaryArgumentValue
+            fi
+        fi
+
+        # ---------------------------------------------------------------
+
+        _ProcessingArgumentName='--外界预备好用以接收排好版的逐行文本的一系列变量之名称之公共前缀'
+        _TemporaryArgumentValue=''
+
+        if [ "$1" == "${_ProcessingArgumentName}" ]; then
+            _CurrentArgumentOrArgumentPairHaveRecognized=1
+            shift
+
+            # echo  -e  "已经遇到 “ \e[0;91m${_ProcessingArgumentName}\e[0;0m ”。其后还有 \e[0;96m$#\e[0;0m 个参数未处理。"
+
+            if [ "${ResultReceiverVarsNamePrefix_PerTextLine}" != '*|undefined|*' ]; then
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔1〕。'
+                return
+            fi
+
+            if [[ "$1" =~ ^- ]]; then
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值〔1〕。'
+                return
+            fi
+
+            if [ -z "$1" ]; then
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值〔2〕。'
+                return
+            fi
+
+            _TemporaryArgumentValue="$1"
+            shift
+        elif [[ "$1" =~ ^"${_ProcessingArgumentName}"= ]]; then
+            _CurrentArgumentOrArgumentPairHaveRecognized=1
+
+            if [ "${ResultReceiverVarsNamePrefix_PerTextLine}" != '*|undefined|*' ]; then
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔2〕。'
+                shift
+                return
+            fi
+
+            _TemporaryArgumentValue=${1:${#_ProcessingArgumentName}+1}
+            shift
+
+            if [ -z "${_TemporaryArgumentValue}" ]; then
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值〔3〕。'
+                return
+            fi
+        fi
+
+        if [ ! -z "${_TemporaryArgumentValue}" ]; then
+            if [[ ! "${_TemporaryArgumentValue}" =~ ^[a-zA-Z_-][0-9a-zA-Z_-]*$ ]]; then
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔2〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}\e[0;91m ” 。"
+                return
+            else
+                ResultReceiverVarsNamePrefix_PerTextLine=$_TemporaryArgumentValue
             fi
         fi
 
@@ -359,17 +429,17 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             # echo  -e  "已经遇到 “ \e[0;91m${_ProcessingArgumentName}\e[0;0m ”。其后还有 \e[0;96m$#\e[0;0m 个参数未处理。"
 
             if [ "${ResultReceiverVarName_CountOfLines}" != '*|undefined|*' ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔1〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔1〕。'
                 return
             fi
 
             if [[ "$1" =~ ^- ]]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔1〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值〔1〕。'
                 return
             fi
 
             if [ -z "$1" ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔2〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值〔2〕。'
                 return
             fi
 
@@ -379,7 +449,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
             if [ "${ResultReceiverVarName_CountOfLines}" != '*|undefined|*' ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔2〕。'
                 shift
                 return
             fi
@@ -388,14 +458,14 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             shift
 
             if [ -z "${_TemporaryArgumentValue}" ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔3〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值〔3〕。'
                 return
             fi
         fi
 
         if [ ! -z "${_TemporaryArgumentValue}" ]; then
             if [[ ! "${_TemporaryArgumentValue}" =~ ^[a-zA-Z_-][0-9a-zA-Z_-]*$ ]]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规。给出的值为 “ \e[0;33m${_TemporaryArgumentValue}\e[0;0m ” 。〔2〕。"
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔2〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}\e[0;91m ” 。"
                 return
             else
                 ResultReceiverVarName_CountOfLines=$_TemporaryArgumentValue
@@ -411,18 +481,18 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             _CurrentArgumentOrArgumentPairHaveRecognized=1
             shift
 
-            if [ "${HanCharacterPerLineMaxCount}" != 'undefined' ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔1〕。'
+            if [ "${HanCharacterPerLineMaxCount}" != '*|undefined|*' ]; then
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔1〕。'
                 return
             fi
 
-            if [[ "$1" =~ ^- ]]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔1〕。'
+            if [[ "$1" =~ ^-[^0-9] ]] || [[ "$1" == '-' ]]; then
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值〔1〕。'
                 return
             fi
 
             if [ -z "$1" ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔2〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值〔2〕。'
                 return
             fi
 
@@ -431,8 +501,8 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
         elif [[ "$1" =~ ^"${_ProcessingArgumentName}"= ]]; then
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
-            if [ "${HanCharacterPerLineMaxCount}" != 'undefined' ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
+            if [ "${HanCharacterPerLineMaxCount}" != '*|undefined|*' ]; then
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔2〕。'
                 shift
                 return
             fi
@@ -443,17 +513,73 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             if [ "$_TemporaryArgumentValue" == '0' ]; then
                 HanCharacterPerLineMaxCount=0
             elif [ -z "${_TemporaryArgumentValue}" ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔3〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值〔3〕。'
                 return
             fi
         fi
 
         if [ ! -z "$_TemporaryArgumentValue" ]; then
             if [[ ! "${_TemporaryArgumentValue}" =~ ^[1-9][0-9]*$ ]]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规。给出的值为 “ \e[0;33m${_TemporaryArgumentValue}\e[0;0m ” 。〔2〕。"
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔1〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}\e[0;91m ” 。"
                 return
             else
                 HanCharacterPerLineMaxCount=$_TemporaryArgumentValue
+            fi
+        fi
+
+        # ---------------------------------------------------------------
+
+        _ProcessingArgumentName='--外界预备好用以接收排好版的逐行文本的一系列变量的总数'
+        _TemporaryArgumentValue=''
+
+        if [ "$1" == "${_ProcessingArgumentName}" ]; then
+            _CurrentArgumentOrArgumentPairHaveRecognized=1
+            shift
+
+            if [ "${CountOfOuterScopePreparedVarsForPerLineText}" != '*|undefined|*' ]; then
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔1〕。'
+                return
+            fi
+
+            if [[ "$1" =~ ^-[^0-9] ]] || [[ "$1" == '-' ]]; then
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值〔1〕。'
+                return
+            fi
+
+            if [ -z "$1" ]; then
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值〔2〕。'
+                return
+            fi
+
+            _TemporaryArgumentValue="$1"
+            shift
+        elif [[ "$1" =~ ^"${_ProcessingArgumentName}"= ]]; then
+            _CurrentArgumentOrArgumentPairHaveRecognized=1
+
+            if [ "${CountOfOuterScopePreparedVarsForPerLineText}" != '*|undefined|*' ]; then
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔2〕。'
+                shift
+                return
+            fi
+
+            _TemporaryArgumentValue=${1:${#_ProcessingArgumentName}+1}
+            shift
+
+            if [ "$_TemporaryArgumentValue" == '0' ]; then
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔1〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}\e[0;91m ” 。"
+                return
+            elif [ -z "${_TemporaryArgumentValue}" ]; then
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值〔3〕。'
+                return
+            fi
+        fi
+
+        if [ ! -z "$_TemporaryArgumentValue" ]; then
+            if [[ ! "${_TemporaryArgumentValue}" =~ ^[1-9][0-9]*$ ]]; then
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔2〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}\e[0;91m ” 。"
+                return
+            else
+                CountOfOuterScopePreparedVarsForPerLineText=$_TemporaryArgumentValue
             fi
         fi
 
@@ -466,8 +592,8 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             _CurrentArgumentOrArgumentPairHaveRecognized=1
             shift
 
-            if [ "${ShouldAddASpaceAfterLastEnglishWordPerLine}" != 'undefined' ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  "不应重复出现。〔1〕。已有参数将其配置为 “ \e[0;32m${ShouldAddASpaceAfterLastEnglishWordPerLine}\e[0;33m ” 。"
+            if [ "${ShouldAddASpaceAfterLastEnglishWordPerLine}" != '*|undefined|*' ]; then
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "不应重复出现〔1〕。已有参数将其配置为 “ \e[0;32m${ShouldAddASpaceAfterLastEnglishWordPerLine}\e[0;91m ” 。"
                 return
             fi
 
@@ -482,8 +608,8 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
         elif [[ "$1" =~ ^"${_ProcessingArgumentName}"= ]]; then
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
-            if [ "${ShouldAddASpaceAfterLastEnglishWordPerLine}" != 'undefined' ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
+            if [ "${ShouldAddASpaceAfterLastEnglishWordPerLine}" != '*|undefined|*' ]; then
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔2〕。'
                 shift
                 return
             fi
@@ -494,7 +620,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             if [ "$_TemporaryArgumentValue" == '0' ]; then
                 _TemporaryArgumentValue='false'
             elif [ -z "$_TemporaryArgumentValue" ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔1〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值〔1〕。'
                 return
             fi
         fi
@@ -516,8 +642,8 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             _CurrentArgumentOrArgumentPairHaveRecognized=1
             shift
 
-            if [ "${ShouldDoubleOriginalLineBreaks}" != 'undefined' ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  "不应重复出现。〔1〕。已有参数将其配置为 “ \e[0;32m${ShouldDoubleOriginalLineBreaks}\e[0;33m ” 。"
+            if [ "${ShouldDoubleOriginalLineBreaks}" != '*|undefined|*' ]; then
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "不应重复出现〔1〕。已有参数将其配置为 “ \e[0;32m${ShouldDoubleOriginalLineBreaks}\e[0;91m ” 。"
                 return
             fi
 
@@ -532,8 +658,8 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
         elif [[ "$1" =~ ^"${_ProcessingArgumentName}"= ]]; then
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
-            if [ "${ShouldDoubleOriginalLineBreaks}" != 'undefined' ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
+            if [ "${ShouldDoubleOriginalLineBreaks}" != '*|undefined|*' ]; then
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔2〕。'
                 shift
                 return
             fi
@@ -544,7 +670,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             if [ "${_TemporaryArgumentValue}" == '0' ]; then
                 _TemporaryArgumentValue='false'
             elif [ -z "${_TemporaryArgumentValue}" ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔1〕。'
+                Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值〔1〕。'
                 return
             fi
         fi
@@ -573,11 +699,19 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
     _ProcessingArgumentName=''
     _TemporaryArgumentValue=''
 
-    if [ "${ResultReceiverVarName_FullText}" == '*|undefined|*' ] && [ "${ResultReceiverVarName_TextLinesArray}" == '*|undefined|*' ]; then
-        echo -e "\e[0;31m在命令参数表中缺少必要参数。以下 2 个参数，至少给出一个。可以同时给出。\e[0;0m"
-        echo -e "    \e[0;31m“ \e[0;97m--用以接收排好版的文本的全文的变量名\e[0;31m ”\e[0;0m"
-        echo -e "    \e[0;31m“ \e[0;97m--用以接收排好版的文本的逐行文本列表的变量名\e[0;31m ”\e[0;0m"
-        echo -e "另，二者均不可出现多次。"
+
+
+    if [ "${ResultReceiverVarName_FullText}" == '*|undefined|*' ] && [ "${ResultReceiverVarName_TextLinesArray}" == '*|undefined|*' ] && [ "${ResultReceiverVarsNamePrefix_PerTextLine}" == '*|undefined|*' ]; then
+        echo -e "\e[0;91m在函数"
+        echo -e "    \e[0;91m“ \e[0;97mConvertTo-吴乐川将文本转换为多行文本_须采用接收器变量\e[0;91m ”"
+        echo -e "\e[0;91m的命令参数表中缺少必要参数。\e[0;0m"
+        echo -e "\e[0;91m以下 3 个参数，至少给出一个。可以同时给出。\e[0;0m"
+        echo -e "    \e[0;91m“ \e[0;97m--用以接收排好版的文本的全文的变量名\e[0;91m ”\e[0;0m"
+        echo -e "    \e[0;91m“ \e[0;97m--用以接收排好版的逐行文本列表的变量名\e[0;91m ”\e[0;0m"
+        echo -e "    \e[0;91m“ \e[0;97m--外界预备好用以接收排好版的逐行文本的一系列变量之名称之公共前缀\e[0;91m ”\e[0;0m"
+        echo -e "另，3 者均不可出现多次。"
+        echo
+        echo
         return
     fi
 
@@ -593,23 +727,47 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
         ResultReceiverVarName_CountOfLines=''
     fi
 
-    if [[ "${HanCharacterPerLineMaxCount}" == '0' || "${HanCharacterPerLineMaxCount}" == 'undefined' ]]; then
+    if [ "${ResultReceiverVarsNamePrefix_PerTextLine}" == '*|undefined|*' ]; then
+        ResultReceiverVarsNamePrefix_PerTextLine=''
+    fi
+
+    if [ "${CountOfOuterScopePreparedVarsForPerLineText}" == '*|undefined|*' ]; then
+        CountOfOuterScopePreparedVarsForPerLineText=''
+    fi
+
+    if [[ "${HanCharacterPerLineMaxCount}" == '0' || "${HanCharacterPerLineMaxCount}" == '*|undefined|*' ]]; then
         HanCharacterPerLineMaxCount=$HAN_CHARACTER_PER_LINE_DEFAULT_MAX_COUNT
     fi
 
-    if [ "${ShouldAddASpaceAfterLastEnglishWordPerLine}" == 'undefined' ]; then
+    if [ "${ShouldAddASpaceAfterLastEnglishWordPerLine}" == '*|undefined|*' ]; then
         ShouldAddASpaceAfterLastEnglishWordPerLine='false'
     fi
 
-    if [ "${ShouldDoubleOriginalLineBreaks}" == 'undefined' ]; then
+    if [ "${ShouldDoubleOriginalLineBreaks}" == '*|undefined|*' ]; then
         ShouldDoubleOriginalLineBreaks='false'
+    fi
+
+    if [ ! -z "$ResultReceiverVarsNamePrefix_PerTextLine" ] && [ -z "$CountOfOuterScopePreparedVarsForPerLineText" ]; then
+        echo -e "\e[0;31m在命令参数表中缺少必要参数。\n你已给出 “ \e[0;97m--外界预备好用以接收排好版的逐行文本的一系列变量之名称之公共前缀\e[0;31m ” 。\n此时，必须配合给出 “ \e[0;97m--外界预备好用以接收排好版的逐行文本的一系列变量的总数\e[0;31m （应取正整数） ” 。\e[0;0m"
+        return
+    fi
+
+    if [ ! -z "$ResultReceiverVarsNamePrefix_PerTextLine" ] && [ -z "$ResultReceiverVarName_CountOfLines" ]; then
+        echo -e "\e[0;31m在命令参数表中缺少必要参数。\n你已给出 “ \e[0;97m--外界预备好用以接收排好版的逐行文本的一系列变量之名称之公共前缀\e[0;31m ” 。\n此时，必须配合给出 “ \e[0;97m--用以接收排好版的文本的行数的变量名\e[0;31m （应为某变量名） ” 。\e[0;0m"
+        return
     fi
 
 
 
     if [ $SHOULD_DEBUG -eq 1 ]; then
         echo
-        echo  -e  "〔调试〕： 用以接收排好版的文本的逐行文本列表的变量名：\n           \e[0;33m${ResultReceiverVarName_TextLinesArray}\e[0;0m"
+        echo  -e  "〔调试〕： 用以接收排好版的文本的全文的变量名：\n           \e[0;33m${ResultReceiverVarName_FullText}\e[0;0m"
+        echo
+        echo  -e  "〔调试〕： 用以接收排好版的逐行文本列表的变量名：\n           \e[0;33m${ResultReceiverVarName_TextLinesArray}\e[0;0m"
+        echo
+        echo  -e  "〔调试〕： 外界预备好用以接收排好版的逐行文本的一系列变量之名称之公共前缀：\n           \e[0;33m${ResultReceiverVarsNamePrefix_PerTextLine}\e[0;0m"
+        echo
+        echo  -e  "〔调试〕： 外界预备好用以接收排好版的逐行文本的一系列变量的总数：\n           \e[0;33m${CountOfOuterScopePreparedVarsForPerLineText}\e[0;0m"
         echo
         echo  -e  "〔调试〕： 单行等效汉字字数上限：\n           \e[0;33m${HanCharacterPerLineMaxCount}\e[0;0m"
         echo
@@ -617,9 +775,10 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
         echo
         echo  -e  "〔调试〕： 原文本中的每个换行符在产生的内容中应改作两个换行符：\n           \e[0;33m${ShouldDoubleOriginalLineBreaks}\e[0;0m"
         echo
-        echo  -e  "〔调试〕： 原文本： \e[0;91m'\e[0;33m${OriginalText}\e[0;91m'\e[0;0m"
+        echo  -e  "〔调试〕： 原文本： \n\e[0;91m'\e[0;33m${OriginalText}\e[0;91m'\e[0;0m\n"
         echo
     fi
+        # echo  -e  "〔调试〕： 原文本： \n\e[0;91m'\e[0;33m${OriginalText}\e[0;91m'\e[0;0m\n"
 
 
 
@@ -666,7 +825,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             if [ "$Char" == '\' ]; then
                 Char="\\"
                 ThisCharIsBackSlash='true'
-                # if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： 第 $((LoopIndex+1)) 字是反斜杠。 \e[0;91m'\e[0;33m${Char}${Char}\e[0;91m'\e[0;0m"; fi
+                if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： 第 $((LoopIndex+1)) 字是反斜杠。 \e[0;91m'\e[0;33m${Char}${Char}\e[0;91m'\e[0;0m"; fi
                 LastCharWasBackSlash="$ThisCharIsBackSlash"
                 continue
             else
@@ -678,7 +837,6 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
 
 
-        # TemporaryWordIsHanCharacter=`Assert-吴乐川判断字符系中日韩文字_直接回显结论  "$Char"`
         Assert-吴乐川判断字符系中日韩文字_须采用接收器变量  TemporaryWordIsHanCharacter  "$Char"
 
         # if [ $SHOULD_DEBUG -eq 1 ]; then
@@ -694,7 +852,6 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
         if [ "$Char" == $LINE_BREAK ] || [ "$Char" == ' ' ] || [ "$TemporaryWordIsHanCharacter" == 'true' ]; then
             if [[ "$TemporaryWord" =~ [^\s] ]]; then
                 read -r TemporaryWord <<< $TemporaryWord  # 掐头去尾。等效于其他编程语言的 trim() 。
-                # TemporaryWord=$(echo    $TemporaryWord) # 掐头去尾。等效于其他编程语言的 trim() 。
                 WordIndex=$((WordIndex+1));
                 # if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： 第 ${WordIndex} 词： \e[0;91m'\e[0;33m${TemporaryWord}\e[0;91m'\e[0;0m"; fi
                 WordList+=( "$TemporaryWord" )
@@ -719,7 +876,6 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
     if [ ! -z "$TemporaryWord" ]; then
         if [[ "$TemporaryWord" =~ [^\s] ]]; then
             read -r TemporaryWord <<< $TemporaryWord  # 掐头去尾。等效于其他编程语言的 trim() 。
-            # TemporaryWord=$(echo    $TemporaryWord) # 掐头去尾。等效于其他编程语言的 trim() 。
             WordIndex=$((WordIndex+1));
             # if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： 第 ${WordIndex} 词： \e[0;91m'\e[0;33m${TemporaryWord}\e[0;91m'\e[0;0m"; fi
             WordList+=( "$TemporaryWord" )
@@ -783,7 +939,19 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
 
 
+    function Write-_吴乐川打印警告_外界准备的用以接收逐行文本的变量不够用 {
+        local _CountOfLinesSoFar=$1
+        local _TextOfInvolvedLine="$2"
 
+        echo  -e  "\e[0;33m〔警告〕： "
+        echo  -e  "    \e[0;33m外界为函数 “ \e[0;97mConvertTo-吴乐川将文本转换为多行文本_须采用接收器变量\e[0;33m ” 准备的\e[0;0m"
+        echo  -e  "    \e[0;33m用以接收排好版的逐行文本的系列变量的数目不够。\e[0;0m"
+        echo  -e  "    \e[0;33m外界准备了 \e[0;96m${CountOfOuterScopePreparedVarsForPerLineText}\e[0;33m 个变量；目前产生的文本是第 \e[0;91m${_CountOfLinesSoFar}\e[0;33m 行。"
+        echo  -e  "    \e[0;33m所涉行之全文：\e[0;91m'\e[0;97m${_TextOfInvolvedLine}\e[0;91m'\e[0;33m。\e[0;0m"
+        echo  -e  "    \e[0;33m故已经产生了一个全局变量，名为“ \e[0;97m${ResultReceiverVarsNamePrefix_PerTextLine}${_CountOfLinesSoFar}\e[0;33m ”，这可能已经造成 “ 变量污染 ”。\e[0;0m"
+        echo  -e  "    \e[0;33m接下来仍可能产生一个或一系列全局变量，继续造成 “ 变量污染 ”。\e[0;0m"
+        echo
+    }
 
     while [ $IndexOfProcessingWord -lt $CountOfWords ]; do
 
@@ -941,26 +1109,47 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
 
 
+        CountOfLines=$((CountOfLines+1))
+
         if [ $CountOfLines -gt 0 ]; then
             FORMATTED_FULL_TEXT+="\n"
         fi
-
-
-
         FORMATTED_FULL_TEXT+="$TextsOfProcessingLine"
-        CountOfLines=$((CountOfLines+1))
+
+        if [ ! -z "$ResultReceiverVarsNamePrefix_PerTextLine" ]; then
+            if [ $CountOfLines -eq $((1+CountOfOuterScopePreparedVarsForPerLineText)) ]; then
+                Write-_吴乐川打印警告_外界准备的用以接收逐行文本的变量不够用  "$CountOfLines"  "$TextsOfProcessingLine"
+            fi
+
+            eval "${ResultReceiverVarsNamePrefix_PerTextLine}${CountOfLines}=\"$TextsOfProcessingLine\""
+        fi
 
         if [ ! -z "${ResultReceiverVarName_TextLinesArray}" ]; then
-            eval "$ResultReceiverVarName_TextLinesArray+=( \"$TextsOfProcessingLine\" )"
+            if [ -z "$TextsOfProcessingLine" ]; then
+                eval "$ResultReceiverVarName_TextLinesArray+=( \"\" )"
+            else
+                eval "$ResultReceiverVarName_TextLinesArray+=( \"$TextsOfProcessingLine\" )"
+            fi
         fi
+
+        TextsOfProcessingLine=''
 
 
 
         if [ "$LineEndedBecauseOfLineBreakSign" == 'true' ] && [ "$ShouldDoubleOriginalLineBreaks" == 'true' ]; then
-            FORMATTED_FULL_TEXT+="\n"
             CountOfLines=$((CountOfLines+1))
+            FORMATTED_FULL_TEXT+="\n"
+
+            if [ ! -z "$ResultReceiverVarsNamePrefix_PerTextLine" ]; then
+                if [ $CountOfLines -eq $((1+CountOfOuterScopePreparedVarsForPerLineText)) ]; then
+                    Write-_吴乐川打印警告_外界准备的用以接收逐行文本的变量不够用  "$CountOfLines"  "$TextsOfProcessingLine"
+                fi
+
+                eval "${ResultReceiverVarsNamePrefix_PerTextLine}${CountOfLines}=''"
+            fi
+
             if [ ! -z "${ResultReceiverVarName_TextLinesArray}" ]; then
-                eval "$ResultReceiverVarName_TextLinesArray+=( '\n' )"
+                eval "$ResultReceiverVarName_TextLinesArray+=( \"\" )"
             fi
         fi
 

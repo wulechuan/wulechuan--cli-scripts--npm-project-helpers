@@ -16,6 +16,44 @@ function 测试之主程序 {
 
 
     if false; then
+        # 方法一：
+        # 预备足够多（ 100 个）的 local 变量来接收逐行文本。
+        # 此方法较繁复。但较可靠。因为避免了 IFS 对换行符的不当处理。
+
+        ResultReceiver=''
+
+        local CountOfTextLines
+        local ReceiverVarsCount=24
+        for ((LoopIndex=1; LoopIndex<=$ReceiverVarsCount; LoopIndex++)); do
+            eval "local WlcTextOfLine_${LoopIndex}=''"
+        done
+
+        ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变量 \
+            --外界预备好用以接收排好版的逐行文本的一系列变量之名称之公共前缀 WlcTextOfLine_ \
+            --外界预备好用以接收排好版的逐行文本的一系列变量的总数 $ReceiverVarsCount \
+            --用以接收排好版的文本的行数的变量名 CountOfTextLines \
+            '大漠沙如雪' --英语单词在行尾时其后应保留一个空格 false '  燕山月似钩' ' 。 ' \
+            '文档对象模型（DOM）将 web 页面与到脚本或编程语言连接起来。通常是指 JavaScript，但将 HTML、SVG 或 XML 文档建模为对象并不是 JavaScript 语言的一部分。DOM 模型用一个逻辑树来表示一个文档，树的每个分支的终点都是一个节点（node），每个节点都包含着对象（object）。DOM 的方法（method）让你可以用特定方式操作这个树，用这些方法你可以改变文档的结构、样式或者内容。节点可以关联上事件处理器，一旦某一事件被触发了，那些事件处理器就会被执行。 ' \
+            "Aliquip proident nulla ex cillum magna. Anim culpa dolor ullamco nulla culpa labore. Lo\nrem dolor proident qui aliquip nulla. Do ex external link 1 (www.bing.com) anim tempor do veniam duis nulla ut culpa tempor dolore. Labore dolore ex anim fake self-page link 2 (do not follow) id. Anim et ex ex labore cupidatat anim proident laboris amet fugiat aute ad.\n Reprehenderit dolore cupidatat sit elit esse anim est aute." \
+            --原文本中的每个换行符在产生的内容中应改作两个换行符 true \
+            "\n总有一天中国人会有自己的高性能计算机芯片。" \
+            --单行等效汉字字数上限 24
+
+        if [ ! -z "$CountOfTextLines" ]; then
+            for ((LoopIndex=1; LoopIndex<=$CountOfTextLines; LoopIndex++)); do
+                eval "Text=\"\$WlcTextOfLine_${LoopIndex}\""
+                echo -e  "    # ║ \e[0;91m$Text\e[0;0m"
+            done
+        fi
+
+        return
+    fi
+
+
+
+
+
+    if false; then
         ResultReceiver=''
 
         ConvertTo-吴乐川将文本转换为多行文本_直接回显结论 '大漠沙如雪' --英语单词在行尾时其后应保留一个空格 false '  燕山月似钩' ' 。 ' \
@@ -24,11 +62,11 @@ function 测试之主程序 {
             --原文本中的每个换行符在产生的内容中应改作两个换行符 true \
             "\n总有一天中国人会有自己的高性能计算机芯片。" \
             --单行等效汉字字数上限 24
-    fi
 
-    echo
-    echo
-    echo
+        echo
+        echo
+        echo
+    fi
 
     if false; then
         ResultReceiver=''
@@ -38,11 +76,11 @@ function 测试之主程序 {
             "\n总\\\\有一天中国人会有自己的高性能计算机芯片。" \
             --原文本中的每个换行符在产生的内容中应改作两个换行符 true \
             --单行等效汉字字数上限 19
-    fi
 
-    echo
-    echo
-    echo
+        echo
+        echo
+        echo
+    fi
 
     if false; then
         ResultReceiver=''
@@ -130,6 +168,7 @@ function 测试之主程序 {
 
 
     if false; then
+
         echo
         echo
         echo
@@ -158,7 +197,65 @@ function 测试之主程序 {
 
 
 
+    local LINE_BREAK='\n'
+    local GUO_JI_GE=''
+    GUO_JI_GE+="起来，饥寒交迫的奴隶，"
+    GUO_JI_GE+="${LINE_BREAK}起来，全世界受苦的人！"
+    GUO_JI_GE+="${LINE_BREAK}满腔的热血已经沸腾，"
+    GUO_JI_GE+="${LINE_BREAK}要为真理而斗争！"
+    GUO_JI_GE+="${LINE_BREAK}旧世界打个落花流水，"
+    GUO_JI_GE+="${LINE_BREAK}奴隶们，起来，起来！"
+    GUO_JI_GE+="${LINE_BREAK}不要说我们一无所有，"
+    GUO_JI_GE+="${LINE_BREAK}我们要做天下的主人！"
+    GUO_JI_GE+="${LINE_BREAK}这是最后的斗争，"
+    GUO_JI_GE+="${LINE_BREAK}团结起来，到明天，"
+    GUO_JI_GE+="${LINE_BREAK}英特纳雄耐尔就一定要实现。"
+    GUO_JI_GE+="${LINE_BREAK}这是最后的斗争，"
+    GUO_JI_GE+="${LINE_BREAK}团结起来，到明天，"
+    GUO_JI_GE+="${LINE_BREAK}英特纳雄耐尔就一定要实现。"
+    GUO_JI_GE+="${LINE_BREAK}从来就没有什么救世主，"
+    GUO_JI_GE+="${LINE_BREAK}也不靠神仙皇帝。"
+    GUO_JI_GE+="${LINE_BREAK}要创造人类的幸福，"
+    GUO_JI_GE+="${LINE_BREAK}全靠我们自己。"
+    GUO_JI_GE+="${LINE_BREAK}我们要夺回劳动果实，"
+    GUO_JI_GE+="${LINE_BREAK}让思想冲破牢笼。"
+    GUO_JI_GE+="${LINE_BREAK}快把那炉火烧得通红，"
+    GUO_JI_GE+="${LINE_BREAK}趁热打铁才能成功！"
+    GUO_JI_GE+="${LINE_BREAK}这是最后的斗争，"
+    GUO_JI_GE+="${LINE_BREAK}团结起来，到明天，"
+    GUO_JI_GE+="${LINE_BREAK}英特纳雄耐尔就一定要实现。"
+    GUO_JI_GE+="${LINE_BREAK}这是最后的斗争，"
+    GUO_JI_GE+="${LINE_BREAK}团结起来，到明天，"
+    GUO_JI_GE+="${LINE_BREAK}英特纳雄耐尔就一定要实现。"
+    GUO_JI_GE+="${LINE_BREAK}是谁创造了人类世界？"
+    GUO_JI_GE+="${LINE_BREAK}是我们劳动群众。"
+    GUO_JI_GE+="${LINE_BREAK}一切归劳动者所有，"
+    GUO_JI_GE+="${LINE_BREAK}哪能容得寄生虫！"
+    GUO_JI_GE+="${LINE_BREAK}最可恨那些毒蛇猛兽，"
+    GUO_JI_GE+="${LINE_BREAK}吃尽了我们的血肉。"
+    GUO_JI_GE+="${LINE_BREAK}一旦把它们消灭干净，"
+    GUO_JI_GE+="${LINE_BREAK}鲜红的太阳照遍全球！"
+    GUO_JI_GE+="${LINE_BREAK}这是最后的斗争，"
+    GUO_JI_GE+="${LINE_BREAK}团结起来，到明天，"
+    GUO_JI_GE+="${LINE_BREAK}英特纳雄耐尔就一定要实现。"
+    GUO_JI_GE+="${LINE_BREAK}这是最后的斗争，"
+    GUO_JI_GE+="${LINE_BREAK}团结起来，到明天，"
+    GUO_JI_GE+="${LINE_BREAK}英特纳雄耐尔就一定要实现。"
+    # echo -e "$GUO_JI_GE"
+
+
+
     if true; then
+
+        # Update-吴乐川更新当前_npm_项目的某批依赖包 \
+        #     --这批依赖包之依赖类别='本产品拟囊括这些软件之整体或部分' \
+        #     --内容分割记号='|::|' \
+        #     --某依赖包之版本配置='@jun-yong-fei-ji/jian-ji-ji    |::|  2025  |::|   出征。' \
+        #     --某依赖包之版本配置="@dao-dan/dong-feng-17          |::|  2025  |::|   ${GUO_JI_GE}" \
+        #     --应仅作仿真演练 true
+
+        # return
+
         echo
         echo
         echo
@@ -180,7 +277,7 @@ function 测试之主程序 {
             --某依赖包之版本配置='@zhong-hua/package-cde         |::|   0  |::| 这是仅限版本零，而不是不设限。' \
             --某依赖包之版本配置='@zhong-hua/package-fghi' \
             --某依赖包之版本配置='@jun-yong-fei-ji/jian-ji-ji    |::|  2025  |::|   出征。' \
-            --某依赖包之版本配置='@dao-dan/dong-feng-17          |::|  2025  |::|   起来，饥寒交迫的奴隶，\n起来，全世界受苦的人！\n满腔的热血已经沸腾，\n要为真理而斗争！\n旧世界打个落花流水，\n奴隶们，起来，起来！\n不要说我们一无所有，\n我们要做天下的主人！\n这是最后的斗争，\n团结起来，到明天，\n英特纳雄耐尔就一定要实现。\n这是最后的斗争，\n团结起来，到明天，\n英特纳雄耐尔就一定要实现。\n从来就没有什么救世主，\n也不靠神仙皇帝。\n要创造人类的幸福，\n全靠我们自己。\n我们要夺回劳动果实，\n让思想冲破牢笼。\n快把那炉火烧得通红，\n趁热打铁才能成功！\n这是最后的斗争，\n团结起来，到明天，\n英特纳雄耐尔就一定要实现。\n这是最后的斗争，\n团结起来，到明天，\n英特纳雄耐尔就一定要实现。\n是谁创造了人类世界？\n是我们劳动群众。\n一切归劳动者所有，\n哪能容得寄生虫！\n最可恨那些毒蛇猛兽，\n吃尽了我们的血肉。\n一旦把它们消灭干净，\n鲜红的太阳照遍全球！\n这是最后的斗争，\n团结起来，到明天，\n英特纳雄耐尔就一定要实现。\n这是最后的斗争，\n团结起来，到明天，\n英特纳雄耐尔就一定要实现。' \
+            --某依赖包之版本配置="@dao-dan/dong-feng-17          |::|  2025  |::|   ${GUO_JI_GE}" \
             --某依赖包之版本配置='@dao-dan/dong-feng-41          |::|  2025  |::|   也没有神仙皇帝。' \
             --应仅作仿真演练 true
 
@@ -205,4 +302,3 @@ echo -e "\n───────────────────────
 unset -f 测试之主程序
 unset __WLC_time_start__
 unset __WLC_time_end__
- 
