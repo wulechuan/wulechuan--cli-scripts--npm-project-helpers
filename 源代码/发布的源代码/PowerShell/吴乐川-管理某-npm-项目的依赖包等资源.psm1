@@ -676,7 +676,7 @@ function ConvertTo-_吴乐川管理某_npm_项目__新装或升级依赖包__内
 
 
             [string]${private:某依赖包之版本配置} = ''
-            [string]${private:某依赖包之锁定版本范围之原因} = "${private:措辞_未注明须锁定版本范围的原因}"
+            [string]${private:某依赖包之锁定版本范围之原因} = ''
             # Write-Host "`e[33m`"${private:某依赖包之名称}`"： `${private:某依赖包之原始扼要配置} ${private:某依赖包之原始扼要配置}`e[0;0m"
 
 
@@ -750,7 +750,7 @@ function ConvertTo-_吴乐川管理某_npm_项目__新装或升级依赖包__内
                         命令主体 = "${private:某依赖包之名称}@latest"
 
                         版本配置 = 'latest' # 因为永远是 latest，故用处不大。
-                        锁版原因 = '版本并未设限。故谈不上什么原因。' # 仅充当“注释”，供程序员阅读。
+                        锁版原因 = '~~~ 版本并未设限。故谈不上什么原因。 ~~~' # 仅充当“注释”，供程序员阅读。
 
                         包名字符数 = "${private:某依赖包之名称}".Length
                         命令主体之字符数 = "${private:某依赖包之名称}@latest".Length
@@ -761,6 +761,10 @@ function ConvertTo-_吴乐川管理某_npm_项目__新装或升级依赖包__内
                     }
                 )
             } else {
+                if ("${private:某依赖包之锁定版本范围之原因}" -match '^\s*$') {
+                    ${private:某依赖包之锁定版本范围之原因}="${private:措辞_未注明须锁定版本范围的原因}"
+                }
+
                 ${private:乙类配置条目之列表} += @(
                     [PSCustomObject]@{
                         软件名称 = "${private:某依赖包之名称}"

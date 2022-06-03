@@ -994,32 +994,32 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
 
 
-        if [ $_ProcessingPackageHasLockedVersionRange -eq 0 ] && [ ! -z "$_ProcessingPackageVerionLockReason" ]; then
-            echo
-            Write-_吴乐川打印一条红线
-            echo  -e  "\e[0;31m解析【npm 软件包版本配置】时，发行某配置有误。\e[0;0m"
-            Write-_吴乐川打印一条红线
-
-            echo  -e  "  \e[0;31m依赖包\e[0;0m"
-            echo  -e  "      \e[0;31m“ \e[0;33m${_ProcessingPackageName}\e[0;31m ”\e[0;0m"
-            echo  -e  "  \e[0;31m并未锁定安装版本之范围，却给出了相关原因。这不合规。\e[0;0m"
-            echo  -e  "  \e[0;31m凡不锁定版本的软件无所谓“版本锁定之原因”。\e[0;0m"
-            echo
-
-            echo  -e  "  \e[0;31m给出的所谓“原因”如下：\e[0;0m"
-            echo  -e  "      \"\e[0;33m${_ProcessingPackageVerionLockReason}\e[0;0m\""
-
-            echo  -e
-            echo  -e  "  \e[0;31m务必删去这一讲述“原因”的措辞。\e[0;0m"
-
-            Write-_吴乐川打印一条红线
-            echo
-
-            return
-        fi
-
         if [ $_ProcessingPackageHasLockedVersionRange -eq 0 ]; then
-            _ProcessingPackageVerionLockReason='版本并未设限。故谈不上什么原因。'
+            if [ ! -z "$_ProcessingPackageVerionLockReason" ]; then
+                echo
+                Write-_吴乐川打印一条红线
+                echo  -e  "\e[0;31m解析【npm 软件包版本配置】时，发行某配置有误。\e[0;0m"
+                Write-_吴乐川打印一条红线
+
+                echo  -e  "  \e[0;31m依赖包\e[0;0m"
+                echo  -e  "      \e[0;31m“ \e[0;33m${_ProcessingPackageName}\e[0;31m ”\e[0;0m"
+                echo  -e  "  \e[0;31m并未锁定安装版本之范围，却给出了相关原因。这不合规。\e[0;0m"
+                echo  -e  "  \e[0;31m凡不锁定版本的软件无所谓“版本锁定之原因”。\e[0;0m"
+                echo
+
+                echo  -e  "  \e[0;31m给出的所谓“原因”如下：\e[0;0m"
+                echo  -e  "      \"\e[0;33m${_ProcessingPackageVerionLockReason}\e[0;0m\""
+
+                echo  -e
+                echo  -e  "  \e[0;31m务必删去这一讲述“原因”的措辞。\e[0;0m"
+
+                Write-_吴乐川打印一条红线
+                echo
+
+                return
+            fi
+
+            _ProcessingPackageVerionLockReason='~~~ 版本并未设限。故谈不上什么原因。 ~~~'
         fi
 
 
@@ -1290,32 +1290,42 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
 
 
-        if [ ! -z "$_DescriptionContentLinesCount" ]; then
-            for ((_DescriptionContentLineLoopIndex=0; _DescriptionContentLineLoopIndex<$_DescriptionContentLinesCount; _DescriptionContentLineLoopIndex++)); do
-                if [ "$_ShouldUseArrayForReceiveingFormattedTexts" == 'true' ]; then
-                    _DescriptionContentProcessingLineText=${_DescriptionContentPerLineTextsArray[${_DescriptionContentLineLoopIndex}]}
-                else
-                    eval "_DescriptionContentProcessingLineText=\"\$${_DescriptionContentPerLineTextVarsNamePrefix}$((_DescriptionContentLineLoopIndex+1))\""
-                fi
+        if [ -z "$_DescriptionContentLinesCount" ] || [ "$_DescriptionContentLinesCount" == '0' ]; then
+            _DescriptionContentLinesCount=1
 
-
-
-                if [ -z "$_DescriptionContentProcessingLineText" ]; then
-                    _DescriptionContentProcessingLineLength=0
-                else
-                    Get-吴乐川求一行文本视觉宽度等效英语字母数_须采用接收器变量  _DescriptionContentProcessingLineLength  "$_DescriptionContentProcessingLineText"
-                fi
-
-                _DescriptionContentProcessingLinePaddingCount=$((_DescriptionFrameWidthInEnglishCharsCount-1-5-_DescriptionContentProcessingLineLength-1-1))
-                _DescriptionContentProcessingLinePaddingTextAndTailFrame=''
-                if [ $_DescriptionContentProcessingLinePaddingCount -gt 0 ]; then
-                    _DescriptionContentProcessingLinePaddingTextAndTailFrame="${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:$_DescriptionContentProcessingLinePaddingCount} ║"
-                fi
-
-                _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║     ${_DescriptionContentProcessingLineText}${_DescriptionContentProcessingLinePaddingTextAndTailFrame}"
-
-            done
+            if [ "$_ShouldUseArrayForReceiveingFormattedTexts" == 'true' ]; then
+                _DescriptionContentPerLineTextsArray=( '~~~ 未注明须锁定版本范围的原因。 ~~~' )
+            fi
         fi
+
+        for ((_DescriptionContentLineLoopIndex=0; _DescriptionContentLineLoopIndex<$_DescriptionContentLinesCount; _DescriptionContentLineLoopIndex++)); do
+            if [ "$_ShouldUseArrayForReceiveingFormattedTexts" == 'true' ]; then
+                _DescriptionContentProcessingLineText=${_DescriptionContentPerLineTextsArray[${_DescriptionContentLineLoopIndex}]}
+            else
+                eval "_DescriptionContentProcessingLineText=\"\$${_DescriptionContentPerLineTextVarsNamePrefix}$((_DescriptionContentLineLoopIndex+1))\""
+            fi
+
+
+
+            if [ -z "$_DescriptionContentProcessingLineText" ]; then
+                _DescriptionContentProcessingLineLength=0
+            else
+                Get-吴乐川求一行文本视觉宽度等效英语字母数_须采用接收器变量  _DescriptionContentProcessingLineLength  "$_DescriptionContentProcessingLineText"
+            fi
+
+            _DescriptionContentProcessingLinePaddingCount=$((_DescriptionFrameWidthInEnglishCharsCount-1-5-_DescriptionContentProcessingLineLength-1-1))
+            _DescriptionContentProcessingLinePaddingTextAndTailFrame=''
+            if [ $_DescriptionContentProcessingLinePaddingCount -gt 0 ]; then
+                _DescriptionContentProcessingLinePaddingTextAndTailFrame="\e[0;36m${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:$_DescriptionContentProcessingLinePaddingCount} ║"
+            fi
+
+            if [ "$_DescriptionContentProcessingLineText" == '~~~ 未注明须锁定版本范围的原因。 ~~~' ]; then
+                _DescriptionContentProcessingLineText="\e[0;37m${_DescriptionContentProcessingLineText}"
+            fi
+
+            _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║     ${_DescriptionContentProcessingLineText}${_DescriptionContentProcessingLinePaddingTextAndTailFrame}"
+
+        done
 
         # ───────────────────  ╔╦╗═╬╚╩╝║  ──────────────────
 
