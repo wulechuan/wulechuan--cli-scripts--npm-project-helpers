@@ -226,16 +226,16 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
 
 
-    local ResultReceiverVarName_FullText='*|undefined|*'
-    local ResultReceiverVarName_TextLinesArray='*|undefined|*'
-    local ResultReceiverVarsNamePrefix_PerTextLine='*|undefined|*'
-    local ResultReceiverVarName_CountOfLines='*|undefined|*'
+    local ResultReceiverVarName_FullText='*|未给出|*'
+    local ResultReceiverVarName_TextLinesArray='*|未给出|*'
+    local ResultReceiverVarsNamePrefix_PerTextLine='*|未给出|*'
+    local ResultReceiverVarName_CountOfLines='*|未给出|*'
 
-    local CountOfOuterScopePreparedVarsForPerLineText='*|undefined|*'
+    local CountOfOuterScopePreparedVarsForPerLineText='*|未给出|*'
     local OriginalText=''
-    local HanCharacterPerLineMaxCount='*|undefined|*'
-    local ShouldAddASpaceAfterLastEnglishWordPerLine='*|undefined|*' # 'true' 或其它值。
-    local ShouldDoubleOriginalLineBreaks='*|undefined|*' # 'true' 或其它值。
+    local HanCharacterPerLineMaxCount='*|未给出|*'
+    local ShouldAddASpaceAfterLastEnglishWordPerLine='*|未给出|*' # 'true' 或其它值。
+    local ShouldDoubleOriginalLineBreaks='*|未给出|*' # 'true' 或其它值。
 
 
 
@@ -263,7 +263,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
             # echo  -e  "已经遇到 “ \e[0;91m${_ProcessingArgumentName}\e[0;0m ”。其后还有 \e[0;96m$#\e[0;0m 个参数未处理。"
 
-            if [ "${ResultReceiverVarName_FullText}" != '*|undefined|*' ]; then
+            if [ "${ResultReceiverVarName_FullText}" != '*|未给出|*' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔1〕。'
                 return
             fi
@@ -283,7 +283,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
         elif [[ "$1" =~ ^"${_ProcessingArgumentName}"= ]]; then
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
-            if [ "${ResultReceiverVarName_FullText}" != '*|undefined|*' ]; then
+            if [ "${ResultReceiverVarName_FullText}" != '*|未给出|*' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔2〕。'
                 shift
                 return
@@ -318,7 +318,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
             # echo  -e  "已经遇到 “ \e[0;91m${_ProcessingArgumentName}\e[0;0m ”。其后还有 \e[0;96m$#\e[0;0m 个参数未处理。"
 
-            if [ "${ResultReceiverVarName_TextLinesArray}" != '*|undefined|*' ]; then
+            if [ "${ResultReceiverVarName_TextLinesArray}" != '*|未给出|*' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔1〕。'
                 return
             fi
@@ -338,7 +338,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
         elif [[ "$1" =~ ^"${_ProcessingArgumentName}"= ]]; then
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
-            if [ "${ResultReceiverVarName_TextLinesArray}" != '*|undefined|*' ]; then
+            if [ "${ResultReceiverVarName_TextLinesArray}" != '*|未给出|*' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔2〕。'
                 shift
                 return
@@ -373,7 +373,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
             # echo  -e  "已经遇到 “ \e[0;91m${_ProcessingArgumentName}\e[0;0m ”。其后还有 \e[0;96m$#\e[0;0m 个参数未处理。"
 
-            if [ "${ResultReceiverVarsNamePrefix_PerTextLine}" != '*|undefined|*' ]; then
+            if [ "${ResultReceiverVarsNamePrefix_PerTextLine}" != '*|未给出|*' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔1〕。'
                 return
             fi
@@ -393,7 +393,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
         elif [[ "$1" =~ ^"${_ProcessingArgumentName}"= ]]; then
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
-            if [ "${ResultReceiverVarsNamePrefix_PerTextLine}" != '*|undefined|*' ]; then
+            if [ "${ResultReceiverVarsNamePrefix_PerTextLine}" != '*|未给出|*' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔2〕。'
                 shift
                 return
@@ -428,7 +428,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
             # echo  -e  "已经遇到 “ \e[0;91m${_ProcessingArgumentName}\e[0;0m ”。其后还有 \e[0;96m$#\e[0;0m 个参数未处理。"
 
-            if [ "${ResultReceiverVarName_CountOfLines}" != '*|undefined|*' ]; then
+            if [ "${ResultReceiverVarName_CountOfLines}" != '*|未给出|*' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔1〕。'
                 return
             fi
@@ -448,7 +448,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
         elif [[ "$1" =~ ^"${_ProcessingArgumentName}"= ]]; then
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
-            if [ "${ResultReceiverVarName_CountOfLines}" != '*|undefined|*' ]; then
+            if [ "${ResultReceiverVarName_CountOfLines}" != '*|未给出|*' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔2〕。'
                 shift
                 return
@@ -481,7 +481,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             _CurrentArgumentOrArgumentPairHaveRecognized=1
             shift
 
-            if [ "${HanCharacterPerLineMaxCount}" != '*|undefined|*' ]; then
+            if [ "${HanCharacterPerLineMaxCount}" != '*|未给出|*' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔1〕。'
                 return
             fi
@@ -501,7 +501,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
         elif [[ "$1" =~ ^"${_ProcessingArgumentName}"= ]]; then
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
-            if [ "${HanCharacterPerLineMaxCount}" != '*|undefined|*' ]; then
+            if [ "${HanCharacterPerLineMaxCount}" != '*|未给出|*' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔2〕。'
                 shift
                 return
@@ -536,7 +536,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             _CurrentArgumentOrArgumentPairHaveRecognized=1
             shift
 
-            if [ "${CountOfOuterScopePreparedVarsForPerLineText}" != '*|undefined|*' ]; then
+            if [ "${CountOfOuterScopePreparedVarsForPerLineText}" != '*|未给出|*' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔1〕。'
                 return
             fi
@@ -546,17 +546,24 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
                 return
             fi
 
-            if [ -z "$1" ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值〔2〕。'
-                return
-            fi
+            if [ "$1" == '0' ]; then
+                # Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔1〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}\e[0;91m ” 。"
+                # return
+                _TemporaryArgumentValue='-应关闭该输出通道-'
+                shift
+            else
+                if [ -z "$1" ]; then
+                    Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值〔2〕。'
+                    return
+                fi
 
-            _TemporaryArgumentValue="$1"
-            shift
+                _TemporaryArgumentValue="$1"
+                shift
+            fi
         elif [[ "$1" =~ ^"${_ProcessingArgumentName}"= ]]; then
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
-            if [ "${CountOfOuterScopePreparedVarsForPerLineText}" != '*|undefined|*' ]; then
+            if [ "${CountOfOuterScopePreparedVarsForPerLineText}" != '*|未给出|*' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔2〕。'
                 shift
                 return
@@ -566,8 +573,9 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             shift
 
             if [ "$_TemporaryArgumentValue" == '0' ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔1〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}\e[0;91m ” 。"
-                return
+                # Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔1〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}\e[0;91m ” 。"
+                # return
+                _TemporaryArgumentValue='-应关闭该输出通道-'
             elif [ -z "${_TemporaryArgumentValue}" ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值〔3〕。'
                 return
@@ -575,7 +583,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
         fi
 
         if [ ! -z "$_TemporaryArgumentValue" ]; then
-            if [[ ! "${_TemporaryArgumentValue}" =~ ^[1-9][0-9]*$ ]]; then
+            if [[ ! "${_TemporaryArgumentValue}" =~ ^[1-9][0-9]*$ ]] && [ "${_TemporaryArgumentValue}" != '-应关闭该输出通道-' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔2〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}\e[0;91m ” 。"
                 return
             else
@@ -592,7 +600,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             _CurrentArgumentOrArgumentPairHaveRecognized=1
             shift
 
-            if [ "${ShouldAddASpaceAfterLastEnglishWordPerLine}" != '*|undefined|*' ]; then
+            if [ "${ShouldAddASpaceAfterLastEnglishWordPerLine}" != '*|未给出|*' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  "不应重复出现〔1〕。已有参数将其配置为 “ \e[0;32m${ShouldAddASpaceAfterLastEnglishWordPerLine}\e[0;91m ” 。"
                 return
             fi
@@ -608,7 +616,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
         elif [[ "$1" =~ ^"${_ProcessingArgumentName}"= ]]; then
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
-            if [ "${ShouldAddASpaceAfterLastEnglishWordPerLine}" != '*|undefined|*' ]; then
+            if [ "${ShouldAddASpaceAfterLastEnglishWordPerLine}" != '*|未给出|*' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔2〕。'
                 shift
                 return
@@ -642,7 +650,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             _CurrentArgumentOrArgumentPairHaveRecognized=1
             shift
 
-            if [ "${ShouldDoubleOriginalLineBreaks}" != '*|undefined|*' ]; then
+            if [ "${ShouldDoubleOriginalLineBreaks}" != '*|未给出|*' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  "不应重复出现〔1〕。已有参数将其配置为 “ \e[0;32m${ShouldDoubleOriginalLineBreaks}\e[0;91m ” 。"
                 return
             fi
@@ -658,7 +666,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
         elif [[ "$1" =~ ^"${_ProcessingArgumentName}"= ]]; then
             _CurrentArgumentOrArgumentPairHaveRecognized=1
 
-            if [ "${ShouldDoubleOriginalLineBreaks}" != '*|undefined|*' ]; then
+            if [ "${ShouldDoubleOriginalLineBreaks}" != '*|未给出|*' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔2〕。'
                 shift
                 return
@@ -701,7 +709,11 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
 
 
-    if [ "${ResultReceiverVarName_FullText}" == '*|undefined|*' ] && [ "${ResultReceiverVarName_TextLinesArray}" == '*|undefined|*' ] && [ "${ResultReceiverVarsNamePrefix_PerTextLine}" == '*|undefined|*' ]; then
+    if [ "$CountOfOuterScopePreparedVarsForPerLineText" == '-应关闭该输出通道-' ]; then
+        ResultReceiverVarsNamePrefix_PerTextLine='*|未给出|*'
+    fi
+
+    if [ "${ResultReceiverVarName_FullText}" == '*|未给出|*' ] && [ "${ResultReceiverVarName_TextLinesArray}" == '*|未给出|*' ] && [ "${ResultReceiverVarsNamePrefix_PerTextLine}" == '*|未给出|*' ]; then
         echo -e "\e[0;91m在函数"
         echo -e "    \e[0;91m“ \e[0;97mConvertTo-吴乐川将文本转换为多行文本_须采用接收器变量\e[0;91m ”"
         echo -e "\e[0;91m的命令参数表中缺少必要参数。\e[0;0m"
@@ -715,35 +727,35 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
         return
     fi
 
-    if [ "${ResultReceiverVarName_FullText}" == '*|undefined|*' ]; then
+    if [ "${ResultReceiverVarName_FullText}" == '*|未给出|*' ]; then
         ResultReceiverVarName_FullText=''
     fi
 
-    if [ "${ResultReceiverVarName_TextLinesArray}" == '*|undefined|*' ]; then
+    if [ "${ResultReceiverVarName_TextLinesArray}" == '*|未给出|*' ]; then
         ResultReceiverVarName_TextLinesArray=''
     fi
 
-    if [ "${ResultReceiverVarName_CountOfLines}" == '*|undefined|*' ]; then
+    if [ "${ResultReceiverVarName_CountOfLines}" == '*|未给出|*' ]; then
         ResultReceiverVarName_CountOfLines=''
     fi
 
-    if [ "${ResultReceiverVarsNamePrefix_PerTextLine}" == '*|undefined|*' ]; then
+    if [ "${ResultReceiverVarsNamePrefix_PerTextLine}" == '*|未给出|*' ]; then
         ResultReceiverVarsNamePrefix_PerTextLine=''
     fi
 
-    if [ "${CountOfOuterScopePreparedVarsForPerLineText}" == '*|undefined|*' ]; then
+    if [ "${CountOfOuterScopePreparedVarsForPerLineText}" == '*|未给出|*' ]; then
         CountOfOuterScopePreparedVarsForPerLineText=''
     fi
 
-    if [[ "${HanCharacterPerLineMaxCount}" == '0' || "${HanCharacterPerLineMaxCount}" == '*|undefined|*' ]]; then
+    if [[ "${HanCharacterPerLineMaxCount}" == '0' || "${HanCharacterPerLineMaxCount}" == '*|未给出|*' ]]; then
         HanCharacterPerLineMaxCount=$HAN_CHARACTER_PER_LINE_DEFAULT_MAX_COUNT
     fi
 
-    if [ "${ShouldAddASpaceAfterLastEnglishWordPerLine}" == '*|undefined|*' ]; then
+    if [ "${ShouldAddASpaceAfterLastEnglishWordPerLine}" == '*|未给出|*' ]; then
         ShouldAddASpaceAfterLastEnglishWordPerLine='false'
     fi
 
-    if [ "${ShouldDoubleOriginalLineBreaks}" == '*|undefined|*' ]; then
+    if [ "${ShouldDoubleOriginalLineBreaks}" == '*|未给出|*' ]; then
         ShouldDoubleOriginalLineBreaks='false'
     fi
 

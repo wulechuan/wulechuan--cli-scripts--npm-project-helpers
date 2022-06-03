@@ -1210,9 +1210,10 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
     local _DescriptionFrameInnerWidth1=$((PackageGroupB_LongestPackageNameLength-3))
     local _DescriptionFrameInnerWidth2=$((_DescriptionFrameWidthInEnglishCharsCount-3-$_DescriptionFrameInnerWidth1))
 
-    # local _DescriptionContentPerLineTextsArray
+    local _ShouldUseArrayForReceiveingFormattedTexts='true'
+    local _DescriptionContentPerLineTextsArray
     local _DescriptionContentPerLineTextVarsNamePrefix='_DescriptionContentTextOfLine_'
-    local _DescriptionContentPerLineTextVarsCount=200
+    local _DescriptionContentPerLineTextVarsCount=0 # 0 代表关闭该功能。也不会初始化一系列 local 变量。整数代表开启该功能，但为求稳妥，应令取值足够大，例如取 200 。拟取 319 。
     local _DescriptionContentLineLoopIndex=0
     local _DescriptionContentLinesCount=0
 
@@ -1221,7 +1222,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
     local _DescriptionContentProcessingLinePaddingCount=0
     local _DescriptionContentProcessingLinePaddingTextAndTailFrame=''
 
-    if [[ ! "$_DescriptionContentPerLineTextVarsCount" =~ ^[1-9][0-9]*$ ]]; then
+    if [[ ! "$_DescriptionContentPerLineTextVarsCount" =~ ^[0-9]*$ ]]; then
         echo  -e  "\e[0;91m在函数\n    “ \e[0;97mUpdate-吴乐川更新当前_npm_项目的某批依赖包\e[0;91m ”\n中：\e[0;0m"
         echo  -e  "\e[0;91m变量\n    “ \e[0;97m_DescriptionContentPerLineTextVarsCount\e[0;91m ”\n取值不合规。\n须取正整数。给出的值却是 “ \e[0;33m${_DescriptionContentPerLineTextVarsCount}\e[0;91m ”。\e[0;0m"
         echo
@@ -1271,63 +1272,55 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
         # ───────────────────  ╔╦╗═╬╚╩╝║  ──────────────────
 
-        if false; then
-            _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║     ${_ProcessingPackageVerionLockReason}\e[0;0m"
-        else
-            # _DescriptionContentPerLineTextsArray=()
-
+        if [ "$_ShouldUseArrayForReceiveingFormattedTexts" == 'false' ]; then
             # 利用循环语句和 eval 语句，准备好足够多的 local 变量，用以接下来接收逐行文本。
             for ((_DescriptionContentLineLoopIndex=1; _DescriptionContentLineLoopIndex<=$_DescriptionContentPerLineTextVarsCount; _DescriptionContentLineLoopIndex++)); do
                 eval "local ${_DescriptionContentPerLineTextVarsNamePrefix}${_DescriptionContentLineLoopIndex}=''"
             done
+        fi
 
-            ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变量 \
-                --单行等效汉字字数上限 $((_DescriptionContentLineMaxHanCharsCount)) \
-                --外界预备好用以接收排好版的逐行文本的一系列变量之名称之公共前缀  $_DescriptionContentPerLineTextVarsNamePrefix \
-                --外界预备好用以接收排好版的逐行文本的一系列变量的总数           $_DescriptionContentPerLineTextVarsCount \
-                --用以接收排好版的文本的行数的变量名                           _DescriptionContentLinesCount \
-                "${_ProcessingPackageVerionLockReason}"
+        # local _IFS_BACKUP_="$IFS"
+        # IFS=''
+
+        # echo -e "'${_ProcessingPackageVerionLockReason}'"
+
+        ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变量 \
+            --单行等效汉字字数上限 $((_DescriptionContentLineMaxHanCharsCount)) \
+            --用以接收排好版的逐行文本列表的变量名                         _DescriptionContentPerLineTextsArray \
+            --用以接收排好版的文本的行数的变量名                           _DescriptionContentLinesCount \
+            --外界预备好用以接收排好版的逐行文本的一系列变量之名称之公共前缀  $_DescriptionContentPerLineTextVarsNamePrefix \
+            --外界预备好用以接收排好版的逐行文本的一系列变量的总数           $_DescriptionContentPerLineTextVarsCount \
+            "${_ProcessingPackageVerionLockReason}"
+
+        # IFS="$_IFS_BACKUP_"
 
 
 
-            if [ ! -z "$_DescriptionContentLinesCount" ]; then
-                for ((_DescriptionContentLineLoopIndex=1; _DescriptionContentLineLoopIndex<=$_DescriptionContentLinesCount; _DescriptionContentLineLoopIndex++)); do
+        if [ ! -z "$_DescriptionContentLinesCount" ]; then
+            for ((_DescriptionContentLineLoopIndex=1; _DescriptionContentLineLoopIndex<=$_DescriptionContentLinesCount; _DescriptionContentLineLoopIndex++)); do
+                if [ "$_ShouldUseArrayForReceiveingFormattedTexts" == 'true' ]; then
+                    _DescriptionContentProcessingLineText=${_DescriptionContentPerLineTextsArray[$_DescriptionContentLineLoopIndex]}
+                else
                     eval "_DescriptionContentProcessingLineText=\"\$${_DescriptionContentPerLineTextVarsNamePrefix}${_DescriptionContentLineLoopIndex}\""
+                fi
 
 
 
-                    if [ -z "$_DescriptionContentProcessingLineText" ]; then
-                        _DescriptionContentProcessingLineLength=0
-                    else
-                        Get-吴乐川求一行文本视觉宽度等效英语字母数_须采用接收器变量  _DescriptionContentProcessingLineLength  "$_DescriptionContentProcessingLineText"
-                    fi
+                if [ -z "$_DescriptionContentProcessingLineText" ]; then
+                    _DescriptionContentProcessingLineLength=0
+                else
+                    Get-吴乐川求一行文本视觉宽度等效英语字母数_须采用接收器变量  _DescriptionContentProcessingLineLength  "$_DescriptionContentProcessingLineText"
+                fi
 
-                    _DescriptionContentProcessingLinePaddingCount=$((_DescriptionFrameWidthInEnglishCharsCount-1-5-_DescriptionContentProcessingLineLength-1-1))
-                    _DescriptionContentProcessingLinePaddingTextAndTailFrame=''
-                    if [ $_DescriptionContentProcessingLinePaddingCount -gt 0 ]; then
-                        _DescriptionContentProcessingLinePaddingTextAndTailFrame="${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:$_DescriptionContentProcessingLinePaddingCount} ║"
-                    fi
+                _DescriptionContentProcessingLinePaddingCount=$((_DescriptionFrameWidthInEnglishCharsCount-1-5-_DescriptionContentProcessingLineLength-1-1))
+                _DescriptionContentProcessingLinePaddingTextAndTailFrame=''
+                if [ $_DescriptionContentProcessingLinePaddingCount -gt 0 ]; then
+                    _DescriptionContentProcessingLinePaddingTextAndTailFrame="${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:$_DescriptionContentProcessingLinePaddingCount} ║"
+                fi
 
-                    _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║     ${_DescriptionContentProcessingLineText}${_DescriptionContentProcessingLinePaddingTextAndTailFrame}"
+                _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║     ${_DescriptionContentProcessingLineText}${_DescriptionContentProcessingLinePaddingTextAndTailFrame}"
 
-                done
-            fi
-
-            # for _DescriptionContentProcessingLineText in ${_DescriptionContentPerLineTextsArray[@]}; do
-            #     if [ -z "$_DescriptionContentProcessingLineText" ] || [ "$_DescriptionContentProcessingLineText" == '\n' ]; then
-            #         _DescriptionContentProcessingLineLength=0
-            #     else
-            #         Get-吴乐川求一行文本视觉宽度等效英语字母数_须采用接收器变量  _DescriptionContentProcessingLineLength  "$_DescriptionContentProcessingLineText"
-            #     fi
-
-            #     _DescriptionContentProcessingLinePaddingCount=$((_DescriptionFrameWidthInEnglishCharsCount-1-5-_DescriptionContentProcessingLineLength-1-1))
-            #     _DescriptionContentProcessingLinePaddingTextAndTailFrame=''
-            #     if [ $_DescriptionContentProcessingLinePaddingCount -gt 0 ]; then
-            #         _DescriptionContentProcessingLinePaddingTextAndTailFrame="${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:$_DescriptionContentProcessingLinePaddingCount} ║"
-            #     fi
-
-            #     _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║     ${_DescriptionContentProcessingLineText}${_DescriptionContentProcessingLinePaddingTextAndTailFrame}"
-            # done
+            done
         fi
 
         # ───────────────────  ╔╦╗═╬╚╩╝║  ──────────────────
