@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# if   [ -f './吴乐川读取并处理某函数的参数表.sh' ]; then
-#     source  './吴乐川读取并处理某函数的参数表.sh'
-# elif [ -f './源代码/发布的源代码/bash/吴乐川读取并处理某函数的参数表.sh' ]; then
-#     source  './源代码/发布的源代码/bash/吴乐川读取并处理某函数的参数表.sh'
+# if   [ -f './吴乐川-针对命令与函数的辅助工具集.sh' ]; then
+#     source  './吴乐川-针对命令与函数的辅助工具集.sh'
+# elif [ -f './源代码/发布的源代码/bash/吴乐川-针对命令与函数的辅助工具集.sh' ]; then
+#     source  './源代码/发布的源代码/bash/吴乐川-针对命令与函数的辅助工具集.sh'
 # fi
 
 
@@ -424,7 +424,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__其他交代 {
 
 
 function Update-吴乐川更新当前_npm_项目的某批依赖包 {
-    local PACKAGE_CONFIG_CONTENT_DEFAULT_SEPARATOR='|||'
+    local PACKAGE_CONFIG_CONTENT_DEFAULT_SEPARATOR='|::|'
     local SHOULD_DEBUG=0
 
 

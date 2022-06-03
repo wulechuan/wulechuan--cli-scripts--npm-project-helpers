@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # 下方这一行的写法专门针对本工具集自身，不适应于其他任何 npm 项。
-source  './源代码/发布的源代码/bash/吴乐川读取并处理某函数的参数表.sh'
+source  './源代码/发布的源代码/bash/吴乐川-针对命令与函数的辅助工具集.sh'
+source  './源代码/发布的源代码/bash/吴乐川-数据处理-文本.sh'
 source  './源代码/发布的源代码/bash/吴乐川-打印-json.sh'
 source  './源代码/发布的源代码/bash/吴乐川-管理某-npm-项目的依赖包等资源.sh'
 
@@ -57,55 +58,21 @@ function 完整流程  {
 
 
     # ───────────────────────────────────────────────────────────────
-    #  3) 安装依赖包。【产品级】、【甲】类。
+    #  3.1) 安装依赖包。【产品级】。
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #     顺便提醒，虽然一般而言 latest 版本应恰为最高版本，但并不确保。
     # ───────────────────────────────────────────────────────────────
-
-    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为最晚版本  --dry-run $ShouldDryRun
 
     # 如果 @wulechuan/cli-scripts--npm-project-helpers 工具集随附的 JavaScript 程序运行如期，
     # 其将在此处插入当前 npm 项目的【产品级】、【可自由采取其版本】的依赖包的列表。    另，切勿改动该行。该行之部分文字是供 JavaScript 程序识别的特殊记号。
 
-    if false; then
-
-        echo  '暂无。'
-
-    else
-
-        if [ "$ShouldDryRun" == true ]; then
-            echo  -e  "   \e[0;33m【仿真演练】\e[0;0m"
-        fi
-
-        echo  '    npm  i \'
-        echo  '        @wulechuan/text-basic-typography@latest \'
-        echo  '        chalk@latest \'
-        echo  '        fs-extra@latest \'
-        echo  '        jsonc-parser@latest'
-
-        echo  -en  "\n\e[0;31m"; Write-Line-without-line-break; echo  -e  "\e[0;0m"
-
-        if [ "$ShouldDryRun" == false ]; then
-
-            # ───────────────────────────
-
-            # [ 0 ]        # 当本 else 语句块中没有其它语句时，这句必须存在。
-
-            # ───────────────────────────
-
-            npm  i \
-                @wulechuan/text-basic-typography@latest \
-                chalk@latest \
-                fs-extra@latest \
-                jsonc-parser@latest
-
-            # ───────────────────────────
-
-        fi
-
-    fi
-
-    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为最晚版本  --dry-run $ShouldDryRun  --is-ending
+    Update-吴乐川更新当前_npm_项目的某批依赖包 \
+        --这批依赖包之依赖类别='本产品拟囊括这些软件之整体或部分' \
+        --某依赖包之版本配置='@wulechuan/text-basic-typography   |::|   null' \
+        --某依赖包之版本配置='chalk                              |::|   null' \
+        --某依赖包之版本配置='fs-extra                           |::|   null' \
+        --某依赖包之版本配置='jsonc-parser                       |::|   null' \
+        --应仅作仿真演练 "$ShouldDryRun"
 
 
 
@@ -114,149 +81,19 @@ function 完整流程  {
 
 
     # ───────────────────────────────────────────────────────────────
-    #  3) 安装依赖包。【产品级】、【乙】类。
-    # ───────────────────────────────────────────────────────────────
-
-    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为特定版本  --dry-run $ShouldDryRun
-
-    # 如果 @wulechuan/cli-scripts--npm-project-helpers 工具集随附的 JavaScript 程序运行如期，
-    # 其将在此处插入当前 npm 项目的【产品级】、【须锁定其版本范围】依赖包的列表。    另，切勿改动该行。该行之部分文字是供 JavaScript 程序识别的特殊记号。
-
-    if true; then
-
-        echo  '暂无。'
-
-    else
-
-        if [ "$ShouldDryRun" == true ]; then
-            echo  -e  "   \e[0;33m【仿真演练】\e[0;0m"
-        fi
-
-        # echo  'npm  i  ????????@0.0.0'
-
-        echo  -en  "\n\e[0;31m"; Write-Line-without-line-break; echo  -e  "\e[0;0m"
-
-        if [ "$ShouldDryRun" == false ]; then
-
-            # ───────────────────────────
-
-            [ 0 ]        # 当本 else 语句块中没有其它语句时，这句必须存在。
-
-            # ───────────────────────────
-            # 暂无任务。故此处无任何信息。
-            # ───────────────────────────
-
-            # 不妨把任务写在这里。
-
-            # ───────────────────────────
-
-        fi
-
-    fi
-
-    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为特定版本  --dry-run $ShouldDryRun  --is-ending
-
-
-
-
-
-
-
-    # ───────────────────────────────────────────────────────────────
-    #  3) 安装依赖包。【研发级】、【甲】类。
+    #  3.2) 安装依赖包。【研发级】。
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #     顺便提醒，虽然一般而言 latest 版本应恰为最高版本，但并不确保。
     # ───────────────────────────────────────────────────────────────
 
-    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为最晚版本  --dry-run $ShouldDryRun
-
     # 如果 @wulechuan/cli-scripts--npm-project-helpers 工具集随附的 JavaScript 程序运行如期，
     # 其将在此处插入当前 npm 项目的【研发级】、【可自由采取其版本】依赖包的列表。    另，切勿改动该行。该行之部分文字是供 JavaScript 程序识别的特殊记号。
 
-    if false; then
-
-        echo  '暂无。'
-
-    else
-
-        if [ "$ShouldDryRun" == true ]; then
-            echo  -e  "   \e[0;33m【仿真演练】\e[0;0m"
-        fi
-
-        echo  '    npm  i  -D \'
-        echo  '        @wulechuan/cli-scripts--git-push@latest \'
-        echo  '        eslint@latest'
-
-        echo  -en  "\n\e[0;32m"; Write-Line-without-line-break; echo  -e  "\e[0;0m"
-
-        if [ "$ShouldDryRun" == false ]; then
-
-            # ───────────────────────────
-
-            # [ 0 ]        # 当本 else 语句块中没有其它语句时，这句必须存在。
-
-            # ───────────────────────────
-
-            npm  i  -D \
-                @wulechuan/cli-scripts--git-push@latest \
-                eslint@latest
-
-            # ───────────────────────────
-
-        fi
-
-    fi
-
-    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为最晚版本  --dry-run $ShouldDryRun  --is-ending
-
-
-
-
-
-
-
-    # ───────────────────────────────────────────────────────────────
-    #  3) 安装依赖包。【研发级】、【乙】类。
-    # ───────────────────────────────────────────────────────────────
-
-    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为特定版本  --dry-run $ShouldDryRun
-
-    # 如果 @wulechuan/cli-scripts--npm-project-helpers 工具集随附的 JavaScript 程序运行如期，
-    # 其将在此处插入当前 npm 项目的【研发级】、【须锁定其版本范围】依赖包的列表。    另，切勿改动该行。该行之部分文字是供 JavaScript 程序识别的特殊记号。
-
-    if true; then
-
-        echo  '暂无。'
-
-    else
-
-        if [ "$ShouldDryRun" == true ]; then
-            echo  -e  "   \e[0;33m【仿真演练】\e[0;0m"
-        fi
-
-        # echo  'npm  i  -D  ????????@0.0.0'
-
-        echo  -en  "\n\e[0;32m"; Write-Line-without-line-break; echo  -e  "\e[0;0m"
-
-        if [ "$ShouldDryRun" == false ]; then
-
-            # ───────────────────────────
-
-            [ 0 ]        # 当本 else 语句块中没有其它语句时，这句必须存在。
-
-            # ───────────────────────────
-            # 暂无任务。故此处无任何信息。
-            # ───────────────────────────
-
-            # 不妨把任务写在这里。
-
-            # ───────────────────────────
-
-        fi
-
-    fi
-
-    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为特定版本  --dry-run $ShouldDryRun  --is-ending
+    Update-吴乐川更新当前_npm_项目的某批依赖包 \
+        --这批依赖包之依赖类别='本产品仅会在研发阶段借助这些软件' \
+        --某依赖包之版本配置='@wulechuan/cli-scripts--git-push   |::|   null' \
+        --某依赖包之版本配置='eslint                             |::|   null' \
+        --应仅作仿真演练 "$ShouldDryRun"
 
 
 
