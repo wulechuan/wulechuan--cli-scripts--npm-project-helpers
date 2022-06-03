@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # 下方这一行的写法专门针对本工具集自身，不适应于其他任何 npm 项。
+source  './源代码/发布的源代码/bash/吴乐川读取并处理某函数的参数表.sh'
 source  './源代码/发布的源代码/bash/吴乐川-打印-json.sh'
 source  './源代码/发布的源代码/bash/吴乐川-管理某-npm-项目的依赖包等资源.sh'
 
@@ -9,24 +10,33 @@ source  './源代码/发布的源代码/bash/吴乐川-管理某-npm-项目的�
 
 
 
-SHOULD_REMOVE_NODE_MODULES_FIRST=1
-SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST=1
-SHOULD_DRY_RUN=0
-
-
-
 
 
 function 完整流程  {
-    local ShouldRemoveNodeModulesFirst=0
-    local ShouldRemovePackageLockJSONFirst=0
-    local ShouldDryRun=0
+    local BY_DEFAULT__SHOULD_REMOVE_NODE_MODULES_FIRST='true'
+    local BY_DEFAULT__SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST='true'
+    local BY_DEFAULT__SHOULD_DRY_RUN='false'
 
-    Read-_吴乐川管理某_npm_项目__读取公共参数  $*
 
-    # echo "[DEBUG] 完整流程 ShouldRemoveNodeModulesFirst = '${ShouldRemoveNodeModulesFirst}'"
-    # echo "[DEBUG] 完整流程 ShouldRemovePackageLockJSONFirst = '${ShouldRemovePackageLockJSONFirst}'"
-    # echo "[DEBUG] 完整流程 ShouldDryRun = '${ShouldDryRun}'"
+
+
+
+    local NameOfThisFunction='完整流程'
+
+    local ShouldRemoveNodeModulesFirst
+    local ShouldRemovePackageLockJSONFirst
+    local ShouldDryRun
+
+    #  命令行参数名 | 变量名 | 类型 | 默认值
+    local ArgumentConfigsArray=(
+        "--remove-node-modules-first    | ShouldRemoveNodeModulesFirst     | 标准类型_布尔 | ${BY_DEFAULT__SHOULD_REMOVE_NODE_MODULES_FIRST}"
+        "--remove-packa-lock-json-first | ShouldRemovePackageLockJSONFirst | 标准类型_布尔 | ${BY_DEFAULT__SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST}"
+        "--dry-run                      | ShouldDryRun                     | 标准类型_布尔 | ${BY_DEFAULT__SHOULD_DRY_RUN}"
+    )
+
+    Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
+
+
 
 
 
@@ -63,7 +73,7 @@ function 完整流程  {
 
     else
 
-        if [ $ShouldDryRun -eq 1 ]; then
+        if [ "$ShouldDryRun" == true ]; then
             echo  -e  "   \e[0;33m【仿真演练】\e[0;0m"
         fi
 
@@ -75,7 +85,7 @@ function 完整流程  {
 
         echo  -en  "\n\e[0;31m"; Write-Line-without-line-break; echo  -e  "\e[0;0m"
 
-        if [ $ShouldDryRun -eq 0 ]; then
+        if [ "$ShouldDryRun" == false ]; then
 
             # ───────────────────────────
 
@@ -118,7 +128,7 @@ function 完整流程  {
 
     else
 
-        if [ $ShouldDryRun -eq 1 ]; then
+        if [ "$ShouldDryRun" == true ]; then
             echo  -e  "   \e[0;33m【仿真演练】\e[0;0m"
         fi
 
@@ -126,7 +136,7 @@ function 完整流程  {
 
         echo  -en  "\n\e[0;31m"; Write-Line-without-line-break; echo  -e  "\e[0;0m"
 
-        if [ $ShouldDryRun -eq 0 ]; then
+        if [ "$ShouldDryRun" == false ]; then
 
             # ───────────────────────────
 
@@ -169,7 +179,7 @@ function 完整流程  {
 
     else
 
-        if [ $ShouldDryRun -eq 1 ]; then
+        if [ "$ShouldDryRun" == true ]; then
             echo  -e  "   \e[0;33m【仿真演练】\e[0;0m"
         fi
 
@@ -179,7 +189,7 @@ function 完整流程  {
 
         echo  -en  "\n\e[0;32m"; Write-Line-without-line-break; echo  -e  "\e[0;0m"
 
-        if [ $ShouldDryRun -eq 0 ]; then
+        if [ "$ShouldDryRun" == false ]; then
 
             # ───────────────────────────
 
@@ -220,7 +230,7 @@ function 完整流程  {
 
     else
 
-        if [ $ShouldDryRun -eq 1 ]; then
+        if [ "$ShouldDryRun" == true ]; then
             echo  -e  "   \e[0;33m【仿真演练】\e[0;0m"
         fi
 
@@ -228,7 +238,7 @@ function 完整流程  {
 
         echo  -en  "\n\e[0;32m"; Write-Line-without-line-break; echo  -e  "\e[0;0m"
 
-        if [ $ShouldDryRun -eq 0 ]; then
+        if [ "$ShouldDryRun" == false ]; then
 
             # ───────────────────────────
 
@@ -275,13 +285,13 @@ function 完整流程  {
         # ───────────────────────────
 
         if false; then
-            if [ $ShouldDryRun -eq 1 ]; then
+            if [ "$ShouldDryRun" == true ]; then
                 echo  -en  "   \e[0;33m【仿真演练】\e[0;0m\n    "
             fi
 
             echo  'npx  browserslist@latest  --update-db'
 
-            if [ $ShouldDryRun -eq 0 ]; then
+            if [ "$ShouldDryRun" == false ]; then
                 npx  browserslist@latest  --update-db
             fi
 
@@ -348,7 +358,5 @@ function 完整流程  {
 
 
 
-完整流程 \
-    --remove-node-modules-first    $SHOULD_REMOVE_NODE_MODULES_FIRST \
-    --remove-packa-lock-json-first $SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST \
-    --dry-run                      $SHOULD_DRY_RUN
+完整流程  $*
+unset -f 完整流程

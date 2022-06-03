@@ -262,7 +262,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
         _ProcessedArgumentsCount=$((_ProcessedArgumentsCount+1))
         _CurrentArgumentOrArgumentPairHaveRecognized=0
 
-        # ---------------------------------------------------------------
+        # ────────────────────────────────────────────────────────────────────────────────
 
         _ProcessingArgumentName='--用以接收排好版的文本的全文的变量名'
         _TemporaryArgumentValue=''
@@ -317,7 +317,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             fi
         fi
 
-        # ---------------------------------------------------------------
+        # ────────────────────────────────────────────────────────────────────────────────
 
         _ProcessingArgumentName='--用以接收排好版的逐行文本列表的变量名'
         _TemporaryArgumentValue=''
@@ -370,7 +370,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             fi
         fi
 
-        # ---------------------------------------------------------------
+        # ────────────────────────────────────────────────────────────────────────────────
 
         _ProcessingArgumentName='--外界预备好用以接收排好版的逐行文本的一系列变量之名称之公共前缀'
         _TemporaryArgumentValue=''
@@ -425,7 +425,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             fi
         fi
 
-        # ---------------------------------------------------------------
+        # ────────────────────────────────────────────────────────────────────────────────
 
         _ProcessingArgumentName='--用以接收排好版的文本的行数的变量名'
         _TemporaryArgumentValue=''
@@ -478,7 +478,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             fi
         fi
 
-        # ---------------------------------------------------------------
+        # ────────────────────────────────────────────────────────────────────────────────
 
         _ProcessingArgumentName='--单行等效汉字字数上限'
         _TemporaryArgumentValue=''
@@ -492,7 +492,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
                 return
             fi
 
-            if [[ "$1" =~ ^-[^0-9] ]] || [[ "$1" == '-' ]]; then
+            if [[ "$1" =~ ^-[^0-9] ]] || [ "$1" == '-' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值〔1〕。'
                 return
             fi
@@ -533,7 +533,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             fi
         fi
 
-        # ---------------------------------------------------------------
+        # ────────────────────────────────────────────────────────────────────────────────
 
         _ProcessingArgumentName='--外界预备好用以接收排好版的逐行文本的一系列变量的总数'
         _TemporaryArgumentValue=''
@@ -547,7 +547,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
                 return
             fi
 
-            if [[ "$1" =~ ^-[^0-9] ]] || [[ "$1" == '-' ]]; then
+            if [[ "$1" =~ ^-[^0-9] ]] || [ "$1" == '-' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值〔1〕。'
                 return
             fi
@@ -597,7 +597,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             fi
         fi
 
-        # ---------------------------------------------------------------
+        # ────────────────────────────────────────────────────────────────────────────────
 
         _ProcessingArgumentName='--英语单词在行尾时其后应保留一个空格'
         _TemporaryArgumentValue=''
@@ -640,14 +640,14 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
         fi
 
         if [ ! -z "${_TemporaryArgumentValue}" ]; then
-            if [ "${_TemporaryArgumentValue}" == 'true' ] || [ "${_TemporaryArgumentValue}" == 'true' ] || [[ "$_TemporaryArgumentValue" =~ ^[01]$ ]]; then
+            if [ "${_TemporaryArgumentValue}" == 'true' ] || [[ "$_TemporaryArgumentValue" =~ ^[01]$ ]]; then
                 ShouldAddASpaceAfterLastEnglishWordPerLine='true'
             else
                 ShouldAddASpaceAfterLastEnglishWordPerLine='false'
             fi
         fi
 
-        # ---------------------------------------------------------------
+        # ────────────────────────────────────────────────────────────────────────────────
 
         _ProcessingArgumentName='--原文本中的每个换行符在产生的内容中应改作两个换行符'
         _TemporaryArgumentValue=''
@@ -690,14 +690,14 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
         fi
 
         if [ ! -z "${_TemporaryArgumentValue}" ]; then
-            if [ "${_TemporaryArgumentValue}" == 'true' ] || [ "${_TemporaryArgumentValue}" == 'true' ] || [[ "$_TemporaryArgumentValue" =~ ^[01]$ ]]; then
+            if [ "${_TemporaryArgumentValue}" == 'true' ] || [[ "$_TemporaryArgumentValue" =~ ^[01]$ ]]; then
                 ShouldDoubleOriginalLineBreaks='true'
             else
                 ShouldDoubleOriginalLineBreaks='false'
             fi
         fi
 
-        # ---------------------------------------------------------------
+        # ────────────────────────────────────────────────────────────────────────────────
 
         if [ $_CurrentArgumentOrArgumentPairHaveRecognized -eq 0 ]; then
             if [ -z "${OriginalText}" ]; then

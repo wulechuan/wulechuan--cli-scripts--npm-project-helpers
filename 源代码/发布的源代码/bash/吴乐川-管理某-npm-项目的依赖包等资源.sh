@@ -1,3 +1,15 @@
+#!/bin/bash
+
+# if   [ -f './吴乐川读取并处理某函数的参数表.sh' ]; then
+#     source  './吴乐川读取并处理某函数的参数表.sh'
+# elif [ -f './源代码/发布的源代码/bash/吴乐川读取并处理某函数的参数表.sh' ]; then
+#     source  './源代码/发布的源代码/bash/吴乐川读取并处理某函数的参数表.sh'
+# fi
+
+
+
+
+
 function Write-Line-without-line-break {
     local Count=72
 
@@ -40,297 +52,29 @@ function Write-_吴乐川打印足够的的空白行_在某任务结束后 {
 
 
 
-function Read-_吴乐川管理某_npm_项目__读取公共参数 {
-    local ShouldDebug=0
-    if [ "$1" == '--debug' ]; then
-        ShouldDebug=1
-        shift
-    fi
-
-
-
-    local LoopIndex=0
-    while [[ ! -z "$1" && $LoopIndex -lt 32 ]]; do
-        LoopIndex=$((LoopIndex+1))
-        if [ $ShouldDebug -eq 1 ]; then
-            echo "[DEBUG] 读取公共参数 [$LoopIndex]\$1='$1'"
-        fi
-
-
-
-        # ───────────────────────────────────────────────
-
-        if [ "$1" == '--remove-node-modules-first' ]; then
-            if [ $ShouldDebug -eq 1 ]; then
-                echo "[DEBUG] 读取公共参数 ShouldRemoveNodeModulesFirst [nothing1] '$ShouldRemoveNodeModulesFirst'"
-            fi
-
-            ShouldRemoveNodeModulesFirst=1
-            shift
-
-
-            if [ ! -z "$1" ]; then
-                if [[ "$1" =~ ^- ]]; then
-                    if [ $ShouldDebug -eq 1 ]; then
-                        echo "[DEBUG] 读取公共参数 ShouldRemoveNodeModulesFirst [nothing2] '$ShouldRemoveNodeModulesFirst'"
-                    fi
-                    continue
-                else
-                    ShouldRemoveNodeModulesFirst="$1"
-                    if [ $ShouldDebug -eq 1 ]; then
-                        echo "[DEBUG] 读取公共参数 ShouldRemoveNodeModulesFirst [space] '$ShouldRemoveNodeModulesFirst'"
-                    fi
-
-                    shift
-                    continue
-                fi
-            fi
-
-        elif [[ "$1" =~ ^--remove-node-modules-first= ]]; then
-            if [ $ShouldDebug -eq 1 ]; then
-                echo "[DEBUG] 读取公共参数 ShouldRemoveNodeModulesFirst [=] '$ShouldRemoveNodeModulesFirst'"
-            fi
-
-            ShouldRemoveNodeModulesFirst="${1:28}"
-            shift
-            continue
-        fi
-
-        # ───────────────────────────────────────────────
-
-        if [ "$1" == '--remove-packa-lock-json-first' ]; then
-            if [ $ShouldDebug -eq 1 ]; then
-                echo "[DEBUG] 读取公共参数 ShouldRemovePackageLockJSONFirst [nothing1] '$ShouldRemovePackageLockJSONFirst'"
-            fi
-
-            ShouldRemovePackageLockJSONFirst=1
-            shift
-
-
-            if [ ! -z "$1" ]; then
-                if [[ "$1" =~ ^- ]]; then
-                    if [ $ShouldDebug -eq 1 ]; then
-                        echo "[DEBUG] 读取公共参数 ShouldRemovePackageLockJSONFirst [nothing2] '$ShouldRemovePackageLockJSONFirst'"
-                    fi
-                    continue
-                else
-                    ShouldRemovePackageLockJSONFirst="$1"
-                    if [ $ShouldDebug -eq 1 ]; then
-                        echo "[DEBUG] 读取公共参数 ShouldRemovePackageLockJSONFirst [space] '$ShouldRemovePackageLockJSONFirst'"
-                    fi
-
-                    shift
-                    continue
-                fi
-            fi
-
-        elif [[ "$1" =~ ^--remove-packa-lock-json-first= ]]; then
-            if [ $ShouldDebug -eq 1 ]; then
-                echo "[DEBUG] 读取公共参数 ShouldRemovePackageLockJSONFirst [=] '$ShouldRemovePackageLockJSONFirst'"
-            fi
-
-            ShouldRemovePackageLockJSONFirst="${1:31}"
-            shift
-            continue
-        fi
-
-        # ───────────────────────────────────────────────
-
-        if [ "$1" == '--should-run-this-task' ]; then
-            if [ $ShouldDebug -eq 1 ]; then
-                echo "[DEBUG] 读取公共参数 ShouldRunThisTask [nothing1] '$ShouldRunThisTask'"
-            fi
-
-            ShouldRunThisTask=1
-            shift
-
-
-            if [ ! -z "$1" ]; then
-                if [[ "$1" =~ ^- ]]; then
-                    if [ $ShouldDebug -eq 1 ]; then
-                        echo "[DEBUG] 读取公共参数 ShouldRunThisTask [nothing2] '$ShouldRunThisTask'"
-                    fi
-                    continue
-                else
-                    ShouldRunThisTask="$1"
-                    if [ $ShouldDebug -eq 1 ]; then
-                        echo "[DEBUG] 读取公共参数 ShouldRunThisTask [space] '$ShouldRunThisTask'"
-                    fi
-
-                    shift
-                    continue
-                fi
-            fi
-
-        elif [[ "$1" =~ ^--should-run-this-task= ]]; then
-            if [ $ShouldDebug -eq 1 ]; then
-                echo "[DEBUG] 读取公共参数 ShouldRunThisTask [=] '$ShouldRunThisTask'"
-            fi
-
-            ShouldRunThisTask="${1:23}"
-            shift
-            continue
-        fi
-
-        # ───────────────────────────────────────────────
-
-        if [ "$1" == '--dry-run' ]; then
-            if [ $ShouldDebug -eq 1 ]; then
-                echo "[DEBUG] 读取公共参数 ShouldDryRun [nothing1] '$ShouldDryRun'"
-            fi
-
-            ShouldDryRun=1
-            shift
-
-            if [ ! -z "$1" ]; then
-                if [[ "$1" =~ ^- ]]; then
-                    if [ $ShouldDebug -eq 1 ]; then
-                        echo "[DEBUG] 读取公共参数 ShouldDryRun [nothing2] '$ShouldDryRun'"
-                    fi
-                    continue
-                else
-                    ShouldDryRun="$1"
-                    if [ $ShouldDebug -eq 1 ]; then
-                        echo "[DEBUG] 读取公共参数 ShouldDryRun [space] '$ShouldDryRun'"
-                    fi
-
-                    shift
-                    continue
-                fi
-            fi
-
-        elif [[ "$1" =~ ^--dry-run= ]]; then
-            if [ $ShouldDebug -eq 1 ]; then
-                echo "[DEBUG] 读取公共参数 ShouldDryRun [=] '$ShouldDryRun'"
-            fi
-
-            ShouldDryRun="${1:10}"
-            shift
-            continue
-        fi
-
-        # ───────────────────────────────────────────────
-
-        if [ "$1" == '--is-ending' ]; then
-            if [ $ShouldDebug -eq 1 ]; then
-                echo "[DEBUG] 读取公共参数 IsEnding [nothing1] '$IsEnding'"
-            fi
-
-            IsEnding=1
-            shift
-
-            if [ ! -z "$1" ]; then
-                if [[ "$1" =~ ^- ]]; then
-                    if [ $ShouldDebug -eq 1 ]; then
-                        echo "[DEBUG] 读取公共参数 IsEnding [nothing2] '$IsEnding'"
-                    fi
-                    continue
-                else
-                    IsEnding="$1"
-                    if [ $ShouldDebug -eq 1 ]; then
-                        echo "[DEBUG] 读取公共参数 IsEnding [space] '$IsEnding'"
-                    fi
-
-                    shift
-                    continue
-                fi
-            fi
-
-        elif [[ "$1" =~ ^--is-ending= ]]; then
-            if [ $ShouldDebug -eq 1 ]; then
-                echo "[DEBUG] 读取公共参数 IsEnding [=] '$IsEnding'"
-            fi
-
-            IsEnding="${1:11}"
-            shift
-            continue
-        fi
-
-        # ───────────────────────────────────────────────
-    done
-
-
-
-    if [[ ! "$ShouldRemoveNodeModulesFirst" =~ ^[01]$ ]]; then
-        if [ "$ShouldRemoveNodeModulesFirst" == 'true' ]; then
-            ShouldRemoveNodeModulesFirst=1
-        else
-            ShouldRemoveNodeModulesFirst=0
-    fi
-    fi
-    if [ $ShouldDebug -eq 1 ]; then
-        echo "[DEBUG] 读取公共参数 ShouldRemoveNodeModulesFirst : '$ShouldRemoveNodeModulesFirst'"
-    fi
-
-
-
-    if [[ ! "$ShouldRemovePackageLockJSONFirst" =~ ^[01]$ ]]; then
-        if [ "$ShouldRemovePackageLockJSONFirst" == 'true' ]; then
-            ShouldRemovePackageLockJSONFirst=1
-        else
-            ShouldRemovePackageLockJSONFirst=0
-    fi
-    fi
-    if [ $ShouldDebug -eq 1 ]; then
-        echo "[DEBUG] 读取公共参数 ShouldRemovePackageLockJSONFirst : '$ShouldRemovePackageLockJSONFirst'"
-    fi
-
-
-
-    if [[ ! "$ShouldRunThisTask" =~ ^[01]$ ]]; then
-        if [ "$ShouldRunThisTask" == 'true' ]; then
-            ShouldRunThisTask=1
-        else
-            ShouldRunThisTask=0
-    fi
-    fi
-    if [ $ShouldDebug -eq 1 ]; then
-        echo "[DEBUG] 读取公共参数 ShouldRunThisTask : '$ShouldRunThisTask'"
-    fi
-
-
-
-    if [[ ! "$ShouldDryRun" =~ ^[01]$ ]]; then
-        if [ "$ShouldDryRun" == 'true' ]; then
-            ShouldDryRun=1
-        else
-            ShouldDryRun=0
-        fi
-    fi
-    if [ $ShouldDebug -eq 1 ]; then
-        echo "[DEBUG] 读取公共参数 ShouldDryRun : '$ShouldDryRun'"
-    fi
-
-
-
-    if [[ ! "$IsEnding" =~ ^[01]$ ]]; then
-        if [ "$IsEnding" == 'true' ]; then
-            IsEnding=1
-        else
-            IsEnding=0
-        fi
-    fi
-    if [ $ShouldDebug -eq 1 ]; then
-        echo "[DEBUG] 读取公共参数 IsEnding : '$IsEnding'"
-    fi
-}
-
-
-
-
-
 function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_modules {
     local DisplayName='node_modules 文件夹'
 
 
 
-    Read-_吴乐川管理某_npm_项目__读取公共参数  $*
+    local NameOfThisFunction='Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_modules'
+
+    local ShouldRunThisTask
+    local ShouldDryRun
+
+    #  命令行参数名 | 变量名 | 类型 | 默认值
+    local ArgumentConfigsArray=(
+        "--should-run-this-task | ShouldRunThisTask | 标准类型_布尔 | false"
+        "--dry-run              | ShouldDryRun      | 标准类型_布尔 | false"
+    )
+
+    Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
 
 
 
     Write-_吴乐川打印足够的的空白行_在某任务开始前
     Write-_吴乐川打印测量提示语长度的尺子_纯粹是于研发阶段用以确保各提示语宽度接近等同
-    if [ "$ShouldDryRun" -eq 0 ]; then
+    if [ "$ShouldDryRun" == false ]; then
         echo  -e "\e[0;96m══════════════════ 删除 ${DisplayName} ════════════════════════════\e[0;0m"
     else
         echo  -e "\e[0;96m═══【仿真演练】═══ 删除 ${DisplayName} ════════════════════════════\e[0;0m"
@@ -339,9 +83,9 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_
 
 
 
-    if [ $ShouldRunThisTask -eq 1 ]; then
+    if [ "$ShouldRunThisTask" == true ]; then
         if [ -d .'/node_modules' ]; then
-            if [ "$ShouldDryRun" -eq 0 ]; then
+            if [ "$ShouldDryRun" == false ]; then
                 echo  -e  "\e[0;31m正在删除 node_modules 文件夹。\e[0;0m"
                 echo
 
@@ -366,7 +110,7 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_
 
 
     echo
-    if [ "$ShouldDryRun" -eq 0 ]; then
+    if [ "$ShouldDryRun" == false ]; then
         echo  -e "\e[0;96m══════════════════ 删除 ${DisplayName} ══════════════ 已结束 ══════\e[0;0m"
     else
         echo  -e "\e[0;96m═══【仿真演练】═══ 删除 ${DisplayName} ══════════════ 已结束 ══════\e[0;0m"
@@ -382,13 +126,24 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_packa
 
 
 
-    Read-_吴乐川管理某_npm_项目__读取公共参数  $*
+    local NameOfThisFunction='Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_package_lock_json'
+
+    local ShouldRunThisTask
+    local ShouldDryRun
+
+    #  命令行参数名 | 变量名 | 类型 | 默认值
+    local ArgumentConfigsArray=(
+        "--should-run-this-task | ShouldRunThisTask | 标准类型_布尔 | false"
+        "--dry-run              | ShouldDryRun      | 标准类型_布尔 | false"
+    )
+
+    Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
 
 
 
     Write-_吴乐川打印足够的的空白行_在某任务开始前
     Write-_吴乐川打印测量提示语长度的尺子_纯粹是于研发阶段用以确保各提示语宽度接近等同
-    if [ "$ShouldDryRun" -eq 0 ]; then
+    if [ "$ShouldDryRun" == false ]; then
         echo  -e "\e[0;92m══════════════════ 删除 ${DisplayName} ═════════════════════════\e[0;0m"
     else
         echo  -e "\e[0;92m═══【仿真演练】═══ 删除 ${DisplayName} ═════════════════════════\e[0;0m"
@@ -397,9 +152,9 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_packa
 
 
 
-    if [ $ShouldRunThisTask -eq 1 ]; then
+    if [ "$ShouldRunThisTask" == true ]; then
         if [ -d .'/package-lock.json' ]; then
-            if [ "$ShouldDryRun" -eq 0 ]; then
+            if [ "$ShouldDryRun" == false ]; then
                 rm  -rf  .'/package-lock.json'
 
                 if [ $? -gt 0 ]; then
@@ -421,7 +176,7 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_packa
 
 
     echo
-    if [ "$ShouldDryRun" -eq 0 ]; then
+    if [ "$ShouldDryRun" == false ]; then
         echo  -e "\e[0;92m══════════════════ 删除 ${DisplayName} ═══════════ 已结束 ══════\e[0;0m"
     else
         echo  -e "\e[0;92m═══【仿真演练】═══ 删除 ${DisplayName} ═══════════ 已结束 ══════\e[0;0m"
@@ -433,16 +188,25 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_packa
 
 
 function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为最晚版本 {
-    local IsEnding=0
-    Read-_吴乐川管理某_npm_项目__读取公共参数  $*
-    # echo "[DEBUG] 产品级_均为最晚版本 IsEnding='$IsEnding'"
+    local NameOfThisFunction='Remove-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为最晚版本'
+
+    local IsEnding
+    local ShouldDryRun
+
+    #  命令行参数名 | 变量名 | 类型 | 默认值
+    local ArgumentConfigsArray=(
+        "--is-ending | IsEnding     | 标准类型_布尔 | false"
+        "--dry-run   | ShouldDryRun | 标准类型_布尔 | false"
+    )
+
+    Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
 
 
 
-    if [ "$IsEnding" -eq 0 ]; then
+    if [ "$IsEnding" == false ]; then
         Write-_吴乐川打印足够的的空白行_在某任务开始前
         Write-_吴乐川打印测量提示语长度的尺子_纯粹是于研发阶段用以确保各提示语宽度接近等同
-        if [ "$ShouldDryRun" -eq 0 ]; then
+        if [ "$ShouldDryRun" == false ]; then
             echo  -e  "\e[0;31m══════════════════ npm i    最晚版本之【产品依赖包】════════════════════\e[0;0m"
         else
             echo  -e  "\e[0;31m═══【仿真演练】═══ npm i    最晚版本之【产品依赖包】════════════════════\e[0;0m"
@@ -450,7 +214,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
         echo
     else
         echo
-        if [ "$ShouldDryRun" -eq 0 ]; then
+        if [ "$ShouldDryRun" == false ]; then
             echo  -e  "\e[0;31m══════════════════ npm i    最晚版本之【产品依赖包】 ══════ 已结束 ══════\e[0;0m"
         else
             echo  -e  "\e[0;31m═══【仿真演练】═══ npm i    最晚版本之【产品依赖包】 ══════ 已结束 ══════\e[0;0m"
@@ -463,16 +227,25 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
 
 
 function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为特定版本 {
-    local IsEnding=0
-    Read-_吴乐川管理某_npm_项目__读取公共参数  $*
-    # echo "[DEBUG] 产品级_均为特定版本 IsEnding='$IsEnding'"
+    local NameOfThisFunction='Remove-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为特定版本'
+
+    local IsEnding
+    local ShouldDryRun
+
+    #  命令行参数名 | 变量名 | 类型 | 默认值
+    local ArgumentConfigsArray=(
+        "--is-ending | IsEnding     | 标准类型_布尔 | false"
+        "--dry-run   | ShouldDryRun | 标准类型_布尔 | false"
+    )
+
+    Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
 
 
 
-    if [ "$IsEnding" -eq 0 ]; then
+    if [ "$IsEnding" == false ]; then
         Write-_吴乐川打印足够的的空白行_在某任务开始前
         Write-_吴乐川打印测量提示语长度的尺子_纯粹是于研发阶段用以确保各提示语宽度接近等同
-        if [ "$ShouldDryRun" -eq 0 ]; then
+        if [ "$ShouldDryRun" == false ]; then
             echo  -e  "\e[0;31m══════════════════ npm i    \e[97;41m特定版本\e[0;31m之【产品依赖包】════════════════════\e[0;0m"
         else
             echo  -e  "\e[0;31m═══【仿真演练】═══ npm i    \e[97;41m特定版本\e[0;31m之【产品依赖包】════════════════════\e[0;0m"
@@ -480,7 +253,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
         echo
     else
         echo
-        if [ "$ShouldDryRun" -eq 0 ]; then
+        if [ "$ShouldDryRun" == false ]; then
             echo  -e  "\e[0;31m══════════════════ npm i    \e[97;41m特定版本\e[0;31m之【产品依赖包】══════ 已结束 ══════\e[0;0m"
         else
             echo  -e  "\e[0;31m═══【仿真演练】═══ npm i    \e[97;41m特定版本\e[0;31m之【产品依赖包】══════ 已结束 ══════\e[0;0m"
@@ -493,16 +266,25 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
 
 
 function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为最晚版本 {
-    local IsEnding=0
-    Read-_吴乐川管理某_npm_项目__读取公共参数  $*
-    # echo "[DEBUG] 研发级_均为最晚版本 IsEnding='$IsEnding'"
+    local NameOfThisFunction='Remove-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为最晚版本'
+
+    local IsEnding
+    local ShouldDryRun
+
+    #  命令行参数名 | 变量名 | 类型 | 默认值
+    local ArgumentConfigsArray=(
+        "--is-ending | IsEnding     | 标准类型_布尔 | false"
+        "--dry-run   | ShouldDryRun | 标准类型_布尔 | false"
+    )
+
+    Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
 
 
 
-    if [ "$IsEnding" -eq 0 ]; then
+    if [ "$IsEnding" == false ]; then
         Write-_吴乐川打印足够的的空白行_在某任务开始前
         Write-_吴乐川打印测量提示语长度的尺子_纯粹是于研发阶段用以确保各提示语宽度接近等同
-        if [ "$ShouldDryRun" -eq 0 ]; then
+        if [ "$ShouldDryRun" == false ]; then
             echo  -e  "\e[0;32m══════════════════ npm i -D 最晚版本之【研发依赖包】════════════════════\e[0;0m"
         else
             echo  -e  "\e[0;32m═══【仿真演练】═══ npm i -D 最晚版本之【研发依赖包】════════════════════\e[0;0m"
@@ -510,7 +292,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
         echo
     else
         echo
-        if [ "$ShouldDryRun" -eq 0 ]; then
+        if [ "$ShouldDryRun" == false ]; then
             echo  -e  "\e[0;32m══════════════════ npm i -D 最晚版本之【研发依赖包】══════ 已结束 ══════\e[0;0m"
         else
             echo  -e  "\e[0;32m═══【仿真演练】═══ npm i -D 最晚版本之【研发依赖包】══════ 已结束 ══════\e[0;0m"
@@ -523,16 +305,25 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
 
 
 function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为特定版本 {
-    local IsEnding=0
-    Read-_吴乐川管理某_npm_项目__读取公共参数  $*
-    # echo "[DEBUG] 研发级_均为特定版本 IsEnding='$IsEnding'"
+    local NameOfThisFunction='Remove-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为特定版本'
+
+    local IsEnding
+    local ShouldDryRun
+
+    #  命令行参数名 | 变量名 | 类型 | 默认值
+    local ArgumentConfigsArray=(
+        "--is-ending | IsEnding     | 标准类型_布尔 | false"
+        "--dry-run   | ShouldDryRun | 标准类型_布尔 | false"
+    )
+
+    Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
 
 
 
-    if [ "$IsEnding" -eq 0 ]; then
+    if [ "$IsEnding" == false ]; then
         Write-_吴乐川打印足够的的空白行_在某任务开始前
         Write-_吴乐川打印测量提示语长度的尺子_纯粹是于研发阶段用以确保各提示语宽度接近等同
-        if [ "$ShouldDryRun" -eq 0 ]; then
+        if [ "$ShouldDryRun" == false ]; then
             echo  -e  "\e[0;32m══════════════════ npm i -D \e[30;102m特定版本\e[0;32m之【研发依赖包】════════════════════\e[0;0m"
         else
             echo  -e  "\e[0;32m═══【仿真演练】═══ npm i -D \e[30;102m特定版本\e[0;32m之【研发依赖包】════════════════════\e[0;0m"
@@ -540,7 +331,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
         echo
     else
         echo
-        if [ "$ShouldDryRun" -eq 0 ]; then
+        if [ "$ShouldDryRun" == false ]; then
             echo  -e  "\e[0;32m══════════════════ npm i -D \e[30;102m特定版本\e[0;32m之【研发依赖包】══════ 已结束 ══════\e[0;0m"
         else
             echo  -e  "\e[0;32m═══【仿真演练】═══ npm i -D \e[30;102m特定版本\e[0;32m之【研发依赖包】══════ 已结束 ══════\e[0;0m"
@@ -553,16 +344,25 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
 
 
 function Write-吴乐川管理某_npm_项目__打印提示语__更新与研发相关的数据库 {
-    local IsEnding=0
-    Read-_吴乐川管理某_npm_项目__读取公共参数  $*
-    # echo "[DEBUG] 研发相关的数据库 IsEnding='$IsEnding'"
+    local NameOfThisFunction='Remove-吴乐川管理某_npm_项目__打印提示语__更新与研发相关的数据库'
+
+    local IsEnding
+    local ShouldDryRun
+
+    #  命令行参数名 | 变量名 | 类型 | 默认值
+    local ArgumentConfigsArray=(
+        "--is-ending | IsEnding     | 标准类型_布尔 | false"
+        "--dry-run   | ShouldDryRun | 标准类型_布尔 | false"
+    )
+
+    Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
 
 
 
-    if [ "$IsEnding" -eq 0 ]; then
+    if [ "$IsEnding" == false ]; then
         Write-_吴乐川打印足够的的空白行_在某任务开始前
         Write-_吴乐川打印测量提示语长度的尺子_纯粹是于研发阶段用以确保各提示语宽度接近等同
-        if [ "$ShouldDryRun" -eq 0 ]; then
+        if [ "$ShouldDryRun" == false ]; then
             echo  -e  "\e[0;33m══════════════════ 更新与研发相关的数据库 ══════════════════════════════\e[0;0m"
         else
             echo  -e  "\e[0;33m═══【仿真演练】═══ 更新与研发相关的数据库 ══════════════════════════════\e[0;0m"
@@ -570,7 +370,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__更新与研发�
         echo
     else
         echo
-        if [ "$ShouldDryRun" -eq 0 ]; then
+        if [ "$ShouldDryRun" == false ]; then
             echo  -e  "\e[0;33m══════════════════ 更新与研发相关的数据库 ════════════════ 已结束 ══════\e[0;0m"
         else
             echo  -e  "\e[0;33m═══【仿真演练】═══ 更新与研发相关的数据库 ════════════════ 已结束 ══════\e[0;0m"
@@ -583,16 +383,25 @@ function Write-吴乐川管理某_npm_项目__打印提示语__更新与研发�
 
 
 function Write-吴乐川管理某_npm_项目__打印提示语__其他交代 {
-    local IsEnding=0
-    Read-_吴乐川管理某_npm_项目__读取公共参数  $*
-    # echo "[DEBUG] 其他交代 IsEnding='$IsEnding'"
+    local NameOfThisFunction='Remove-吴乐川管理某_npm_项目__打印提示语__其他交代'
+
+    local IsEnding
+    local ShouldDryRun
+
+    #  命令行参数名 | 变量名 | 类型 | 默认值
+    local ArgumentConfigsArray=(
+        "--is-ending | IsEnding     | 标准类型_布尔 | false"
+        "--dry-run   | ShouldDryRun | 标准类型_布尔 | false"
+    )
+
+    Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
 
 
 
-    if [ "$IsEnding" -eq 0 ]; then
+    if [ "$IsEnding" == false ]; then
         Write-_吴乐川打印足够的的空白行_在某任务开始前
         Write-_吴乐川打印测量提示语长度的尺子_纯粹是于研发阶段用以确保各提示语宽度接近等同
-        if [ "$ShouldDryRun" -eq 0 ]; then
+        if [ "$ShouldDryRun" == false ]; then
             echo  -e  "\e[0;94m══════════════════ 其他交代 ════════════════════════════════════════════\e[0;0m"
         else
             echo  -e  "\e[0;94m═══【仿真演练】═══ 其他交代 ════════════════════════════════════════════\e[0;0m"
@@ -600,7 +409,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__其他交代 {
         echo
     else
         echo
-        if [ "$ShouldDryRun" -eq 0 ]; then
+        if [ "$ShouldDryRun" == false ]; then
             echo  -e  "\e[0;94m══════════════════ 其他交代 ══════════════════════════════ 已结束 ══════\e[0;0m"
         else
             echo  -e  "\e[0;94m═══【仿真演练】═══ 其他交代 ══════════════════════════════ 已结束 ══════\e[0;0m"
@@ -1436,12 +1245,11 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
 
 
-        if [ $ShouldDryRun -eq 1 ]; then
+        if [ "$ShouldDryRun" == false ]; then
+            ${NPMFullCommandLine}
+        else
             echo  -e  "   \e[0;33m【仿真演练】\e[0;0m"
             echo  -e  "    \e[0;97m${NPMFullCommandLine}\e[0;0m"
-        else
-            # echo  "TODO 执行命令： ${NPMFullCommandLine}"
-            ${NPMFullCommandLine}
         fi
     fi
 
@@ -1510,12 +1318,11 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
 
 
-        if [ $ShouldDryRun -eq 1 ]; then
+        if [ "$ShouldDryRun" == false ]; then
+            ${NPMFullCommandLine}
+        else
             echo  -e  "   \e[0;33m【仿真演练】\e[0;0m"
             echo  -e  "    \e[0;97m${NPMFullCommandLine}\e[0;0m"
-        else
-            # echo  "TODO 执行命令： ${NPMFullCommandLine}"
-            ${NPMFullCommandLine}
         fi
     fi
 

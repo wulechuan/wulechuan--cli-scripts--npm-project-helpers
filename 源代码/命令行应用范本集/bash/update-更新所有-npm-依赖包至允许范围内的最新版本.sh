@@ -1,5 +1,6 @@
 #!/bin/bash
 
+source  './node_modules/@wulechuan/cli-scripts--npm-project-helpers/源代码/发布的源代码/bash/吴乐川读取并处理某函数的参数表.sh'
 source  './node_modules/@wulechuan/cli-scripts--npm-project-helpers/源代码/发布的源代码/bash/吴乐川-打印-json.sh'
 source  './node_modules/@wulechuan/cli-scripts--npm-project-helpers/源代码/发布的源代码/bash/吴乐川-管理某-npm-项目的依赖包等资源.sh'
 
@@ -16,7 +17,7 @@ function 完整流程  {
     local ShouldRemovePackageLockJSONFirst=0
     local ShouldDryRun=0
 
-    Read-_吴乐川管理某_npm_项目__读取公共参数  $*
+    Read-吴乐川读取并处理某函数的参数表  $*
 
     # echo "[DEBUG] 完整流程 ShouldRemoveNodeModulesFirst = '${ShouldRemoveNodeModulesFirst}'"
     # echo "[DEBUG] 完整流程 ShouldRemovePackageLockJSONFirst = '${ShouldRemovePackageLockJSONFirst}'"
