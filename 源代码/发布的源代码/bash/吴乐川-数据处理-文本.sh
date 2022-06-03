@@ -806,24 +806,24 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
     if [ $SHOULD_DEBUG -eq 1 ]; then
         echo
-        echo  -e  "〔调试〕： 用以接收排好版的文本的全文的变量名：\n           \e[0;33m${ResultReceiverVarName_FullText}\e[0;0m"
+        echo  -e  "〔调试〕： 用以接收排好版的文本的全文的变量名：\n           \e[0;33m${ResultReceiverVarName_FullText}${NoColor}"
         echo
-        echo  -e  "〔调试〕： 用以接收排好版的逐行文本列表的变量名：\n           \e[0;33m${ResultReceiverVarName_TextLinesArray}\e[0;0m"
+        echo  -e  "〔调试〕： 用以接收排好版的逐行文本列表的变量名：\n           \e[0;33m${ResultReceiverVarName_TextLinesArray}${NoColor}"
         echo
-        echo  -e  "〔调试〕： 外界预备好用以接收排好版的逐行文本的一系列变量之名称之公共前缀：\n           \e[0;33m${ResultReceiverVarsNamePrefix_PerTextLine}\e[0;0m"
+        echo  -e  "〔调试〕： 外界预备好用以接收排好版的逐行文本的一系列变量之名称之公共前缀：\n           \e[0;33m${ResultReceiverVarsNamePrefix_PerTextLine}${NoColor}"
         echo
-        echo  -e  "〔调试〕： 外界预备好用以接收排好版的逐行文本的一系列变量的总数：\n           \e[0;33m${CountOfOuterScopePreparedVarsForPerLineText}\e[0;0m"
+        echo  -e  "〔调试〕： 外界预备好用以接收排好版的逐行文本的一系列变量的总数：\n           \e[0;33m${CountOfOuterScopePreparedVarsForPerLineText}${NoColor}"
         echo
-        echo  -e  "〔调试〕： 单行等效汉字字数上限：\n           \e[0;33m${HanCharacterPerLineMaxCount}\e[0;0m"
+        echo  -e  "〔调试〕： 单行等效汉字字数上限：\n           \e[0;33m${HanCharacterPerLineMaxCount}${NoColor}"
         echo
-        echo  -e  "〔调试〕： 英语单词在行尾时其后应保留一个空格：\n           \e[0;33m${ShouldAddASpaceAfterLastEnglishWordPerLine}\e[0;0m"
+        echo  -e  "〔调试〕： 英语单词在行尾时其后应保留一个空格：\n           \e[0;33m${ShouldAddASpaceAfterLastEnglishWordPerLine}${NoColor}"
         echo
-        echo  -e  "〔调试〕： 原文本中的每个换行符在产生的内容中应改作两个换行符：\n           \e[0;33m${ShouldDoubleOriginalLineBreaks}\e[0;0m"
+        echo  -e  "〔调试〕： 原文本中的每个换行符在产生的内容中应改作两个换行符：\n           \e[0;33m${ShouldDoubleOriginalLineBreaks}${NoColor}"
         echo
-        echo  -e  "〔调试〕： 原文本： \n\e[0;91m'\e[0;33m${OriginalText}\e[0;91m'\e[0;0m\n"
+        echo  -e  "〔调试〕： 原文本： \n\e[0;91m'\e[0;33m${OriginalText}\e[0;91m'${NoColor}\n"
         echo
     fi
-        # echo  -e  "〔调试〕： 原文本： \n\e[0;91m'\e[0;33m${OriginalText}\e[0;91m'\e[0;0m\n"
+        # echo  -e  "〔调试〕： 原文本： \n\e[0;91m'\e[0;33m${OriginalText}\e[0;91m'${NoColor}\n"
 
 
 
@@ -866,11 +866,14 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             ThisCharIsBackSlash='false'
         else
             if [ "$Char" == '\' ]; then
+                # if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： 第 $((LoopIndex+1)) 字是反斜杠。 \e[0;91m'\e[0;33m${Char}${Char}\e[0;91m'\e[0;0m"; fi
+
                 Char="\\"
                 ThisCharIsBackSlash='true'
-                if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： 第 $((LoopIndex+1)) 字是反斜杠。 \e[0;91m'\e[0;33m${Char}${Char}\e[0;91m'\e[0;0m"; fi
                 LastCharWasBackSlash="$ThisCharIsBackSlash"
+
                 continue
+
             else
                 ThisCharIsBackSlash='false'
             fi

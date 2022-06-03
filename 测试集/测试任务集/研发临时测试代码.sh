@@ -15,7 +15,7 @@ function 测试之主程序 {
 
 
 
-    if true; then
+    if false; then
         # 方法一：
         # 此方法较繁复。
         # 须先预备足够多（ 此例是 99 个）的 local 变量来接收逐行文本。
@@ -51,7 +51,7 @@ function 测试之主程序 {
 
 
 
-    if true; then
+    if false; then
         # 方法二：
         # 此方法略简单。
 
@@ -84,7 +84,7 @@ function 测试之主程序 {
 
 
 
-    if true; then
+    if false; then
 
         echo -e "\n──────────────────────────────────────────\n采用“直接回显结论”的方法\n──────────────────────────────────────────\n"
 
@@ -201,7 +201,7 @@ function 测试之主程序 {
             --某依赖包之版本配置='vu*ex ||| ~3.4  |||' \
             --某依赖包之版本配置='@zhong-hua/packageA ||| null |||  没什么好原因。' \
             --某依赖包之版本配置='@zhong-hua/package-bb     ||| $null |||  我就是想暂缓升级该依赖包不行吗？' \
-            --某依赖包之版本配置='@zhong-hua/package-ccc    ||| 0 |||  这是仅限版本零，而不是不设限。' \
+            --某依赖包之版本配置='@zhong-hua/package-ccc    ||| 0 |||  这表示仅限版本零，而不是不设限。' \
             --应仅作仿真演练=0
     fi
 
@@ -227,7 +227,7 @@ function 测试之主程序 {
             --某依赖包之版本配置='vue-router        ||| ~3.4 ||| 版本兼容问题。' \
             --某依赖包之版本配置='vuex ||| ~3.4 |||  ' \
             --某依赖包之版本配置='@zhong-hua/package-jia ||| null ' \
-            --某依赖包之版本配置='@zhong-hua/package-yi ||| 0 ||| 这是仅限版本零，而不是不设限。' \
+            --某依赖包之版本配置='@zhong-hua/package-yi ||| 0 ||| 这表示仅限版本零，而不是不设限。' \
             --某依赖包之版本配置='@zhong-hua/package-bing-ding' \
             --某依赖包之版本配置='@jun-yong-fei-ji/jian-20    |||  2025   |||   出征。' \
             --某依赖包之版本配置='@dao-dan/dong-feng-17  |||  2025   |||   从来就没有什么救世主，' \
@@ -316,19 +316,19 @@ function 测试之主程序 {
             --某依赖包之版本配置='vuex |::| ~3.4 |::|  ' \
             --某依赖包之版本配置='@zhong-hua/package-a |::| null ' \
             --某依赖包之版本配置='@zhong-hua/package-b |::| $null ' \
-            --某依赖包之版本配置='@zhong-hua/package-cde         |::|   0  |::| 这是仅限版本零，而不是不设限。' \
+            --某依赖包之版本配置='@zhong-hua/package-cde         |::|   0  |::| 这表示仅限版本零，而不是不设限。' \
             --某依赖包之版本配置='@zhong-hua/package-fghi' \
             --某依赖包之版本配置='@jun-yong-fei-ji/jian-ji-ji    |::|  2025  |::|   出征。' \
             --某依赖包之版本配置="@dao-dan/dong-feng-17          |::|  2025  |::|   ${GUO_JI_GE}" \
             --某依赖包之版本配置='@dao-dan/dong-feng-41          |::|  2025  |::|   也没有神仙皇帝。' \
-            --应仅作仿真演练 true
+            --应仅作仿真演练 false
 
-        Update-吴乐川更新当前_npm_项目的某批依赖包 \
-            --这批依赖包之依赖类别='本产品仅会在研发阶段借助这些软件' \
-            --内容分割记号='|:|:|' \
-            --某依赖包之版本配置='@zhong-hua/jiu-zhang         |:|:|   null ' \
-            --某依赖包之版本配置='@zhong-hua/ben-cao-gang-mu   |:|:|   $null ' \
-            --应仅作仿真演练=true
+        # Update-吴乐川更新当前_npm_项目的某批依赖包 \
+        #     --这批依赖包之依赖类别='本产品仅会在研发阶段借助这些软件' \
+        #     --内容分割记号='|:|:|' \
+        #     --某依赖包之版本配置='@zhong-hua/jiu-zhang         |:|:|   null ' \
+        #     --某依赖包之版本配置='@zhong-hua/ben-cao-gang-mu   |:|:|   $null ' \
+        #     --应仅作仿真演练=true
     fi
 }
 
