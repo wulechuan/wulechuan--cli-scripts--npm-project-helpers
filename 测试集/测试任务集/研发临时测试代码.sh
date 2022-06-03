@@ -15,15 +15,17 @@ function 测试之主程序 {
 
 
 
-    if false; then
+    if true; then
         # 方法一：
-        # 预备足够多（ 100 个）的 local 变量来接收逐行文本。
-        # 此方法较繁复。但较可靠。因为避免了 IFS 对换行符的不当处理。
+        # 此方法较繁复。
+        # 须先预备足够多（ 此例是 99 个）的 local 变量来接收逐行文本。
+
+        echo -e "\n──────────────────────────────────────────\n方法一\n──────────────────────────────────────────\n"
 
         ResultReceiver=''
 
         local CountOfTextLines
-        local ReceiverVarsCount=24
+        local ReceiverVarsCount=99
         for ((LoopIndex=1; LoopIndex<=$ReceiverVarsCount; LoopIndex++)); do
             eval "local WlcTextOfLine_${LoopIndex}=''"
         done
@@ -45,15 +47,47 @@ function 测试之主程序 {
                 echo -e  "    # ║ \e[0;91m$Text\e[0;0m"
             done
         fi
+    fi
 
-        return
+
+
+    if true; then
+        # 方法二：
+        # 此方法略简单。
+
+        echo -e "\n──────────────────────────────────────────\n方法二\n──────────────────────────────────────────\n"
+
+        ResultReceiver=''
+
+        local TextLinesArray
+        local CountOfTextLines
+
+        ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变量 \
+            --用以接收排好版的逐行文本列表的变量名 TextLinesArray \
+            --用以接收排好版的文本的行数的变量名 CountOfTextLines \
+            '大漠沙如雪' --英语单词在行尾时其后应保留一个空格 false '  燕山月似钩' ' 。 ' \
+            '文档对象模型（DOM）将 web 页面与到脚本或编程语言连接起来。通常是指 JavaScript，但将 HTML、SVG 或 XML 文档建模为对象并不是 JavaScript 语言的一部分。DOM 模型用一个逻辑树来表示一个文档，树的每个分支的终点都是一个节点（node），每个节点都包含着对象（object）。DOM 的方法（method）让你可以用特定方式操作这个树，用这些方法你可以改变文档的结构、样式或者内容。节点可以关联上事件处理器，一旦某一事件被触发了，那些事件处理器就会被执行。 ' \
+            "Aliquip proident nulla ex cillum magna. Anim culpa dolor ullamco nulla culpa labore. Lo\nrem dolor proident qui aliquip nulla. Do ex external link 1 (www.bing.com) anim tempor do veniam duis nulla ut culpa tempor dolore. Labore dolore ex anim fake self-page link 2 (do not follow) id. Anim et ex ex labore cupidatat anim proident laboris amet fugiat aute ad.\n Reprehenderit dolore cupidatat sit elit esse anim est aute." \
+            --原文本中的每个换行符在产生的内容中应改作两个换行符 true \
+            "\n总有一天中国人会有自己的高性能计算机芯片。" \
+            --单行等效汉字字数上限 33
+
+        if [ ! -z "$CountOfTextLines" ]; then
+            for ((LoopIndex=0; LoopIndex<$CountOfTextLines; LoopIndex++)); do
+                Text="${TextLinesArray[$LoopIndex]}"
+                echo -e  "    # ║ \e[0;91m$Text\e[0;0m"
+            done
+        fi
     fi
 
 
 
 
 
-    if false; then
+    if true; then
+
+        echo -e "\n──────────────────────────────────────────\n采用“直接回显结论”的方法\n──────────────────────────────────────────\n"
+
         ResultReceiver=''
 
         ConvertTo-吴乐川将文本转换为多行文本_直接回显结论 '大漠沙如雪' --英语单词在行尾时其后应保留一个空格 false '  燕山月似钩' ' 。 ' \
@@ -61,14 +95,20 @@ function 测试之主程序 {
             "Aliquip proident nulla ex cillum magna. Anim culpa dolor ullamco nulla culpa labore. Lo\nrem dolor proident qui aliquip nulla. Do ex external link 1 (www.bing.com) anim tempor do veniam duis nulla ut culpa tempor dolore. Labore dolore ex anim fake self-page link 2 (do not follow) id. Anim et ex ex labore cupidatat anim proident laboris amet fugiat aute ad.\n Reprehenderit dolore cupidatat sit elit esse anim est aute." \
             --原文本中的每个换行符在产生的内容中应改作两个换行符 true \
             "\n总有一天中国人会有自己的高性能计算机芯片。" \
-            --单行等效汉字字数上限 24
+            --单行等效汉字字数上限 36
 
-        echo
-        echo
-        echo
     fi
 
+
+
+
+
     if false; then
+
+        echo
+        echo
+        echo
+
         ResultReceiver=''
 
         ConvertTo-吴乐川将文本转换为多行文本_直接回显结论 \
@@ -77,12 +117,14 @@ function 测试之主程序 {
             --原文本中的每个换行符在产生的内容中应改作两个换行符 true \
             --单行等效汉字字数上限 19
 
-        echo
-        echo
-        echo
     fi
 
     if false; then
+
+        echo
+        echo
+        echo
+
         ResultReceiver=''
         Text='页面与到脚本或编程语言连接起来。通常是指页面与到脚本或编程语言连接起来。通常是指'
         for LoopIndex in {1..60}; do Text+='abcd '; done

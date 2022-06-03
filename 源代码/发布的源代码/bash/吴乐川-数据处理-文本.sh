@@ -152,33 +152,29 @@ function Get-吴乐川求一行文本视觉宽度等效英语字母数_须采用
 function ConvertTo-吴乐川将文本转换为多行文本_直接回显结论 {
     local ResultReceiver_TheLinesArray
     local ResultReceiver_TheLinesCount
-    local _IFS_BACKUP_="$IFS"
 
     ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变量 \
         --用以接收排好版的逐行文本列表的变量名 ResultReceiver_TheLinesArray \
         --用以接收排好版的文本的行数的变量名 ResultReceiver_TheLinesCount \
         $*
 
-    # if false; then
+    # if true; then
     #     echo  -e  '〔调试〕：────────────────────────────────────────────────────────────────────────────────'
     #     echo  -e  "〔调试〕： 行数： ${ResultReceiver_TheLinesCount} 。"
     #     echo  -e  '〔调试〕：────────────────────────────────────────────────────────────────────────────────'
     # fi
 
-    IFS='' # 很关键。
-
-    local line=''
-    for line in ${ResultReceiver_TheLinesArray[@]}; do
-        if [ "$line" == '\n' ]; then
-            echo
-        else
-            echo "$line"
-        fi
-    done
+    if [ ! -z "$ResultReceiver_TheLinesCount" ]; then
+        local line=''
+        local lineNumber=0
+        for ((lineNumber=0; lineNumber<$ResultReceiver_TheLinesCount; lineNumber++)); do
+            line=${ResultReceiver_TheLinesArray[$lineNumber]}
+            # echo  "[$((lineNumber+1))] $line"
+            echo  "$line"
+        done
+    fi
 
     # echo  -e  '〔调试〕：────────────────────────────────────────────────────────────────────────────────'
-
-    IFS="$_IFS_BACKUP_"
 }
 
 function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变量 {
@@ -211,13 +207,27 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
 
 
+    local NoColor="\e[0;0m"
+
+    local ColorOfErrorMessage="\e[0;91m"
+    local ColorOfTermInErrorMessage="\e[0;97m"
+
+    local ColorOfWarningMessage="\e[0;33m"
+    local ColorOfTermWarningMessage="\e[0;97m"
+
+
+
+
+
     function Write-_吴乐川打印针对当前处理的参数的错误信息 {
-        echo -e "\e[0;91m在函数"
-        echo -e "    \e[0;91m“ \e[0;97mConvertTo-吴乐川将文本转换为多行文本_须采用接收器变量\e[0;91m ”"
-        echo -e "\e[0;91m的命令参数表中，名为\e[0;0m"
-        echo -e "    \e[0;91m“ \e[0;97m${_ProcessingArgumentName}\e[0;91m ”"
-        echo -e "\e[0;91m的参数有如下问题：\e[0;0m"
-        echo -e "    \e[0;91m\e[0;91m${1}\e[0;0m"
+        local ErrorMessage="$1"
+
+        echo -e "${ColorOfErrorMessage}在函数${NoColor}"
+        echo -e "    ${ColorOfErrorMessage}“ ${ColorOfTermInErrorMessage}ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变量${ColorOfErrorMessage} ”${NoColor}"
+        echo -e "${ColorOfErrorMessage}的命令参数表中，名为${NoColor}"
+        echo -e "    ${ColorOfErrorMessage}“ ${ColorOfTermInErrorMessage}${_ProcessingArgumentName}${ColorOfErrorMessage} ”${NoColor}"
+        echo -e "${ColorOfErrorMessage}的参数有如下问题：${NoColor}"
+        echo -e "    ${ColorOfErrorMessage}${ErrorMessage}${NoColor}"
         echo
         echo
     }
@@ -300,7 +310,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
         if [ ! -z "${_TemporaryArgumentValue}" ]; then
             if [[ ! "${_TemporaryArgumentValue}" =~ ^[a-zA-Z_-][0-9a-zA-Z_-]*$ ]]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔2〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}\e[0;91m ” 。"
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔2〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}${ColorOfErrorMessage} ” 。"
                 return
             else
                 ResultReceiverVarName_FullText=$_TemporaryArgumentValue
@@ -316,8 +326,6 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             _CurrentArgumentOrArgumentPairHaveRecognized=1
             shift
 
-            # echo  -e  "已经遇到 “ \e[0;91m${_ProcessingArgumentName}\e[0;0m ”。其后还有 \e[0;96m$#\e[0;0m 个参数未处理。"
-
             if [ "${ResultReceiverVarName_TextLinesArray}" != '*|未给出|*' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔1〕。'
                 return
@@ -355,7 +363,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
         if [ ! -z "${_TemporaryArgumentValue}" ]; then
             if [[ ! "${_TemporaryArgumentValue}" =~ ^[a-zA-Z_-][0-9a-zA-Z_-]*$ ]]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔2〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}\e[0;91m ” 。"
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔2〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}${ColorOfErrorMessage} ” 。"
                 return
             else
                 ResultReceiverVarName_TextLinesArray=$_TemporaryArgumentValue
@@ -371,7 +379,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             _CurrentArgumentOrArgumentPairHaveRecognized=1
             shift
 
-            # echo  -e  "已经遇到 “ \e[0;91m${_ProcessingArgumentName}\e[0;0m ”。其后还有 \e[0;96m$#\e[0;0m 个参数未处理。"
+            # echo  -e  "已经遇到 “ ${ColorOfErrorMessage}${_ProcessingArgumentName}\e[0;0m ”。其后还有 \e[0;96m$#\e[0;0m 个参数未处理。"
 
             if [ "${ResultReceiverVarsNamePrefix_PerTextLine}" != '*|未给出|*' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔1〕。'
@@ -410,7 +418,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
         if [ ! -z "${_TemporaryArgumentValue}" ]; then
             if [[ ! "${_TemporaryArgumentValue}" =~ ^[a-zA-Z_-][0-9a-zA-Z_-]*$ ]]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔2〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}\e[0;91m ” 。"
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔2〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}${ColorOfErrorMessage} ” 。"
                 return
             else
                 ResultReceiverVarsNamePrefix_PerTextLine=$_TemporaryArgumentValue
@@ -426,8 +434,6 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             _CurrentArgumentOrArgumentPairHaveRecognized=1
             shift
 
-            # echo  -e  "已经遇到 “ \e[0;91m${_ProcessingArgumentName}\e[0;0m ”。其后还有 \e[0;96m$#\e[0;0m 个参数未处理。"
-
             if [ "${ResultReceiverVarName_CountOfLines}" != '*|未给出|*' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔1〕。'
                 return
@@ -465,7 +471,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
         if [ ! -z "${_TemporaryArgumentValue}" ]; then
             if [[ ! "${_TemporaryArgumentValue}" =~ ^[a-zA-Z_-][0-9a-zA-Z_-]*$ ]]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔2〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}\e[0;91m ” 。"
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔2〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}${ColorOfErrorMessage} ” 。"
                 return
             else
                 ResultReceiverVarName_CountOfLines=$_TemporaryArgumentValue
@@ -520,7 +526,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
         if [ ! -z "$_TemporaryArgumentValue" ]; then
             if [[ ! "${_TemporaryArgumentValue}" =~ ^[1-9][0-9]*$ ]]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔1〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}\e[0;91m ” 。"
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔1〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}${ColorOfErrorMessage} ” 。"
                 return
             else
                 HanCharacterPerLineMaxCount=$_TemporaryArgumentValue
@@ -547,7 +553,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             fi
 
             if [ "$1" == '0' ]; then
-                # Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔1〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}\e[0;91m ” 。"
+                # Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔1〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}${ColorOfErrorMessage} ” 。"
                 # return
                 _TemporaryArgumentValue='-应关闭该输出通道-'
                 shift
@@ -573,7 +579,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             shift
 
             if [ "$_TemporaryArgumentValue" == '0' ]; then
-                # Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔1〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}\e[0;91m ” 。"
+                # Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔1〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}${ColorOfErrorMessage} ” 。"
                 # return
                 _TemporaryArgumentValue='-应关闭该输出通道-'
             elif [ -z "${_TemporaryArgumentValue}" ]; then
@@ -584,7 +590,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
         if [ ! -z "$_TemporaryArgumentValue" ]; then
             if [[ ! "${_TemporaryArgumentValue}" =~ ^[1-9][0-9]*$ ]] && [ "${_TemporaryArgumentValue}" != '-应关闭该输出通道-' ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔2〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}\e[0;91m ” 。"
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规〔2〕。给出的值为 “ \e[0;93m${_TemporaryArgumentValue}${ColorOfErrorMessage} ” 。"
                 return
             else
                 CountOfOuterScopePreparedVarsForPerLineText=$_TemporaryArgumentValue
@@ -601,7 +607,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             shift
 
             if [ "${ShouldAddASpaceAfterLastEnglishWordPerLine}" != '*|未给出|*' ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  "不应重复出现〔1〕。已有参数将其配置为 “ \e[0;32m${ShouldAddASpaceAfterLastEnglishWordPerLine}\e[0;91m ” 。"
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "不应重复出现〔1〕。已有参数将其配置为 “ \e[0;32m${ShouldAddASpaceAfterLastEnglishWordPerLine}${ColorOfErrorMessage} ” 。"
                 return
             fi
 
@@ -651,7 +657,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             shift
 
             if [ "${ShouldDoubleOriginalLineBreaks}" != '*|未给出|*' ]; then
-                Write-_吴乐川打印针对当前处理的参数的错误信息  "不应重复出现〔1〕。已有参数将其配置为 “ \e[0;32m${ShouldDoubleOriginalLineBreaks}\e[0;91m ” 。"
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "不应重复出现〔1〕。已有参数将其配置为 “ \e[0;32m${ShouldDoubleOriginalLineBreaks}${ColorOfErrorMessage} ” 。"
                 return
             fi
 
@@ -714,13 +720,13 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
     fi
 
     if [ "${ResultReceiverVarName_FullText}" == '*|未给出|*' ] && [ "${ResultReceiverVarName_TextLinesArray}" == '*|未给出|*' ] && [ "${ResultReceiverVarsNamePrefix_PerTextLine}" == '*|未给出|*' ]; then
-        echo -e "\e[0;91m在函数"
-        echo -e "    \e[0;91m“ \e[0;97mConvertTo-吴乐川将文本转换为多行文本_须采用接收器变量\e[0;91m ”"
-        echo -e "\e[0;91m的命令参数表中缺少必要参数。\e[0;0m"
-        echo -e "\e[0;91m以下 3 个参数，至少给出一个。可以同时给出。\e[0;0m"
-        echo -e "    \e[0;91m“ \e[0;97m--用以接收排好版的文本的全文的变量名\e[0;91m ”\e[0;0m"
-        echo -e "    \e[0;91m“ \e[0;97m--用以接收排好版的逐行文本列表的变量名\e[0;91m ”\e[0;0m"
-        echo -e "    \e[0;91m“ \e[0;97m--外界预备好用以接收排好版的逐行文本的一系列变量之名称之公共前缀\e[0;91m ”\e[0;0m"
+        echo -e "${ColorOfErrorMessage}在函数${NoColor}"
+        echo -e "    ${ColorOfErrorMessage}“ ${ColorOfTermInErrorMessage}ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变量${ColorOfErrorMessage} ”${NoColor}"
+        echo -e "${ColorOfErrorMessage}的命令参数表中缺少必要参数。${NoColor}"
+        echo -e "${ColorOfErrorMessage}以下 3 个参数，至少给出一个。可以同时给出。${NoColor}"
+        echo -e "    ${ColorOfErrorMessage}“ ${ColorOfTermInErrorMessage}--用以接收排好版的文本的全文的变量名${ColorOfErrorMessage} ”${NoColor}"
+        echo -e "    ${ColorOfErrorMessage}“ ${ColorOfTermInErrorMessage}--用以接收排好版的逐行文本列表的变量名${ColorOfErrorMessage} ”${NoColor}"
+        echo -e "    ${ColorOfErrorMessage}“ ${ColorOfTermInErrorMessage}--外界预备好用以接收排好版的逐行文本的一系列变量之名称之公共前缀${ColorOfErrorMessage} ”${NoColor}"
         echo -e "另，3 者均不可出现多次。"
         echo
         echo
@@ -759,13 +765,40 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
         ShouldDoubleOriginalLineBreaks='false'
     fi
 
-    if [ ! -z "$ResultReceiverVarsNamePrefix_PerTextLine" ] && [ -z "$CountOfOuterScopePreparedVarsForPerLineText" ]; then
-        echo -e "\e[0;31m在命令参数表中缺少必要参数。\n你已给出 “ \e[0;97m--外界预备好用以接收排好版的逐行文本的一系列变量之名称之公共前缀\e[0;31m ” 。\n此时，必须配合给出 “ \e[0;97m--外界预备好用以接收排好版的逐行文本的一系列变量的总数\e[0;31m （应取正整数） ” 。\e[0;0m"
+
+
+
+
+    function Write-_吴乐川打印错误信息_参数乙须配合参数甲一并给出 {
+        local NameOfJia="$1"
+        local NameOfYi="$2"
+        local ValueOfYi="$3"
+
+        local ColorOfValueHint="\e[0;92m"
+
+        echo  -e  "${ColorOfErrorMessage}在函数${NoColor}"
+        echo  -e  "    ${ColorOfErrorMessage}“ ${ColorOfTermInErrorMessage}ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变量${ColorOfErrorMessage} ”${NoColor}"
+        echo  -e  "${ColorOfErrorMessage}的命令参数表中缺少必要参数。${NoColor}"
+        echo  -e  "${ColorOfErrorMessage}你已给出${NoColor}"
+        echo  -e  "    ${ColorOfErrorMessage}“ ${ColorOfTermInErrorMessage}${NameOfJia}${ColorOfErrorMessage} ”${NoColor}"
+        echo  -e  "${ColorOfErrorMessage}此时，必须配合给出${NoColor}"
+        echo  -e  "    ${ColorOfErrorMessage}“ ${ColorOfTermInErrorMessage}${NameOfYi}${ColorOfErrorMessage} ” （${ColorOfValueHint}${ValueOfYi}${ColorOfErrorMessage}）${NoColor}"
+        echo
+        echo
+    }
+
+    if [ ! -z "$ResultReceiverVarName_TextLinesArray" ] && [ -z "$ResultReceiverVarName_CountOfLines" ]; then
+        Write-_吴乐川打印错误信息_参数乙须配合参数甲一并给出  '--用以接收排好版的逐行文本列表的变量名'  '--用以接收排好版的文本的行数的变量名'  '取值应为某变量名'
         return
     fi
 
     if [ ! -z "$ResultReceiverVarsNamePrefix_PerTextLine" ] && [ -z "$ResultReceiverVarName_CountOfLines" ]; then
-        echo -e "\e[0;31m在命令参数表中缺少必要参数。\n你已给出 “ \e[0;97m--外界预备好用以接收排好版的逐行文本的一系列变量之名称之公共前缀\e[0;31m ” 。\n此时，必须配合给出 “ \e[0;97m--用以接收排好版的文本的行数的变量名\e[0;31m （应为某变量名） ” 。\e[0;0m"
+        Write-_吴乐川打印错误信息_参数乙须配合参数甲一并给出  '--外界预备好用以接收排好版的逐行文本的一系列变量之名称之公共前缀'  '--用以接收排好版的文本的行数的变量名'  '取值应为某变量名'
+        return
+    fi
+
+    if [ ! -z "$ResultReceiverVarsNamePrefix_PerTextLine" ] && [ -z "$CountOfOuterScopePreparedVarsForPerLineText" ]; then
+        Write-_吴乐川打印错误信息_参数乙须配合参数甲一并给出  '--外界预备好用以接收排好版的逐行文本的一系列变量之名称之公共前缀'  '--外界预备好用以接收排好版的逐行文本的一系列变量的总数'  '取值应为正整数'
         return
     fi
 
@@ -796,10 +829,8 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
 
 
-    # local LINE_BREAK="\\$(echo -n n)"
+    # local LINE_BREAK=`echo -en "\n"`
     local LINE_BREAK="\n"
-    local _IFS_BACKUP_="$IFS"
-    IFS=''
 
 
 
@@ -863,7 +894,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
         if [ "$Char" == $LINE_BREAK ] || [ "$Char" == ' ' ] || [ "$TemporaryWordIsHanCharacter" == 'true' ]; then
             if [[ "$TemporaryWord" =~ [^\s] ]]; then
-                read -r TemporaryWord <<< $TemporaryWord  # 掐头去尾。等效于其他编程语言的 trim() 。
+                read  -r  TemporaryWord <<< $TemporaryWord  # 掐头去尾。等效于其他编程语言的 trim() 。
                 WordIndex=$((WordIndex+1));
                 # if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： 第 ${WordIndex} 词： \e[0;91m'\e[0;33m${TemporaryWord}\e[0;91m'\e[0;0m"; fi
                 WordList+=( "$TemporaryWord" )
@@ -887,7 +918,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
     if [ ! -z "$TemporaryWord" ]; then
         if [[ "$TemporaryWord" =~ [^\s] ]]; then
-            read -r TemporaryWord <<< $TemporaryWord  # 掐头去尾。等效于其他编程语言的 trim() 。
+            read  -r  TemporaryWord <<< $TemporaryWord  # 掐头去尾。等效于其他编程语言的 trim() 。
             WordIndex=$((WordIndex+1));
             # if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： 第 ${WordIndex} 词： \e[0;91m'\e[0;33m${TemporaryWord}\e[0;91m'\e[0;0m"; fi
             WordList+=( "$TemporaryWord" )
@@ -955,13 +986,13 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
         local _CountOfLinesSoFar=$1
         local _TextOfInvolvedLine="$2"
 
-        echo  -e  "\e[0;33m〔警告〕： "
-        echo  -e  "    \e[0;33m外界为函数 “ \e[0;97mConvertTo-吴乐川将文本转换为多行文本_须采用接收器变量\e[0;33m ” 准备的\e[0;0m"
-        echo  -e  "    \e[0;33m用以接收排好版的逐行文本的系列变量的数目不够。\e[0;0m"
-        echo  -e  "    \e[0;33m外界准备了 \e[0;96m${CountOfOuterScopePreparedVarsForPerLineText}\e[0;33m 个变量；目前产生的文本是第 \e[0;91m${_CountOfLinesSoFar}\e[0;33m 行。"
-        echo  -e  "    \e[0;33m所涉行之全文：\e[0;91m'\e[0;97m${_TextOfInvolvedLine}\e[0;91m'\e[0;33m。\e[0;0m"
-        echo  -e  "    \e[0;33m故已经产生了一个全局变量，名为“ \e[0;97m${ResultReceiverVarsNamePrefix_PerTextLine}${_CountOfLinesSoFar}\e[0;33m ”，这可能已经造成 “ 变量污染 ”。\e[0;0m"
-        echo  -e  "    \e[0;33m接下来仍可能产生一个或一系列全局变量，继续造成 “ 变量污染 ”。\e[0;0m"
+        echo  -e  "${ColorOfWarningMessage}〔警告〕： ${NoColor}"
+        echo  -e  "    ${ColorOfWarningMessage}外界为函数 “ ${ColorOfTermWarningMessage}ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变量${ColorOfWarningMessage} ” 准备的${NoColor}"
+        echo  -e  "    ${ColorOfWarningMessage}用以接收排好版的逐行文本的系列变量的数目不够。${NoColor}"
+        echo  -e  "    ${ColorOfWarningMessage}外界准备了 \e[0;96m${CountOfOuterScopePreparedVarsForPerLineText}${ColorOfWarningMessage} 个变量；目前产生的文本是第 \e[0;91m${_CountOfLinesSoFar}${ColorOfWarningMessage} 行。${NoColor}"
+        echo  -e  "    ${ColorOfWarningMessage}所涉行之全文：\e[0;91m'${ColorOfTermWarningMessage}${_TextOfInvolvedLine}\e[0;91m'${ColorOfWarningMessage}。${NoColor}"
+        echo  -e  "    ${ColorOfWarningMessage}故已经产生了一个全局变量，名为“ ${ColorOfTermWarningMessage}${ResultReceiverVarsNamePrefix_PerTextLine}${_CountOfLinesSoFar}${ColorOfWarningMessage} ”，这可能已经造成 “ 变量污染 ”。${NoColor}"
+        echo  -e  "    ${ColorOfWarningMessage}接下来仍可能产生一个或一系列全局变量，继续造成 “ 变量污染 ”。${NoColor}"
         echo
     }
 
@@ -979,13 +1010,6 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             # ────────────────────────────────────────────────────────────────────────────────
 
             ProcessingWord="${WordList[$IndexOfProcessingWord]}"
-
-            # if [ "$(Assert-吴乐川判断排版时该字词之前不宜换行_直接回显结论  "$ProcessingWord")" == 'true' ]; then
-            #     ShouldNotBreakLineBeforeProcessingWord='true'
-            # else
-            #     ShouldNotBreakLineBeforeProcessingWord='false'
-            # fi
-
             Assert-吴乐川判断排版时该字词之前不宜换行_须采用接收器变量  ShouldNotBreakLineBeforeProcessingWord  "$ProcessingWord"
 
             # if [ $SHOULD_DEBUG -eq 1 ]; then
@@ -1010,13 +1034,6 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
             if [ $IndexOfProcessingWord -lt $CountOfWords ]; then
                 NextWord="${WordList[$IndexOfProcessingWord]}"
-
-                # if [ "$(Assert-吴乐川判断排版时该字词之前不宜换行_直接回显结论  "$NextWord")" == 'true' ]; then
-                #     ShouldNotBreakLineBeforeNextWord='true'
-                # else
-                #     ShouldNotBreakLineBeforeNextWord='false'
-                # fi
-
                 Assert-吴乐川判断排版时该字词之前不宜换行_须采用接收器变量  ShouldNotBreakLineBeforeNextWord  "$NextWord"
             fi
 
@@ -1029,7 +1046,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             # ────────────────────────────────────────────────────────────────────────────────
 
             if [ "$ProcessingWord" == $LINE_BREAK ]; then
-                # if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： \e[0;91m~~ 遇到换行符 ~~。\e[0;0m"; fi
+                # if [ $SHOULD_DEBUG -eq 0 ]; then echo  -e  "〔调试〕： \e[0;91m~~ 遇到换行符 ~~。\e[0;0m"; fi
                 LineEndedBecauseOfLineBreakSign='true'
             else
                 LineEndedBecauseOfLineBreakSign='false'
@@ -1040,7 +1057,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
                     ProcessingWord=''
                     LineEndedBecauseOfLineBreakSign='false'
                 else
-                    # if [ $SHOULD_DEBUG -eq 1 ]; then echo  -e  "〔调试〕： \e[0;91m~~ 遇到的该换行符确实应换行。 ~~。\e[0;0m"; fi
+                    # if [ $SHOULD_DEBUG -eq 0 ]; then echo  -e  "〔调试〕：     \e[0;91m~~ 遇到的该换行符确实应换行。 ~~。\e[0;0m"; fi
                     break
                 fi
             fi
@@ -1051,17 +1068,11 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
             # 为统计做准备。
             # ────────────────────────────────────────────────────────────────────────────────
 
-            # WidthOfProcessingWord=`Get-吴乐川求一行文本视觉宽度等效英语字母数_直接回显结论  "$ProcessingWord"`
-
             Get-吴乐川求一行文本视觉宽度等效英语字母数_须采用接收器变量  WidthOfProcessingWord  "$ProcessingWord"
 
             ProcessingWordIsHanCharacter='false'
 
             if [ ${#ProcessingWord} -eq 1 ]; then
-                # if [ "`Assert-吴乐川判断字符系中日韩文字_直接回显结论  "$ProcessingWord"`" == 'true' ]; then
-                #     ProcessingWordIsHanCharacter='true'
-                # fi
-
                 Assert-吴乐川判断字符系中日韩文字_须采用接收器变量  ProcessingWordIsHanCharacter  "$ProcessingWord"
             fi
 
@@ -1086,8 +1097,6 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
                 WidthOfProcessingLineIfAddOneMoreOrTwoWords=$((WidthOfProcessingLine+WidthOfProcessingWord))
 
                 if [ "$ShouldNotBreakLineBeforeNextWord" == 'true' ]; then
-                    # WidthOfNextWord=`Get-吴乐川求一行文本视觉宽度等效英语字母数_直接回显结论  "$NextWord"`
-
                     Get-吴乐川求一行文本视觉宽度等效英语字母数_须采用接收器变量  WidthOfNextWord  "$NextWord"
 
                     WidthOfProcessingLineIfAddOneMoreOrTwoWords=$((WidthOfProcessingLineIfAddOneMoreOrTwoWords+WidthOfNextWord))
@@ -1112,8 +1121,7 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
 
 
 
-        read -r TextsOfProcessingLine <<< $TextsOfProcessingLine  # 掐头去尾。等效于其他编程语言的 trim() 。
-        # TextsOfProcessingLine=$(echo    $TextsOfProcessingLine) # 掐头去尾。等效于其他编程语言的 trim() 。
+        read  -r  TextsOfProcessingLine <<< $TextsOfProcessingLine  # 掐头去尾。等效于其他编程语言的 trim() 。
 
         if [ "$LastWordWasHanCharacter" == 'false' ] && [ "$ShouldAddASpaceAfterLastEnglishWordPerLine" == 'true' ]; then
             TextsOfProcessingLine+=' '
@@ -1196,10 +1204,4 @@ function ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变
     if [ ! -z "${ResultReceiverVarName_CountOfLines}" ]; then
         eval  "$ResultReceiverVarName_CountOfLines=$CountOfLines"
     fi
-
-
-
-
-
-    IFS="$_IFS_BACKUP_"
 }

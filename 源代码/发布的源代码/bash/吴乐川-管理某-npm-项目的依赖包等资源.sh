@@ -946,19 +946,19 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
 
 
-        read _RestPartOfProcessingPackageConfig <<< "${_ProcessingPackageConfig}" # 可截去剩余部分的首尾空白。
+        read  -r  _RestPartOfProcessingPackageConfig <<< "${_ProcessingPackageConfig}" # 可截去剩余部分的首尾空白。
 
         _ProcessingPackageName="${_RestPartOfProcessingPackageConfig%%${PackageConfigContentSeparator}*}"
 
-        read _RestPartOfProcessingPackageConfig <<< "${_RestPartOfProcessingPackageConfig:${#_ProcessingPackageName}+${#PackageConfigContentSeparator}}" # 可截去剩余部分的首尾空白。
+        read  -r  _RestPartOfProcessingPackageConfig <<< "${_RestPartOfProcessingPackageConfig:${#_ProcessingPackageName}+${#PackageConfigContentSeparator}}" # 可截去剩余部分的首尾空白。
 
         _ProcessingPackageVerionConfig="${_RestPartOfProcessingPackageConfig%%${PackageConfigContentSeparator}*}"
 
-        read _RestPartOfProcessingPackageConfig <<< "${_RestPartOfProcessingPackageConfig:${#_ProcessingPackageVerionConfig}+${#PackageConfigContentSeparator}}" # 可截去剩余部分的首尾空白。
+        read  -r  _RestPartOfProcessingPackageConfig <<< "${_RestPartOfProcessingPackageConfig:${#_ProcessingPackageVerionConfig}+${#PackageConfigContentSeparator}}" # 可截去剩余部分的首尾空白。
 
-        read _ProcessingPackageName             <<< "${_ProcessingPackageName}"             # 可截去【包名】的首尾空白。
-        read _ProcessingPackageVerionConfig     <<< "${_ProcessingPackageVerionConfig}"     # 可截去【版本配置】的首尾空白。
-        read _ProcessingPackageVerionLockReason <<< "${_RestPartOfProcessingPackageConfig}" # 可截去【版本设限之原因】的首尾空白。
+        read  -r  _ProcessingPackageName             <<< "${_ProcessingPackageName}"             # 可截去【包名】的首尾空白。
+        read  -r  _ProcessingPackageVerionConfig     <<< "${_ProcessingPackageVerionConfig}"     # 可截去【版本配置】的首尾空白。
+        read  -r  _ProcessingPackageVerionLockReason <<< "${_RestPartOfProcessingPackageConfig}" # 可截去【版本设限之原因】的首尾空白。
 
 
 
@@ -1279,29 +1279,23 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             done
         fi
 
-        # local _IFS_BACKUP_="$IFS"
-        # IFS=''
-
-        # echo -e "'${_ProcessingPackageVerionLockReason}'"
-
         ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变量 \
             --单行等效汉字字数上限 $((_DescriptionContentLineMaxHanCharsCount)) \
             --用以接收排好版的逐行文本列表的变量名                         _DescriptionContentPerLineTextsArray \
             --用以接收排好版的文本的行数的变量名                           _DescriptionContentLinesCount \
             --外界预备好用以接收排好版的逐行文本的一系列变量之名称之公共前缀  $_DescriptionContentPerLineTextVarsNamePrefix \
             --外界预备好用以接收排好版的逐行文本的一系列变量的总数           $_DescriptionContentPerLineTextVarsCount \
+            --原文本中的每个换行符在产生的内容中应改作两个换行符 true \
             "${_ProcessingPackageVerionLockReason}"
-
-        # IFS="$_IFS_BACKUP_"
 
 
 
         if [ ! -z "$_DescriptionContentLinesCount" ]; then
-            for ((_DescriptionContentLineLoopIndex=1; _DescriptionContentLineLoopIndex<=$_DescriptionContentLinesCount; _DescriptionContentLineLoopIndex++)); do
+            for ((_DescriptionContentLineLoopIndex=0; _DescriptionContentLineLoopIndex<$_DescriptionContentLinesCount; _DescriptionContentLineLoopIndex++)); do
                 if [ "$_ShouldUseArrayForReceiveingFormattedTexts" == 'true' ]; then
-                    _DescriptionContentProcessingLineText=${_DescriptionContentPerLineTextsArray[$_DescriptionContentLineLoopIndex]}
+                    _DescriptionContentProcessingLineText=${_DescriptionContentPerLineTextsArray[${_DescriptionContentLineLoopIndex}]}
                 else
-                    eval "_DescriptionContentProcessingLineText=\"\$${_DescriptionContentPerLineTextVarsNamePrefix}${_DescriptionContentLineLoopIndex}\""
+                    eval "_DescriptionContentProcessingLineText=\"\$${_DescriptionContentPerLineTextVarsNamePrefix}$((_DescriptionContentLineLoopIndex+1))\""
                 fi
 
 
