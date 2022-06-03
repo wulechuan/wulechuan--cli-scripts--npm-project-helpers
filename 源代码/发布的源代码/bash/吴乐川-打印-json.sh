@@ -121,7 +121,7 @@ function Write-吴乐川打印_JSON_值_文本型 {
 
     value="$1"
 
-    echo -en "\"\e[0;91m${value}\e[0;0m\""
+    echo -en "\"\e[0;96m${value}\e[0;0m\""
 
     if [ ! $isValueOfLastKey ]; then
         echo -n ','
@@ -152,5 +152,5 @@ function Write-吴乐川打印_JSON_注释_并换行 {
         done
     fi
 
-    echo -e "\e[91m${comment}\e[0;0m"
+    echo -e "\e[0;91m${comment}\e[0;0m"
 }
