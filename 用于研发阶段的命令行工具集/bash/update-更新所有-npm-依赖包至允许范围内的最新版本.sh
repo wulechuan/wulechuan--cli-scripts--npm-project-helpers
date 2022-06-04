@@ -28,11 +28,11 @@ function 完整流程  {
     local ShouldRemovePackageLockJSONFirst
     local ShouldDryRun
 
-    #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
-        "--remove-node-modules-first    | ShouldRemoveNodeModulesFirst     | 标准类型_布尔 | ${BY_DEFAULT__SHOULD_REMOVE_NODE_MODULES_FIRST}"
-        "--remove-packa-lock-json-first | ShouldRemovePackageLockJSONFirst | 标准类型_布尔 | ${BY_DEFAULT__SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST}"
-        "--dry-run                      | ShouldDryRun                     | 标准类型_布尔 | ${BY_DEFAULT__SHOULD_DRY_RUN}"
+        #  命令行参数名                                         | 变量名                            | 取值之类型    | 默认值
+        "--在安装诸依赖包之前应先删除旧有的_node_modules_文件夹     | ShouldRemoveNodeModulesFirst     | 标准类型_布尔 | ${BY_DEFAULT__SHOULD_REMOVE_NODE_MODULES_FIRST}"
+        "--在安装诸依赖包之前应先删除旧有的_package-lock点json_文件 | ShouldRemovePackageLockJSONFirst | 标准类型_布尔 | ${BY_DEFAULT__SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST}"
+        "--应仅作仿真演练                                       | ShouldDryRun                     | 标准类型_布尔 | ${BY_DEFAULT__SHOULD_DRY_RUN}"
     )
 
     Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
@@ -48,8 +48,8 @@ function 完整流程  {
     #  2) 按需删除 package-lock.json 文件。
     # ───────────────────────────────────────────────────────────────
 
-    Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_modules       --dry-run $ShouldDryRun  --should-run-this-task $ShouldRemoveNodeModulesFirst
-    Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_package_lock_json  --dry-run $ShouldDryRun  --should-run-this-task $ShouldRemovePackageLockJSONFirst
+    Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_modules       --应仅作仿真演练 $ShouldDryRun  --should-run-this-task $ShouldRemoveNodeModulesFirst
+    Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_package_lock_json  --应仅作仿真演练 $ShouldDryRun  --should-run-this-task $ShouldRemovePackageLockJSONFirst
 
 
 
@@ -67,14 +67,14 @@ function 完整流程  {
     # 其将在此处插入当前 npm 项目的【产品级】、【可自由采取其版本】的依赖包的列表。    另，切勿改动该行。该行之部分文字是供 JavaScript 程序识别的特殊记号。
 
     Update-吴乐川更新当前_npm_项目的某批依赖包 \
-        --这批依赖包之依赖类别='本产品拟囊括这些软件之整体或部分' \
-        --某依赖包之版本配置='@wulechuan/text-basic-typography   |::|   null' \
-        --某依赖包之版本配置='chalk                              |::|   null' \
-        --某依赖包之版本配置='fs-extra                           |::|   null' \
-        --某依赖包之版本配置='jsonc-parser                       |::|   null' \
+        --这批依赖包之依赖类别 '本产品拟囊括这些软件之整体或部分' \
+        --某依赖包之版本配置 '@wulechuan/text-basic-typography   |::|   null' \
+        --某依赖包之版本配置 'chalk                              |::|   null' \
+        --某依赖包之版本配置 'fs-extra                           |::|   null' \
+        --某依赖包之版本配置 'jsonc-parser                       |::|   null' \
         --应仅作仿真演练 "$ShouldDryRun"
 
-
+    # echo  -e  "Update-吴乐川更新当前_npm_项目的某批依赖包的运行结果代码： \e[0;91m$?\e[0;0m"
 
 
 
@@ -95,6 +95,7 @@ function 完整流程  {
         --某依赖包之版本配置='eslint                             |::|   null' \
         --应仅作仿真演练 "$ShouldDryRun"
 
+    # echo  -e  "Update-吴乐川更新当前_npm_项目的某批依赖包的运行结果代码： \e[0;91m$?\e[0;0m"
 
 
 
@@ -107,7 +108,7 @@ function 完整流程  {
     #     例如： Browserslist:caniuse-lite
     # ───────────────────────────────────────────────────────────────
 
-    Write-吴乐川管理某_npm_项目__打印提示语__更新与研发相关的数据库  --dry-run $ShouldDryRun
+    Write-吴乐川管理某_npm_项目__打印提示语__更新与研发相关的数据库  --应仅作仿真演练 $ShouldDryRun
 
     if true; then
 
@@ -139,7 +140,7 @@ function 完整流程  {
 
     fi
 
-    Write-吴乐川管理某_npm_项目__打印提示语__更新与研发相关的数据库  --dry-run $ShouldDryRun  --is-ending
+    Write-吴乐川管理某_npm_项目__打印提示语__更新与研发相关的数据库  --应仅作仿真演练 $ShouldDryRun  --系作为该任务之结束提示语
 
 
 
@@ -151,7 +152,7 @@ function 完整流程  {
     #  5) 其他交代。
     # ───────────────────────────────────────────────────────────────
 
-    Write-吴乐川管理某_npm_项目__打印提示语__其他交代  --dry-run $ShouldDryRun
+    Write-吴乐川管理某_npm_项目__打印提示语__其他交代  --应仅作仿真演练 $ShouldDryRun
 
     if false; then
 
@@ -188,7 +189,7 @@ function 完整流程  {
 
     fi
 
-    Write-吴乐川管理某_npm_项目__打印提示语__其他交代  --dry-run $ShouldDryRun  --is-ending
+    Write-吴乐川管理某_npm_项目__打印提示语__其他交代  --应仅作仿真演练 $ShouldDryRun  --系作为该任务之结束提示语
 }
 
 

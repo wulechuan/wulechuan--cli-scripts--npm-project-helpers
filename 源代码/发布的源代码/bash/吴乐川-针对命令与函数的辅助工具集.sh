@@ -12,9 +12,9 @@ function Read-吴乐川读取并处理某函数的参数表 {
     #     local NameOfThisFunction='某某函数'
     #
     #     local ArgumentConfigsArray=(
-    #         '--dry-run | ShouldDryRun | 标准类型_布尔   | true'
-    #         '--n1      | Number1      | 标准类型_整数   | -3'
-    #         '--n2      | N2           | 标准类型_正整数 | 19'
+    #         '--应仅作仿真演练 | ShouldDryRun | 标准类型_布尔   | true'
+    #         '--n1           | Number1      | 标准类型_整数   | -3'
+    #         '--n2           | N2           | 标准类型_正整数 | 19'
     #     )
     #
     # ArgumentConfigsArray 的成员的统一结构为 “ 命令行参数名 | 变量名 | 类型 | 默认值 ”。

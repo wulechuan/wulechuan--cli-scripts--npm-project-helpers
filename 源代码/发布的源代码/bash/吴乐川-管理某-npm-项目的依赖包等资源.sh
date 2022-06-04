@@ -65,7 +65,7 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_
     #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
         "--should-run-this-task | ShouldRunThisTask | 标准类型_布尔 | false"
-        "--dry-run              | ShouldDryRun      | 标准类型_布尔 | false"
+        "--应仅作仿真演练              | ShouldDryRun      | 标准类型_布尔 | false"
     )
 
     Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
@@ -134,7 +134,7 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_packa
     #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
         "--should-run-this-task | ShouldRunThisTask | 标准类型_布尔 | false"
-        "--dry-run              | ShouldDryRun      | 标准类型_布尔 | false"
+        "--应仅作仿真演练              | ShouldDryRun      | 标准类型_布尔 | false"
     )
 
     Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
@@ -195,8 +195,8 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
 
     #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
-        "--is-ending | IsEnding     | 标准类型_布尔 | false"
-        "--dry-run   | ShouldDryRun | 标准类型_布尔 | false"
+        "--系作为该任务之结束提示语 | IsEnding     | 标准类型_布尔 | false"
+        "--应仅作仿真演练   | ShouldDryRun | 标准类型_布尔 | false"
     )
 
     Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
@@ -234,8 +234,8 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
 
     #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
-        "--is-ending | IsEnding     | 标准类型_布尔 | false"
-        "--dry-run   | ShouldDryRun | 标准类型_布尔 | false"
+        "--系作为该任务之结束提示语 | IsEnding     | 标准类型_布尔 | false"
+        "--应仅作仿真演练   | ShouldDryRun | 标准类型_布尔 | false"
     )
 
     Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
@@ -273,8 +273,8 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
 
     #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
-        "--is-ending | IsEnding     | 标准类型_布尔 | false"
-        "--dry-run   | ShouldDryRun | 标准类型_布尔 | false"
+        "--系作为该任务之结束提示语 | IsEnding     | 标准类型_布尔 | false"
+        "--应仅作仿真演练   | ShouldDryRun | 标准类型_布尔 | false"
     )
 
     Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
@@ -312,8 +312,8 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
 
     #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
-        "--is-ending | IsEnding     | 标准类型_布尔 | false"
-        "--dry-run   | ShouldDryRun | 标准类型_布尔 | false"
+        "--系作为该任务之结束提示语 | IsEnding     | 标准类型_布尔 | false"
+        "--应仅作仿真演练   | ShouldDryRun | 标准类型_布尔 | false"
     )
 
     Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
@@ -351,8 +351,8 @@ function Write-吴乐川管理某_npm_项目__打印提示语__更新与研发�
 
     #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
-        "--is-ending | IsEnding     | 标准类型_布尔 | false"
-        "--dry-run   | ShouldDryRun | 标准类型_布尔 | false"
+        "--系作为该任务之结束提示语 | IsEnding     | 标准类型_布尔 | false"
+        "--应仅作仿真演练   | ShouldDryRun | 标准类型_布尔 | false"
     )
 
     Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
@@ -390,8 +390,8 @@ function Write-吴乐川管理某_npm_项目__打印提示语__其他交代 {
 
     #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
-        "--is-ending | IsEnding     | 标准类型_布尔 | false"
-        "--dry-run   | ShouldDryRun | 标准类型_布尔 | false"
+        "--系作为该任务之结束提示语 | IsEnding     | 标准类型_布尔 | false"
+        "--应仅作仿真演练   | ShouldDryRun | 标准类型_布尔 | false"
     )
 
     Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
@@ -485,17 +485,17 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
             if [ "$PackageConfigContentSeparator" != 'undefined' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔1〕。'
-                return
+                return 1
             fi
 
             if [[ "$1" =~ ^- ]]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔1〕。'
-                return
+                return 2
             fi
 
             if [ -z "$1" ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔2〕。'
-                return
+                return 2
             fi
 
             _TemporaryArgumentValue="$1"
@@ -506,7 +506,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             if [ "$PackageConfigContentSeparator" != 'undefined' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
                 shift
-                return
+                return 1
             fi
 
             _TemporaryArgumentValue=${1:${#_ProcessingArgumentName}+1}
@@ -514,17 +514,17 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
             if [ "$_TemporaryArgumentValue" == '0' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规。给出的值为 “ \e[0;33m${_TemporaryArgumentValue}\e[0;0m ” 。〔1〕。"
-                return
+                return 3
             elif [ -z "${_TemporaryArgumentValue}" ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔3〕。'
-                return
+                return 2
             fi
         fi
 
         if [ ! -z "$_TemporaryArgumentValue" ]; then
             if [[ "${_TemporaryArgumentValue}" =~ "^[ \n\t]*$" ]]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  "给出值不合规。给出的值为 “ \e[0;33m${_TemporaryArgumentValue}\e[0;0m ” 。〔2〕。"
-                return
+                return 3
             else
                 PackageConfigContentSeparator="${_TemporaryArgumentValue}"
             fi
@@ -541,17 +541,17 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
             if [ "$DependenciesAreOfCateogryOfProduction" != 'undefined' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔1〕。'
-                return
+                return 1
             fi
 
             if [[ "$1" =~ ^- ]]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔1〕。'
-                return
+                return 2
             fi
 
             if [ -z "$1" ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值。〔2〕。'
-                return
+                return 2
             fi
 
             _TemporaryArgumentValue="$1"
@@ -562,7 +562,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             if [ "$DependenciesAreOfCateogryOfProduction" != 'undefined' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
                 shift
-                return
+                return 1
             fi
 
             _TemporaryArgumentValue=${1:${#_ProcessingArgumentName}+1}
@@ -572,7 +572,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
                 _TemporaryArgumentValue='false'
             elif [ -z "${_TemporaryArgumentValue}" ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔3〕。'
-                return
+                return 2
             fi
         fi
 
@@ -587,7 +587,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
                 echo -e "        '本产品仅会在研发阶段借助这些软件'"
                 echo
 
-                return
+                return 3
             fi
         fi
 
@@ -602,7 +602,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
             if [ "$ShouldDryRun" != 'undefined' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  "不应重复出现。〔1〕。已有参数将其配置为 “ \e[0;32m${ShouldDryRun}\e[0;33m ” 。"
-                return
+                return 1
             fi
 
             ShouldDryRun='true'
@@ -619,7 +619,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             if [ "$ShouldDryRun" != 'undefined' ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现。〔2〕。'
                 shift
-                return
+                return 1
             fi
 
             _TemporaryArgumentValue=${1:${#_ProcessingArgumentName}+1}
@@ -629,7 +629,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
                 _TemporaryArgumentValue='false'
             elif [ -z "$_TemporaryArgumentValue" ]; then
                 Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值。〔1〕。'
-                return
+                return 2
             fi
         fi
 
@@ -654,12 +654,12 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
             if [[ "$1" =~ ^- ]]; then
                 Write-_吴乐川打印针对当前处理的依赖包原始配置参数的错误信息  '其后面没有给出值。〔1〕。'
-                return
+                return 2
             fi
 
             if [ -z "$1" ]; then
                 Write-_吴乐川打印针对当前处理的依赖包原始配置参数的错误信息  '其后面没有给出值。〔2〕。'
-                return
+                return 2
             fi
 
             _TemporaryArgumentValue="$1"
@@ -673,7 +673,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
             if [ -z "${_TemporaryArgumentValue}" ]; then
                 Write-_吴乐川打印针对当前处理的依赖包原始配置参数的错误信息  '等号（=）后面没有给出值。〔1〕。'
-                return
+                return 2
             fi
         fi
 
@@ -779,7 +779,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             Write-_吴乐川打印一条红线
             echo
 
-            return
+            return 21
         fi
 
 
@@ -825,7 +825,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
                 Write-_吴乐川打印一条红线
                 echo
 
-                return
+                return 22
             fi
 
             _ProcessingPackageVerionLockReason='~~~ 版本并未设限。故谈不上什么原因。 ~~~'
@@ -940,7 +940,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
     function Write-_吴乐川为方框打印一段水平边线 {
         if [[ ! "$1" =~ ^[1-9][0-9]*$ ]]; then
-            return
+            return 1
         fi
 
         local _temp_looping_index=0
@@ -1201,9 +1201,9 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
 
     if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
-        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为最晚版本  --dry-run $ShouldDryRun
+        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为最晚版本  --应仅作仿真演练 $ShouldDryRun
     else
-        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为最晚版本  --dry-run $ShouldDryRun
+        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为最晚版本  --应仅作仿真演练 $ShouldDryRun
     fi
 
     if [ $PackageGroupA_PackagesCount -eq 0 ]; then
@@ -1256,9 +1256,9 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
 
     if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
-        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为最晚版本  --dry-run $ShouldDryRun  --is-ending
+        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为最晚版本  --应仅作仿真演练 $ShouldDryRun  --系作为该任务之结束提示语
     else
-        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为最晚版本  --dry-run $ShouldDryRun  --is-ending
+        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为最晚版本  --应仅作仿真演练 $ShouldDryRun  --系作为该任务之结束提示语
     fi
 
 
@@ -1274,9 +1274,9 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
 
     if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
-        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为特定版本  --dry-run $ShouldDryRun
+        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为特定版本  --应仅作仿真演练 $ShouldDryRun
     else
-        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为特定版本  --dry-run $ShouldDryRun
+        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为特定版本  --应仅作仿真演练 $ShouldDryRun
     fi
 
     if [ $PackageGroupB_PackagesCount -eq 0 ]; then
@@ -1327,9 +1327,9 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
     fi
 
     if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
-        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为特定版本  --dry-run $ShouldDryRun  --is-ending
+        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为特定版本  --应仅作仿真演练 $ShouldDryRun  --系作为该任务之结束提示语
     else
-        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为特定版本  --dry-run $ShouldDryRun  --is-ending
+        Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为特定版本  --应仅作仿真演练 $ShouldDryRun  --系作为该任务之结束提示语
     fi
 
 

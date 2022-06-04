@@ -33,8 +33,8 @@ function 完整流程  {
     #  2) 按需删除 package-lock.json 文件。
     # ────────────────────────────────────────────────────────────────
 
-    Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_modules       --dry-run $ShouldDryRun  --should-run-this-task $ShouldRemoveNodeModulesFirst
-    Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_package_lock_json  --dry-run $ShouldDryRun  --should-run-this-task $ShouldRemovePackageLockJSONFirst
+    Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_modules       --应仅作仿真演练 $ShouldDryRun  --should-run-this-task $ShouldRemoveNodeModulesFirst
+    Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_package_lock_json  --应仅作仿真演练 $ShouldDryRun  --should-run-this-task $ShouldRemovePackageLockJSONFirst
 
 
 
@@ -48,12 +48,12 @@ function 完整流程  {
     #     顺便提醒，虽然一般而言 latest 版本应恰为最高版本，但并不确保。
     # ────────────────────────────────────────────────────────────────
 
-    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为最晚版本  --dry-run $ShouldDryRun
+    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为最晚版本  --应仅作仿真演练 $ShouldDryRun
 
     # 如果 @wulechuan/cli-scripts--npm-project-helpers 工具集随附的 JavaScript 程序运行如期，
     # 其将在此处插入当前 npm 项目的【产品级】、【可自由采取其版本】的依赖包的列表。    另，切勿改动该行。该行之部分文字是供 JavaScript 程序识别的特殊记号。
 
-    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为最晚版本  --dry-run $ShouldDryRun  --is-ending
+    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为最晚版本  --应仅作仿真演练 $ShouldDryRun  --系作为该任务之结束提示语
 
 
 
@@ -65,12 +65,12 @@ function 完整流程  {
     #  3) 安装依赖包。【产品级】、【乙】类。
     # ────────────────────────────────────────────────────────────────
 
-    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为特定版本  --dry-run $ShouldDryRun
+    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为特定版本  --应仅作仿真演练 $ShouldDryRun
 
     # 如果 @wulechuan/cli-scripts--npm-project-helpers 工具集随附的 JavaScript 程序运行如期，
     # 其将在此处插入当前 npm 项目的【产品级】、【须锁定其版本范围】依赖包的列表。    另，切勿改动该行。该行之部分文字是供 JavaScript 程序识别的特殊记号。
 
-    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为特定版本  --dry-run $ShouldDryRun  --is-ending
+    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为特定版本  --应仅作仿真演练 $ShouldDryRun  --系作为该任务之结束提示语
 
 
 
@@ -84,12 +84,12 @@ function 完整流程  {
     #     顺便提醒，虽然一般而言 latest 版本应恰为最高版本，但并不确保。
     # ────────────────────────────────────────────────────────────────
 
-    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为最晚版本  --dry-run $ShouldDryRun
+    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为最晚版本  --应仅作仿真演练 $ShouldDryRun
 
     # 如果 @wulechuan/cli-scripts--npm-project-helpers 工具集随附的 JavaScript 程序运行如期，
     # 其将在此处插入当前 npm 项目的【研发级】、【可自由采取其版本】依赖包的列表。    另，切勿改动该行。该行之部分文字是供 JavaScript 程序识别的特殊记号。
 
-    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为最晚版本  --dry-run $ShouldDryRun  --is-ending
+    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为最晚版本  --应仅作仿真演练 $ShouldDryRun  --系作为该任务之结束提示语
 
 
 
@@ -101,12 +101,12 @@ function 完整流程  {
     #  3) 安装依赖包。【研发级】、【乙】类。
     # ────────────────────────────────────────────────────────────────
 
-    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为特定版本  --dry-run $ShouldDryRun
+    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为特定版本  --应仅作仿真演练 $ShouldDryRun
 
     # 如果 @wulechuan/cli-scripts--npm-project-helpers 工具集随附的 JavaScript 程序运行如期，
     # 其将在此处插入当前 npm 项目的【研发级】、【须锁定其版本范围】依赖包的列表。    另，切勿改动该行。该行之部分文字是供 JavaScript 程序识别的特殊记号。
 
-    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为特定版本  --dry-run $ShouldDryRun  --is-ending
+    Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为特定版本  --应仅作仿真演练 $ShouldDryRun  --系作为该任务之结束提示语
 
 
 
@@ -120,7 +120,7 @@ function 完整流程  {
     #     例如： Browserslist:caniuse-lite
     # ────────────────────────────────────────────────────────────────
 
-    Write-吴乐川管理某_npm_项目__打印提示语__更新与研发相关的数据库  --dry-run $ShouldDryRun
+    Write-吴乐川管理某_npm_项目__打印提示语__更新与研发相关的数据库  --应仅作仿真演练 $ShouldDryRun
 
     if true; then
 
@@ -152,7 +152,7 @@ function 完整流程  {
 
     fi
 
-    Write-吴乐川管理某_npm_项目__打印提示语__更新与研发相关的数据库  --dry-run $ShouldDryRun  --is-ending
+    Write-吴乐川管理某_npm_项目__打印提示语__更新与研发相关的数据库  --应仅作仿真演练 $ShouldDryRun  --系作为该任务之结束提示语
 
 
 
@@ -164,7 +164,7 @@ function 完整流程  {
     #  5) 其他交代。
     # ────────────────────────────────────────────────────────────────
 
-    Write-吴乐川管理某_npm_项目__打印提示语__其他交代  --dry-run $ShouldDryRun
+    Write-吴乐川管理某_npm_项目__打印提示语__其他交代  --应仅作仿真演练 $ShouldDryRun
 
     if true; then
 
@@ -201,7 +201,7 @@ function 完整流程  {
 
     fi
 
-    Write-吴乐川管理某_npm_项目__打印提示语__其他交代  --dry-run $ShouldDryRun  --is-ending
+    Write-吴乐川管理某_npm_项目__打印提示语__其他交代  --应仅作仿真演练 $ShouldDryRun  --系作为该任务之结束提示语
 }
 
 
@@ -209,6 +209,6 @@ function 完整流程  {
 
 
 完整流程 \
-    --remove-node-modules-first    $SHOULD_REMOVE_NODE_MODULES_FIRST \
-    --remove-packa-lock-json-first $SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST \
-    --dry-run                      $SHOULD_DRY_RUN
+    --在安装诸依赖包之前应先删除旧有的_node_modules_文件夹    $SHOULD_REMOVE_NODE_MODULES_FIRST \
+    --在安装诸依赖包之前应先删除旧有的_package-lock点json_文件 $SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST \
+    --应仅作仿真演练                      $SHOULD_DRY_RUN
