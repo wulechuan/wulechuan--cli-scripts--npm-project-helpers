@@ -409,7 +409,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
     )
 
     Write-_吴乐川管理某_npm_项目__内部通用工具__打印提示语__处理某批依赖包 `
-        -固定格式的文本_第1片段 'npm i   ' `
+        -固定格式的文本_第1片段 'npm i -P' `
         -固定格式的文本_第2片段 "${script:措辞_所谓最晚版本}" `
         -固定格式的文本_第3片段 '产品' `
         -首选颜色 'DarkRed' `
@@ -428,7 +428,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
     )
 
     Write-_吴乐川管理某_npm_项目__内部通用工具__打印提示语__处理某批依赖包 `
-        -固定格式的文本_第1片段 'npm i   ' `
+        -固定格式的文本_第1片段 'npm i -P' `
         -固定格式的文本_第2片段 "${script:措辞_所谓特定版本}" `
         -固定格式的文本_第3片段 '产品' `
         -首选颜色 'DarkRed' `
@@ -925,7 +925,9 @@ function Update-_吴乐川管理某_npm_项目__新装或升级依赖包__内部
         )]
         [switch]$安装之前应先删除旧有的_package_lock_json_文件,
 
-        [int]   $凡版本锁定之条目_其锁版原因单行等效汉字字数上限 # 默认值为 25 。
+        [int]   $凡版本锁定之条目_其锁版原因单行等效汉字字数上限, # 默认值为 25 。
+
+        [string]$NPM安装依赖包时须额外带上的参数序列
     )
 
 
@@ -935,6 +937,23 @@ function Update-_吴乐川管理某_npm_项目__新装或升级依赖包__内部
 
         Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_modules       -应仅作仿真演练:$应仅作仿真演练  -应执行该步骤:$安装之前应先删除旧有的_node_modules_文件夹
         Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_package_lock_json  -应仅作仿真演练:$应仅作仿真演练  -应执行该步骤:$安装之前应先删除旧有的_package_lock_json_文件
+
+        if ("$NPM安装依赖包时须额外带上的参数序列") {
+            [string[]]${private:NPM安装依赖包时须带上的额外参数列表} = @()
+
+            ("$NPM安装依赖包时须额外带上的参数序列" -split ' ', 0).ForEach{
+                if ("$_" -NotIn @(
+                    '-P'
+                    '--save-prod'
+                    '-D'
+                    '--save-dev'
+                )) {
+                    ${private:NPM安装依赖包时须带上的额外参数列表} += @( "$_" )
+                }
+            }
+
+            $NPM安装依赖包时须额外带上的参数序列 = (${private:NPM安装依赖包时须带上的额外参数列表} -join ' ')
+        }
     }
 
 
@@ -1047,17 +1066,25 @@ function Update-_吴乐川管理某_npm_项目__新装或升级依赖包__内部
             } else {
 
                 [string]  ${private:命令行甲_主命令名} = 'npm'
-                [string]  ${private:命令行甲_次命令名} = 'i'
+                [string]  ${private:命令行甲_次命令名} = 'install'
                 [string[]]${private:命令行甲_参数表} = @()
 
-                [string]  ${private:命令行甲之文本呈现形式_首部} = 'npm  i'
+                [string]  ${private:命令行甲之文本呈现形式_首部} = 'npm  install'
 
                 if (${private:这批依赖包为产品级依赖包}) {
-                    ${private:命令行甲之文本呈现形式_首部} += ' `'
-                } else {
-                    ${private:命令行甲之文本呈现形式_首部} += '  -D `'
-                    ${private:命令行甲_参数表} += @( '-D' )
+                    ${private:命令行甲之文本呈现形式_首部} += '  --save-prod'
+                    ${private:命令行甲_参数表} += @( '--save-prod' )
+                } else {    
+                    ${private:命令行甲之文本呈现形式_首部} += '  --save-dev'
+                    ${private:命令行甲_参数表} += @( '--save-dev' )
                 }
+
+                if ("$NPM安装依赖包时须额外带上的参数序列") {
+                    ${private:命令行甲之文本呈现形式_首部} += "  $NPM安装依赖包时须额外带上的参数序列"
+                    ${private:命令行甲_参数表} += @( "$NPM安装依赖包时须额外带上的参数序列" )
+                }
+
+                ${private:命令行甲之文本呈现形式_首部} += ' `'
 
                 Write-Host  "`e[0;92m${private:命令行甲之文本呈现形式_首部}`e[0;0m"
 
@@ -1110,9 +1137,13 @@ function Update-_吴乐川管理某_npm_项目__新装或升级依赖包__内部
                 Write-Host
 
                 if ($应仅作仿真演练) {
-                    Write-Host  -F 'DarkYellow'  '   【仿真演练】'
-                    Write-Host  -F 'White'       "    ${private:命令行甲_主命令名}  ${private:命令行甲_次命令名}  ${private:命令行甲_参数表}"
-                } else {
+                    Write-Host  -NoNewline  -F 'DarkYellow'  "   【仿真演练】`n    "
+                }
+
+                Write-Host  -F 'White'       "${private:命令行甲_主命令名}  ${private:命令行甲_次命令名}  ${private:命令行甲_参数表}"
+
+                if (-not $应仅作仿真演练) {
+                    Write-Host
                     & ${private:命令行甲_主命令名} ${private:命令行甲_次命令名} ${private:命令行甲_参数表}
                 }
 
@@ -1150,17 +1181,25 @@ function Update-_吴乐川管理某_npm_项目__新装或升级依赖包__内部
             } else {
 
                 [string]  ${private:命令行乙_主命令名} = 'npm'
-                [string]  ${private:命令行乙_次命令名} = 'i'
+                [string]  ${private:命令行乙_次命令名} = 'install'
                 [string[]]${private:命令行乙_参数表} = @()
 
-                [string]  ${private:命令行乙之文本呈现形式_首部} = 'npm  i'
+                [string]  ${private:命令行乙之文本呈现形式_首部} = 'npm  install'
 
                 if (${private:这批依赖包为产品级依赖包}) {
-                    ${private:命令行乙之文本呈现形式_首部} += ' `'
+                    ${private:命令行乙之文本呈现形式_首部} += '  --save-prod'
+                    ${private:命令行乙_参数表} += @( '--save-prod' )
                 } else {
-                    ${private:命令行乙之文本呈现形式_首部} += '  -D `'
-                    ${private:命令行乙_参数表} += @( '-D' )
+                    ${private:命令行乙之文本呈现形式_首部} += '  --save-dev'
+                    ${private:命令行乙_参数表} += @( '--save-dev' )
                 }
+
+                if ("$NPM安装依赖包时须额外带上的参数序列") {
+                    ${private:命令行乙之文本呈现形式_首部} += "  $NPM安装依赖包时须额外带上的参数序列"
+                    ${private:命令行乙_参数表} += @( "$NPM安装依赖包时须额外带上的参数序列" )
+                }
+
+                ${private:命令行乙之文本呈现形式_首部} += ' `'
 
                 Write-Host  "`e[0;92m${private:命令行乙之文本呈现形式_首部}`e[0;0m"
 
@@ -1302,9 +1341,13 @@ function Update-_吴乐川管理某_npm_项目__新装或升级依赖包__内部
                 Write-Host
 
                 if ($应仅作仿真演练) {
-                    Write-Host  -F 'DarkYellow'  '   【仿真演练】'
-                    Write-Host  -F 'White'       "    ${private:命令行乙_主命令名}  ${private:命令行乙_次命令名}  ${private:命令行乙_参数表}"
-                } else {
+                    Write-Host  -NoNewline  -F 'DarkYellow'  "   【仿真演练】`n    "
+                }
+
+                Write-Host  -F 'White'       "${private:命令行乙_主命令名}  ${private:命令行乙_次命令名}  ${private:命令行乙_参数表}"
+
+                if (-not $应仅作仿真演练) {
+                    Write-Host
                     & ${private:命令行乙_主命令名} ${private:命令行乙_次命令名} ${private:命令行乙_参数表}
                 }
 
@@ -1360,7 +1403,9 @@ function Update-吴乐川更新当前_npm_项目的所有批次的依赖包 {
             Mandatory = $false,
             ValueFromPipeline = $false
         )]
-        [int]   $凡版本锁定之条目_其锁版原因单行等效汉字字数上限 # 默认值为 25 。
+        [int]   $凡版本锁定之条目_其锁版原因单行等效汉字字数上限, # 默认值为 25 。
+
+        [string]$NPM安装依赖包时须额外带上的参数序列
     )
 
 
@@ -1442,7 +1487,8 @@ function Update-吴乐川更新当前_npm_项目的所有批次的依赖包 {
             -应仅作仿真演练:$应仅作仿真演练 `
             -安装之前应先删除旧有的_node_modules_文件夹:$安装之前应先删除旧有的_node_modules_文件夹 `
             -安装之前应先删除旧有的_package_lock_json_文件:$安装之前应先删除旧有的_package_lock_json_文件 `
-            -凡版本锁定之条目_其锁版原因单行等效汉字字数上限 $凡版本锁定之条目_其锁版原因单行等效汉字字数上限
+            -凡版本锁定之条目_其锁版原因单行等效汉字字数上限 $凡版本锁定之条目_其锁版原因单行等效汉字字数上限 `
+            -NPM安装依赖包时须额外带上的参数序列 "$NPM安装依赖包时须额外带上的参数序列"
     }
 }
 

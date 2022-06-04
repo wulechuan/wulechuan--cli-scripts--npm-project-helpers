@@ -33,8 +33,8 @@ function 完整流程  {
     #  2) 按需删除 package-lock.json 文件。
     # ────────────────────────────────────────────────────────────────
 
-    Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_modules       --应仅作仿真演练 $ShouldDryRun  --should-run-this-task $ShouldRemoveNodeModulesFirst
-    Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_package_lock_json  --应仅作仿真演练 $ShouldDryRun  --should-run-this-task $ShouldRemovePackageLockJSONFirst
+    Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_modules       --应仅作仿真演练 $ShouldDryRun  --确应运行该任务 $ShouldRemoveNodeModulesFirst
+    Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_package_lock_json  --应仅作仿真演练 $ShouldDryRun  --确应运行该任务 $ShouldRemovePackageLockJSONFirst
 
 
 

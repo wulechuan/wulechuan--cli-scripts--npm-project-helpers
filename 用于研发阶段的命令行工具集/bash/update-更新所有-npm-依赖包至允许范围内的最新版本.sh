@@ -33,6 +33,7 @@ function 完整流程  {
         "--在安装诸依赖包之前应先删除旧有的_node_modules_文件夹     | ShouldRemoveNodeModulesFirst     | 标准类型_布尔 | ${BY_DEFAULT__SHOULD_REMOVE_NODE_MODULES_FIRST}"
         "--在安装诸依赖包之前应先删除旧有的_package-lock点json_文件 | ShouldRemovePackageLockJSONFirst | 标准类型_布尔 | ${BY_DEFAULT__SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST}"
         "--应仅作仿真演练                                       | ShouldDryRun                     | 标准类型_布尔 | ${BY_DEFAULT__SHOULD_DRY_RUN}"
+        "--npm-args                                           | NpmArguments                     |             | '--foreground-scripts'"
     )
 
     local LastTaskReturnCode
@@ -51,10 +52,10 @@ function 完整流程  {
     #  2) 按需删除 package-lock.json 文件。
     # ───────────────────────────────────────────────────────────────
 
-    Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_modules       --应仅作仿真演练 $ShouldDryRun  --should-run-this-task $ShouldRemoveNodeModulesFirst
+    Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_modules       --应仅作仿真演练 $ShouldDryRun  --确应运行该任务 $ShouldRemoveNodeModulesFirst
     LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi
 
-    Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_package_lock_json  --应仅作仿真演练 $ShouldDryRun  --should-run-this-task $ShouldRemovePackageLockJSONFirst
+    Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_package_lock_json  --应仅作仿真演练 $ShouldDryRun  --确应运行该任务 $ShouldRemovePackageLockJSONFirst
     LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi
 
 
@@ -78,6 +79,7 @@ function 完整流程  {
         --某依赖包之版本配置 'chalk                              |::|   null' \
         --某依赖包之版本配置 'fs-extra                           |::|   null' \
         --某依赖包之版本配置 'jsonc-parser                       |::|   null' \
+        --NPM安装依赖包时须额外带上的参数序列 "$NpmArguments" \
         --应仅作仿真演练 "$ShouldDryRun"
 
     LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi
@@ -99,6 +101,7 @@ function 完整流程  {
         --这批依赖包之依赖类别='本产品仅会在研发阶段借助这些软件' \
         --某依赖包之版本配置='@wulechuan/cli-scripts--git-push   |::|   null' \
         --某依赖包之版本配置='eslint                             |::|   null' \
+        --NPM安装依赖包时须额外带上的参数序列 "$NpmArguments" \
         --应仅作仿真演练 "$ShouldDryRun"
 
     LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi

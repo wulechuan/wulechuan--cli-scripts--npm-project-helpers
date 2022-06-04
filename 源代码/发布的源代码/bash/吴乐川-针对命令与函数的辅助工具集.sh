@@ -140,7 +140,12 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
 
     local _OriginalArgumentsCount=$#
-    # echo  -e  "_OriginalArgumentsCount=${_OriginalArgumentsCount}\n"
+
+    if [ $ShouldDebug -eq 1 ]; then
+        echo
+        echo  -e  "〔调试〕： \e[0;92m收到的参数总数（ 不含 \e[0;96m--should-debug\e[0;92m ）： \e[0;91m${_OriginalArgumentsCount}\e[0;0m"
+        echo
+    fi
 
     local _ProcessedArgumentsCount=0
 
@@ -166,7 +171,12 @@ function Read-吴乐川读取并处理某函数的参数表 {
     local _ArgumentConfigsLoopIndex=0
 
     local _ArgumentConfigsCount=${#ArgumentConfigsArray[@]}
-    # echo  -e  "_ArgumentConfigsCount=${_ArgumentConfigsCount}\n"
+
+    if [ $ShouldDebug -eq 1 ]; then
+        echo
+        echo  -e  "〔调试〕： \e[0;92m探测到外界准备的参数配置条数： \e[0;91m${_ArgumentConfigsCount}\e[0;0m"
+        echo
+    fi
 
     local _ProcessingArgumentConfig
 
@@ -539,13 +549,10 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
     if [ $ShouldDebug -eq 1 ]; then
         echo
-        echo
-        echo
         echo      '〔调试〕： ────────────────────────────────────────────────────────────────'
         echo  -e  "〔调试〕： \e[0;32m函数${NoColor}"
         echo  -e  "〔调试〕：     \e[0;32m“ ${ColorOfTermInErrorMessage}${NameOfThisFunction}\e[0;32m ”${NoColor}"
-        echo  -e  "〔调试〕： \e[0;32m的各变量：${NoColor}"
-        echo
+        echo  -e  "〔调试〕： \e[0;32m的各参数及其对应变量：${NoColor}"
 
         local ColorOfArgumentNames="\e[0;96m"
         local ColorOfVarNames="\e[0;33m"
@@ -594,7 +601,8 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
 
 
-            echo      '〔调试〕： ──────────────────────────────────────'
+            echo  -e  "〔调试〕："
+            # echo      '〔调试〕： ──────────────────────────────────────'
 
             if [ -z "$_ProcessingArgumentTypeStandardName" ]; then
             echo  -e  "〔调试〕： ${ColorOfArgumentNames}${_ProcessingArgumentName}${NoColor}"
@@ -603,12 +611,12 @@ function Read-吴乐川读取并处理某函数的参数表 {
             fi
 
             echo  -e  "〔调试〕：     ${ColorOfVarNames}${_ProcessingVariableName}${ColorOfExpressionParts}=${ColorOfValues}${_ExistingValueOfProcessingVar}${NoColor}"
-            echo
 
         done
 
         if [ $AnonymouseValuesCountAddedByThisTool -gt 0 ]; then
-            echo      '〔调试〕： ──────────────────────────────────────'
+            echo  -e  "〔调试〕："
+            # echo      '〔调试〕： ──────────────────────────────────────'
             echo  -e  "〔调试〕： ${ColorOfArgumentNames}${ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST}${NoColor}"
             echo  -e  "〔调试〕：     ${ColorOfVarNames}${ResultRecievingVarName_AnonymousValuesArray}${ColorOfExpressionParts}+=(${NoColor}"
 
@@ -653,7 +661,9 @@ function Read-吴乐川读取并处理某函数的参数表 {
             done
 
             echo  -e  "〔调试〕：     ${ColorOfExpressionParts})${NoColor}"
-            echo
         fi
+
+        echo      '〔调试〕： ────────────────────────────────────────────────────────────────'
+        echo
     fi
 }

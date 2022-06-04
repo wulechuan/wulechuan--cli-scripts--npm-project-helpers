@@ -18,11 +18,17 @@
 
 
 Param(
-    [Alias('先删NM', '删_node_modules')]
-    [switch]$安装之前应先删除旧有的_node_modules_文件夹,
+    [Alias('保留NM', '保留_node_modules')]
+    [switch]$应保留旧有的_node_modules_文件夹,
 
-    [Alias('先删PL', '删_package_lock_json')]
-    [switch]$安装之前应先删除旧有的_package_lock_json_文件
+    [Alias('保留PL', '保留_package_lock_json')]
+    [switch]$应保留旧有的_package_lock_json_文件,
+
+    [Alias('dry-run')]
+    [switch]$仅作仿真演练,
+
+    [Alias('npm-args')]
+    [string]$NPM安装依赖包时须额外带上的参数序列
 )
 
 
@@ -34,7 +40,21 @@ Param(
 
 
 PROCESS {
+    [boolean]${script:安装之前应先删除旧有的_node_modules_文件夹} = $true
+    [boolean]${script:安装之前应先删除旧有的_package_lock_json_文件} = $true
     [boolean]${script:应仅作仿真演练} = $false
+
+    if ($应保留旧有的_node_modules_文件夹) {
+        ${script:安装之前应先删除旧有的_node_modules_文件夹} = $false
+    }
+
+    if ($应保留旧有的_package_lock_json_文件) {
+        ${script:安装之前应先删除旧有的_package_lock_json_文件} = $false
+    }
+
+    if ($仅作仿真演练) {
+        ${script:应仅作仿真演练} = $true
+    }
 
 
 
@@ -112,8 +132,9 @@ PROCESS {
 
         ${private:本产品所有的_npm_依赖包的安装版本配置总表} | Update-吴乐川更新当前_npm_项目的所有批次的依赖包 `
             -应仅作仿真演练:${script:应仅作仿真演练} `
-            -安装之前应先删除旧有的_node_modules_文件夹:$安装之前应先删除旧有的_node_modules_文件夹 `
-            -安装之前应先删除旧有的_package_lock_json_文件:$安装之前应先删除旧有的_package_lock_json_文件
+            -安装之前应先删除旧有的_node_modules_文件夹:${script:安装之前应先删除旧有的_node_modules_文件夹} `
+            -安装之前应先删除旧有的_package_lock_json_文件:${script:安装之前应先删除旧有的_package_lock_json_文件} `
+            -NPM安装依赖包时须额外带上的参数序列 "$NPM安装依赖包时须额外带上的参数序列"
 
 
 
@@ -125,7 +146,7 @@ PROCESS {
         #     例如： Browserslist:caniuse-lite
         # ────────────────────────────────────────────────────────────────
 
-        Write-吴乐川管理某_npm_项目__打印提示语__更新与研发相关的数据库  -应仅作仿真演练:$应仅作仿真演练
+        Write-吴乐川管理某_npm_项目__打印提示语__更新与研发相关的数据库  -应仅作仿真演练:${script:应仅作仿真演练}
 
         if ($true) {
 
@@ -153,7 +174,7 @@ PROCESS {
 
         }
 
-        Write-吴乐川管理某_npm_项目__打印提示语__更新与研发相关的数据库  -应仅作仿真演练:$应仅作仿真演练  -该信息系作为任务结束语
+        Write-吴乐川管理某_npm_项目__打印提示语__更新与研发相关的数据库  -应仅作仿真演练:${script:应仅作仿真演练}  -该信息系作为任务结束语
 
 
 
@@ -163,7 +184,7 @@ PROCESS {
         #  5) 其他交代。
         # ────────────────────────────────────────────────────────────────
 
-        Write-吴乐川管理某_npm_项目__打印提示语__其他交代  -应仅作仿真演练:$应仅作仿真演练
+        Write-吴乐川管理某_npm_项目__打印提示语__其他交代  -应仅作仿真演练:${script:应仅作仿真演练}
 
         if ($true) {
 
@@ -192,7 +213,7 @@ PROCESS {
 
         }
 
-        Write-吴乐川管理某_npm_项目__打印提示语__其他交代  -应仅作仿真演练:$应仅作仿真演练  -该信息系作为任务结束语
+        Write-吴乐川管理某_npm_项目__打印提示语__其他交代  -应仅作仿真演练:${script:应仅作仿真演练}  -该信息系作为任务结束语
 
     } catch {
 

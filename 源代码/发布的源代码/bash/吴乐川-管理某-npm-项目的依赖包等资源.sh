@@ -70,8 +70,8 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_
 
     #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
-        "--should-run-this-task | ShouldRunThisTask | 标准类型_布尔 | false"
-        "--应仅作仿真演练              | ShouldDryRun      | 标准类型_布尔 | false"
+        "--确应运行该任务 | ShouldRunThisTask | 标准类型_布尔 | false"
+        "--应仅作仿真演练 | ShouldDryRun      | 标准类型_布尔 | false"
     )
 
     Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
@@ -139,8 +139,8 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_packa
 
     #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
-        "--should-run-this-task | ShouldRunThisTask | 标准类型_布尔 | false"
-        "--应仅作仿真演练              | ShouldDryRun      | 标准类型_布尔 | false"
+        "--确应运行该任务 | ShouldRunThisTask | 标准类型_布尔 | false"
+        "--应仅作仿真演练 | ShouldDryRun      | 标准类型_布尔 | false"
     )
 
     Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
@@ -202,7 +202,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
     #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
         "--系作为该任务之结束提示语 | IsEnding     | 标准类型_布尔 | false"
-        "--应仅作仿真演练   | ShouldDryRun | 标准类型_布尔 | false"
+        "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
 
     Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
@@ -213,17 +213,17 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
         Write-_吴乐川打印足够的的空白行_在某任务开始前
         Write-_吴乐川打印测量提示语长度的尺子_纯粹是于研发阶段用以确保各提示语宽度接近等同
         if [ "$ShouldDryRun" == false ]; then
-            echo  -e  "\e[0;31m══════════════════ npm i    最晚版本之【产品依赖包】════════════════════\e[0;0m"
+            echo  -e  "\e[0;31m══════════════════ npm i -P 最晚版本之【产品依赖包】════════════════════\e[0;0m"
         else
-            echo  -e  "\e[0;31m═══【仿真演练】═══ npm i    最晚版本之【产品依赖包】════════════════════\e[0;0m"
+            echo  -e  "\e[0;31m═══【仿真演练】═══ npm i -P 最晚版本之【产品依赖包】════════════════════\e[0;0m"
         fi
         echo
     else
         echo
         if [ "$ShouldDryRun" == false ]; then
-            echo  -e  "\e[0;31m══════════════════ npm i    最晚版本之【产品依赖包】 ══════ 已结束 ══════\e[0;0m"
+            echo  -e  "\e[0;31m══════════════════ npm i -P 最晚版本之【产品依赖包】 ══════ 已结束 ══════\e[0;0m"
         else
-            echo  -e  "\e[0;31m═══【仿真演练】═══ npm i    最晚版本之【产品依赖包】 ══════ 已结束 ══════\e[0;0m"
+            echo  -e  "\e[0;31m═══【仿真演练】═══ npm i -P 最晚版本之【产品依赖包】 ══════ 已结束 ══════\e[0;0m"
         fi
         Write-_吴乐川打印测量提示语长度的尺子_纯粹是于研发阶段用以确保各提示语宽度接近等同
         Write-_吴乐川打印足够的的空白行_在某任务结束后
@@ -241,7 +241,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
     #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
         "--系作为该任务之结束提示语 | IsEnding     | 标准类型_布尔 | false"
-        "--应仅作仿真演练   | ShouldDryRun | 标准类型_布尔 | false"
+        "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
 
     Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
@@ -252,17 +252,17 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
         Write-_吴乐川打印足够的的空白行_在某任务开始前
         Write-_吴乐川打印测量提示语长度的尺子_纯粹是于研发阶段用以确保各提示语宽度接近等同
         if [ "$ShouldDryRun" == false ]; then
-            echo  -e  "\e[0;31m══════════════════ npm i    \e[97;41m特定版本\e[0;31m之【产品依赖包】════════════════════\e[0;0m"
+            echo  -e  "\e[0;31m══════════════════ npm i -P \e[97;41m特定版本\e[0;31m之【产品依赖包】════════════════════\e[0;0m"
         else
-            echo  -e  "\e[0;31m═══【仿真演练】═══ npm i    \e[97;41m特定版本\e[0;31m之【产品依赖包】════════════════════\e[0;0m"
+            echo  -e  "\e[0;31m═══【仿真演练】═══ npm i -P \e[97;41m特定版本\e[0;31m之【产品依赖包】════════════════════\e[0;0m"
         fi
         echo
     else
         echo
         if [ "$ShouldDryRun" == false ]; then
-            echo  -e  "\e[0;31m══════════════════ npm i    \e[97;41m特定版本\e[0;31m之【产品依赖包】══════ 已结束 ══════\e[0;0m"
+            echo  -e  "\e[0;31m══════════════════ npm i -P \e[97;41m特定版本\e[0;31m之【产品依赖包】══════ 已结束 ══════\e[0;0m"
         else
-            echo  -e  "\e[0;31m═══【仿真演练】═══ npm i    \e[97;41m特定版本\e[0;31m之【产品依赖包】══════ 已结束 ══════\e[0;0m"
+            echo  -e  "\e[0;31m═══【仿真演练】═══ npm i -P \e[97;41m特定版本\e[0;31m之【产品依赖包】══════ 已结束 ══════\e[0;0m"
         fi
         Write-_吴乐川打印测量提示语长度的尺子_纯粹是于研发阶段用以确保各提示语宽度接近等同
         Write-_吴乐川打印足够的的空白行_在某任务结束后
@@ -280,7 +280,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
     #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
         "--系作为该任务之结束提示语 | IsEnding     | 标准类型_布尔 | false"
-        "--应仅作仿真演练   | ShouldDryRun | 标准类型_布尔 | false"
+        "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
 
     Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
@@ -319,7 +319,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
     #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
         "--系作为该任务之结束提示语 | IsEnding     | 标准类型_布尔 | false"
-        "--应仅作仿真演练   | ShouldDryRun | 标准类型_布尔 | false"
+        "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
 
     Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
@@ -358,7 +358,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__更新与研发�
     #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
         "--系作为该任务之结束提示语 | IsEnding     | 标准类型_布尔 | false"
-        "--应仅作仿真演练   | ShouldDryRun | 标准类型_布尔 | false"
+        "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
 
     Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
@@ -397,7 +397,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__其他交代 {
     #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
         "--系作为该任务之结束提示语 | IsEnding     | 标准类型_布尔 | false"
-        "--应仅作仿真演练   | ShouldDryRun | 标准类型_布尔 | false"
+        "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
 
     Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
@@ -437,10 +437,11 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
 
 
-    # --内容分割记号          至多出现 1 次。    非空白文本。
-    # --这批依赖包之依赖类别   至多出现 1 次。    '本产品拟囊括这些软件之整体或部分' | '本产品仅会在研发阶段借助这些软件'
-    # --应仅作仿真演练        至多出现 1 次。    1 | 0 | true | false
-    # --某依赖包之版本配置    可多次出现。        非空白文本。
+    # --内容分割记号                       至多出现 1 次。    非空白文本。
+    # --这批依赖包之依赖类别                至多出现 1 次。    '本产品拟囊括这些软件之整体或部分' | '本产品仅会在研发阶段借助这些软件'
+    # --应仅作仿真演练                     至多出现 1 次。    1 | 0 | true | false
+    # --NPM安装依赖包时须额外带上的参数序列  至多出现 1 次。     文本。
+    # --某依赖包之版本配置                 可多次出现。        非空白文本。
 
 
 
@@ -462,6 +463,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
     local DependenciesAreOfCateogryOfProduction='undefined' # 'true' 或其它值。
     local ShouldDryRun='undefined' # 'true' 或其它值。
     local DependencyVersionConfigurations=()
+    local NpmExtraArguments='undefined'
 
 
 
@@ -678,7 +680,7 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             shift
 
             if [ -z "${_TemporaryArgumentValue}" ]; then
-                Write-_吴乐川打印针对当前处理的依赖包原始配置参数的错误信息  '等号（=）后面没有给出值。〔1〕。'
+                Write-_吴乐川打印针对当前处理的依赖包原始配置参数的错误信息  '等号（=）后面没有给出值。〔3〕。'
                 return 2
             fi
         fi
@@ -687,14 +689,83 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
             DependencyVersionConfigurations+=( "${_TemporaryArgumentValue}" )
         fi
 
+        # ────────────────────────────────────────────────────────────────────────────────
+
+        _ProcessingArgumentName='--NPM安装依赖包时须额外带上的参数序列'
+        _TemporaryArgumentValue=''
+
+        if [ "$1" == "${_ProcessingArgumentName}" ]; then
+            _CurrentArgumentOrArgumentPairHaveRecognized=1
+            shift
+
+            if [ "$NpmExtraArguments" != 'undefined' ]; then
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "不应重复出现。〔1〕。已有参数将其配置为 “ \e[0;32m${NpmExtraArguments}\e[0;33m ” 。"
+                return 1
+            fi
+
+            if [[ "$1" =~ ^- ]]; then
+                Write-_吴乐川打印针对当前处理的依赖包原始配置参数的错误信息  '其后面没有给出值。〔1〕。'
+                return 2
+            fi
+
+            _TemporaryArgumentValue="$1"
+            shift
+        elif [[ "$1" =~ ^"${_ProcessingArgumentName}"= ]]; then
+            _CurrentArgumentOrArgumentPairHaveRecognized=1
+
+            if [ "$NpmExtraArguments" != 'undefined' ]; then
+                Write-_吴乐川打印针对当前处理的参数的错误信息  "不应重复出现。〔2〕。已有参数将其配置为 “ \e[0;32m${NpmExtraArguments}\e[0;33m ” 。"
+                shift
+                return 1
+            fi
+
+            _TemporaryArgumentValue=${1:${#_ProcessingArgumentName}+1}
+            shift
+
+            if [ -z "${_TemporaryArgumentValue}" ]; then
+                Write-_吴乐川打印针对当前处理的依赖包原始配置参数的错误信息  '等号（=）后面没有给出值。〔3〕。'
+                return 2
+            fi
+        fi
+
+
+        if [ ! -z "${_TemporaryArgumentValue}" ]; then
+            NpmExtraArguments=''
+
+            local NpmArgumentsList
+            local NpmArgument
+
+            eval "local NpmArgumentsList=( ${_TemporaryArgumentValue} )"
+
+            for NpmArgument in ${NpmArgumentsList[@]}; do
+                if [[ "$NpmArgument" != '-P' && "$NpmArgument" != '--save-prod' && "$NpmArgument" != '-D' && "$NpmArgument" != '--save-dev' ]]; then
+                    NpmExtraArguments+=" ${NpmArgument}"
+                fi
+            done
+        fi
+
+        # ────────────────────────────────────────────────────────────────────────────────
+
+
+
+
+
         if [ $_CurrentArgumentOrArgumentPairHaveRecognized -eq 0 ]; then
             # echo -e "〔调试〕： while 语句循环体末尾准备 shift，\e[0;31m丢弃该参数'\e[0;97m$1\e[0;31m'\e[0;0m。"
             shift
         fi
     done
 
+
+
+
+
     _ProcessingArgumentName=''
     _TemporaryArgumentValue=''
+
+
+
+
 
     if [ "${PackageConfigContentSeparator}" == 'undefined' ]; then
         PackageConfigContentSeparator="${PACKAGE_CONFIG_CONTENT_DEFAULT_SEPARATOR}"
@@ -704,14 +775,24 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
         ShouldDryRun='false'
     fi
 
+    if [ "${NpmExtraArguments}" == 'undefined' ]; then
+        NpmExtraArguments=''
+    fi
+
 
 
     if [ $SHOULD_DEBUG -eq 1 ]; then
+        echo  -n  '〔调试〕： '
+        Write-Line-without-line-break
         echo
-        echo "〔调试〕： 应仅作仿真演练：   \e[0;33m${ShouldDryRun}\e[0;0m"
-        echo "〔调试〕： 依赖包均为产品级： \e[0;33m${DependenciesAreOfCateogryOfProduction}\e[0;0m"
-        echo "〔调试〕： 依赖包配置的总数： \e[0;33m${#DependencyVersionConfigurations[@]}\e[0;0m"
-        echo "〔调试〕： 内容分割记号：     \e[0;33m'${PackageConfigContentSeparator}'\e[0;0m"
+        echo  -e  "〔调试〕： 应仅作仿真演练： \e[0;33m${ShouldDryRun}\e[0;0m"
+        echo  -e  "〔调试〕： 依赖包均为产品级： \e[0;33m${DependenciesAreOfCateogryOfProduction}\e[0;0m"
+        echo  -e  "〔调试〕： 依赖包配置的总数： \e[0;33m${#DependencyVersionConfigurations[@]}\e[0;0m"
+        echo  -e  "〔调试〕： 内容分割记号： \e[0;33m'${PackageConfigContentSeparator}'\e[0;0m"
+        echo  -e  "〔调试〕： NPM安装依赖包时须额外带上的参数序列： \e[0;33m'${NpmExtraArguments}'\e[0;0m"
+        echo  -n  '〔调试〕： '
+        Write-Line-without-line-break
+        echo
         echo
     fi
 
@@ -1219,9 +1300,9 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
         NPMFullCommandLine=''
 
         if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
-            NPMSubCommand='i'
+            NPMSubCommand="install  --save-prod  ${NpmExtraArguments}"
         else
-            NPMSubCommand='i  -D'
+            NPMSubCommand="install  --save-dev   ${NpmExtraArguments}"
         fi
 
         NPMFullCommandLine="${NPMCommand}  ${NPMSubCommand}"
@@ -1251,11 +1332,15 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
 
 
+        if [ "$ShouldDryRun" == true ]; then
+            echo  -en  "   \e[0;33m【仿真演练】\n    \e[0;0m"
+        fi
+
+        echo  -e  "\e[0;97m${NPMFullCommandLine}\e[0;0m"
+
         if [ "$ShouldDryRun" == false ]; then
+            echo
             ${NPMFullCommandLine}
-        else
-            echo  -e  "   \e[0;33m【仿真演练】\e[0;0m"
-            echo  -e  "    \e[0;97m${NPMFullCommandLine}\e[0;0m"
         fi
     fi
 
@@ -1292,9 +1377,9 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
         NPMFullCommandLine=''
 
         if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
-            NPMSubCommand='i'
+            NPMSubCommand="install  --save-prod  ${NpmExtraArguments}"
         else
-            NPMSubCommand='i  -D'
+            NPMSubCommand="install  --save-dev   ${NpmExtraArguments}"
         fi
 
         NPMFullCommandLine="${NPMCommand}  ${NPMSubCommand}"
@@ -1324,11 +1409,15 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
 
 
+        if [ "$ShouldDryRun" == true ]; then
+            echo  -en  "   \e[0;33m【仿真演练】\n    \e[0;0m"
+        fi
+
+        echo  -e  "\e[0;97m${NPMFullCommandLine}\e[0;0m"
+
         if [ "$ShouldDryRun" == false ]; then
+            echo
             ${NPMFullCommandLine}
-        else
-            echo  -e  "   \e[0;33m【仿真演练】\e[0;0m"
-            echo  -e  "    \e[0;97m${NPMFullCommandLine}\e[0;0m"
         fi
     fi
 
