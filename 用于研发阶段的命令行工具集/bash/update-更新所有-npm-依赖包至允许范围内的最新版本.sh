@@ -33,7 +33,7 @@ function 完整流程  {
         "--在安装诸依赖包之前应先删除旧有的_node_modules_文件夹     | ShouldRemoveNodeModulesFirst     | 标准类型_布尔 | ${BY_DEFAULT__SHOULD_REMOVE_NODE_MODULES_FIRST}"
         "--在安装诸依赖包之前应先删除旧有的_package-lock点json_文件 | ShouldRemovePackageLockJSONFirst | 标准类型_布尔 | ${BY_DEFAULT__SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST}"
         "--应仅作仿真演练                                       | ShouldDryRun                     | 标准类型_布尔 | ${BY_DEFAULT__SHOULD_DRY_RUN}"
-        "--npm-args                                           | NpmArguments                     |             | '--foreground-scripts'"
+        "--npm-args                                           | NpmArguments                     |             |" # '--foreground-scripts'
     )
 
     local LastTaskReturnCode

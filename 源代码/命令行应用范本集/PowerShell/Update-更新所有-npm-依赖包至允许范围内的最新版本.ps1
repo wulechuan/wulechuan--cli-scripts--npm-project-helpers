@@ -28,7 +28,7 @@ Param(
     [switch]$仅作仿真演练,
 
     [Alias('npm-args')]
-    [string]$NPM安装依赖包时须额外带上的参数序列
+    [string]$NPM参数序列
 )
 
 
@@ -43,6 +43,7 @@ PROCESS {
     [boolean]${script:安装之前应先删除旧有的_node_modules_文件夹} = $true
     [boolean]${script:安装之前应先删除旧有的_package_lock_json_文件} = $true
     [boolean]${script:应仅作仿真演练} = $false
+    [string] ${script:NPM安装依赖包时须额外带上的参数序列} = '' # '--foreground-scripts'
 
     if ($应保留旧有的_node_modules_文件夹) {
         ${script:安装之前应先删除旧有的_node_modules_文件夹} = $false
@@ -54,6 +55,10 @@ PROCESS {
 
     if ($仅作仿真演练) {
         ${script:应仅作仿真演练} = $true
+    }
+
+    if ("$NPM参数序列") {
+        ${script:NPM安装依赖包时须额外带上的参数序列}="${NPM参数序列}"
     }
 
 
