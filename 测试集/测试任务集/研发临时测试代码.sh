@@ -1,3 +1,4 @@
+source  ./源代码/发布的源代码/bash/吴乐川-针对命令与函数的辅助工具集.sh
 source  ./源代码/发布的源代码/bash/吴乐川-数据处理-文本.sh
 source  ./源代码/发布的源代码/bash/吴乐川-管理某-npm-项目的依赖包等资源.sh
 
@@ -6,11 +7,75 @@ source  ./源代码/发布的源代码/bash/吴乐川-管理某-npm-项目的依
 
 
 function 测试之主程序 {
+    local LastTaskReturnCode
+
     local ResultReceiver=''
     local Text=''
     local Char=''
     local LoopIndex=0
 
+
+
+
+
+    if true; then
+        local NameOfThisFunction='测试之主程序（第一部分）'
+
+        local Number1
+        local number2
+        local n3
+        local boolean1
+        local Bool2
+        local AllTextSnippets=( '测试程序调用 “ Read-吴乐川读取并处理某函数的参数表 ” 之前旧有的内容，不应被洗掉。' )
+
+        local ArgumentConfigsArray=(
+            #  命令行参数名                                         | 变量名                            | 取值之类型    | 默认值
+            "--number-1        | Number1         | 标准类型_整数     | ${BY_DEFAULT__SHOULD_REMOVE_NODE_MODULES_FIRST}"
+            "--正整数           | number2         | 标准类型_正整数   | ${BY_DEFAULT__SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST}"
+            "--整数3            | n3              | 标准类型_非负整数 | ${BY_DEFAULT__SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST}"
+            "--开关甲           | boolean1        | 标准类型_布尔     | ${BY_DEFAULT__SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST}"
+            "--bool-2          | Bool2           | 标准类型_布尔     | ${BY_DEFAULT__SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST}"
+            "〈匿名值之汇总列表〉 | AllTextSnippets |                 | ${BY_DEFAULT__SHOULD_DRY_RUN}"
+        )
+
+
+        Read-吴乐川读取并处理某函数的参数表  --should-debug true \
+            --number-1 1 \
+            匿名值表中新添的第一词 \
+            --正整数 2 \
+            --整数3 3 \
+            --开关甲 true \
+            --bool-2 \
+            0 \
+            --作者 '作者是吴乐川' \
+            '匿名值表中新添的第2词' \
+            "这后面带有换行符：\n……这是换行符之后的内容。" \
+            '' \
+            "" \
+            ' ' \
+            我就是吴乐川！
+
+        echo
+        echo
+        echo
+        echo  '───────────────────────────────────────────────────'
+        echo  '调用 “ Read-吴乐川读取并处理某函数的参数表 ” 之后'
+        echo  '───────────────────────────────────────────────────'
+        echo  -e  "\e[0;33mAllTextSnippets\e[0;97m=(\e[0;0m"
+        for ((LoopIndex=0; LoopIndex<${#AllTextSnippets[@]}; LoopIndex++)); do
+            Text=${AllTextSnippets[$LoopIndex]}
+            echo -e  "    \e[0;97m\"\e[0;91m${Text}\e[0;97m\"\e[0;0m"
+        done
+        echo  -e  "\e[0;97m)\e[0;0m"
+        echo  '───────────────────────────────────────────────────'
+        echo
+        echo
+
+        LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi
+
+
+        return
+    fi
 
 
 

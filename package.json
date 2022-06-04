@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@wulechuan/cli-scripts--git-push": "^6.0.9",
-    "eslint": "^8.16.0"
+    "eslint": "^8.17.0"
   },
   "homepage": "https://github.com/wulechuan/wulechuan--cli-scripts--npm-project-helpers#readme",
   "repository": {

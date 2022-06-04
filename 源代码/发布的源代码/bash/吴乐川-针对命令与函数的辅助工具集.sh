@@ -1,5 +1,7 @@
 
 function Read-吴乐川读取并处理某函数的参数表 {
+    local ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST='〈匿名值之汇总列表〉'
+
     # 外界应预备好以下两个变量：
     #
     #     NameOfThisFunction
@@ -62,9 +64,32 @@ function Read-吴乐川读取并处理某函数的参数表 {
     local ColorOfTermWarningMessage="\e[0;97m"
 
 
-    function Write-_吴乐川打印针对当前处理的参数的错误信息 {
+
+    function Write-_吴乐川打印针对当前处理的参数配置的错误信息 {
+        local IndexOfInvolvedConfig="$1"
+        local NameOfInvolvedConfigItem="$2"
+        local InvalidValueOfInvolvedConfigItem="$3"
+
+        local ColorOfItemName="\e[0;97m"
+        local ColorOfInvalidValue="\e[0;33m"
+
+        echo -e "${ColorOfErrorMessage}在函数${NoColor}"
+        echo -e "    ${ColorOfErrorMessage}“ ${ColorOfTermInErrorMessage}${NameOfThisFunction}${ColorOfErrorMessage} ”${NoColor}"
+        echo -e "${ColorOfErrorMessage}的参数配置表出现如下问题：${NoColor}"
+        echo -e "    ${ColorOfErrorMessage}第 \e[0;96m${IndexOfInvolvedConfig}${ColorOfErrorMessage} 个参数配置中的〈${ColorOfItemName}${NameOfInvolvedConfigItem}${ColorOfErrorMessage}〉配置了无效的值。${NoColor}"
+        echo -e "    ${ColorOfErrorMessage}该〈${ColorOfItemName}${NameOfInvolvedConfigItem}${ColorOfErrorMessage}〉的无效值为 “ ${ColorOfInvalidValue}${InvalidValueOfInvolvedConfigItem}${ColorOfErrorMessage} ”。${NoColor}"
+
+        if [ "$StandardTypeName" ]; then
+            echo  -e  "    ${ColorOfErrorMessage}合规的值须为 “ ${ColorOfTermInErrorMessage}${StandardTypeName}${ColorOfErrorMessage} ” ${NoColor}"
+        fi
+
+        echo
+        echo
+    }
+
+    function Write-_吴乐川打印针对当前处理的参数的错误信息_通用版 {
         local ErrorMessage="$1"
-        local StandardTypeName="$2"
+        local ShouldShowTipOfValueType="$2"
 
         echo -e "${ColorOfErrorMessage}在函数${NoColor}"
         echo -e "    ${ColorOfErrorMessage}“ ${ColorOfTermInErrorMessage}${NameOfThisFunction}${ColorOfErrorMessage} ”${NoColor}"
@@ -73,12 +98,41 @@ function Read-吴乐川读取并处理某函数的参数表 {
         echo -e "${ColorOfErrorMessage}的参数出现如下问题：${NoColor}"
         echo -e "    ${ColorOfErrorMessage}${ErrorMessage}${NoColor}"
 
-        if [ "$StandardTypeName" ]; then
+        if [ "$ShouldShowTipOfValueType" == 'true' ] && [ ! -z "$_ProcessingArgumentTypeStandardName" ]; then
             echo  -e  "    ${ColorOfErrorMessage}合规的值须为 “ ${ColorOfTermInErrorMessage}${_ProcessingArgumentTypeStandardName}${ColorOfErrorMessage} ” ${NoColor}"
         fi
 
         echo
         echo
+    }
+
+    function Write-_吴乐川打印针对当前处理的参数的错误信息_参数不应重复出现 {
+        local ErrorVariationCode="$1"
+        local ErrorMessage="重复出现。\e[0;0m    〔源代码相关位置 ${ErrorVariationCode}〕\n    ${ColorOfErrorMessage}已另有参数将该变量配置为 “ \e[0;32m${_ExistingValueOfProcessingVar}${ColorOfErrorMessage} ” 。\n    \e[0;94m另注：上述已配置的值为等效后的标准值，并非命令行中的原始值。${ColorOfErrorMessage} "
+
+        Write-_吴乐川打印针对当前处理的参数的错误信息_通用版  "$ErrorMessage"
+    }
+
+    function Write-_吴乐川打印针对当前处理的参数的错误信息_参数未给出值 {
+        local ErrorVariationCode="$1"
+        local LeadingArgumentNameHasEqualSign="$2"
+
+        local ErrorMessageSnippet1="参数名后未跟随给出值。"
+        if [ "$LeadingArgumentNameHasEqualSign" == 'true' ]; then
+            ErrorMessageSnippet1="参数名在等号（=）后未跟随给出值。"
+        fi
+
+        local ErrorMessage="${ErrorMessageSnippet1}\e[0;0m    〔源代码相关位置 ${ErrorVariationCode}〕\n    ${ColorOfErrorMessage}已另有参数将该变量配置为 “ \e[0;32m${_ExistingValueOfProcessingVar}${ColorOfErrorMessage} ” 。\n    \e[0;94m另注：上述已配置的值为等效后的标准值，并非命令行中的原始值。${ColorOfErrorMessage} "
+
+        Write-_吴乐川打印针对当前处理的参数的错误信息_通用版  "$ErrorMessage"  true
+    }
+
+    function Write-_吴乐川打印针对当前处理的参数的错误信息_参数值不合规 {
+        local ErrorVariationCode="$1"
+
+        local ErrorMessage="给出的值不合规。\e[0;0m    〔源代码相关位置 ${ErrorVariationCode}〕\n    ${ColorOfErrorMessage}给出的值为 “ \e[0;93m${_TemporaryArgumentValue}${ColorOfErrorMessage} ” 。"
+
+        Write-_吴乐川打印针对当前处理的参数的错误信息_通用版  "$ErrorMessage"  true
     }
 
 
@@ -89,6 +143,10 @@ function Read-吴乐川读取并处理某函数的参数表 {
     # echo  -e  "_OriginalArgumentsCount=${_OriginalArgumentsCount}\n"
 
     local _ProcessedArgumentsCount=0
+
+    local ResultRecievingVarName_AnonymousValuesArray
+    local AnonymouseValuesArrayAddedByThisTool=()
+    local AnonymouseValuesCountAddedByThisTool=0
 
     local _ProcessingArgumentName
     local _ProcessingVariableName
@@ -119,23 +177,39 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
         _ProcessingArgumentName=${_ProcessingArgumentConfig%%|*}
         _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingArgumentName}+1}
-        read _ProcessingArgumentName <<< $_ProcessingArgumentName
+        read  -r  _ProcessingArgumentName <<< $_ProcessingArgumentName
         # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
+
+        if [ "$_ProcessingArgumentName" != "$ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST" ]; then
+            if [ "$_ProcessingArgumentName" == '--' ] || [[ ! "$_ProcessingArgumentName" =~ ^- ]]; then
+                Write-_吴乐川打印针对当前处理的参数配置的错误信息  "$((_ArgumentConfigsLoopIndex+1))"  "命令行参数名"  "${_ProcessingArgumentName}"
+                return 92
+            fi
+        fi
 
         _ProcessingVariableName=${_ProcessingArgumentConfig%%|*}
         _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingVariableName}+1}
-        read _ProcessingVariableName <<< $_ProcessingVariableName
+        read  -r  _ProcessingVariableName <<< $_ProcessingVariableName
         # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
+
+        if [ -z "$_ProcessingVariableName" ] || [[ ! "$_ProcessingVariableName" =~ ^[a-zA-Z_-][0-9a-zA-Z_-]*$ ]]; then
+            Write-_吴乐川打印针对当前处理的参数配置的错误信息  "$((_ArgumentConfigsLoopIndex+1))"  "变量名"  "${_ProcessingVariableName}"
+            return 92
+        fi
 
         # _ProcessingArgumentType=${_ProcessingArgumentConfig%%|*}
         # _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingArgumentType}+1}
-        # read _ProcessingArgumentType <<< $_ProcessingArgumentType
+        # read  -r  _ProcessingArgumentType <<< $_ProcessingArgumentType
         # # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
 
         # _ProcessingArgumentDefaultValue=${_ProcessingArgumentConfig%%|*}
         # _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingArgumentDefaultValue}+1}
-        # read _ProcessingArgumentDefaultValue <<< $_ProcessingArgumentDefaultValue
+        # read  -r  _ProcessingArgumentDefaultValue <<< $_ProcessingArgumentDefaultValue
         # # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
+
+        if [ "$_ProcessingArgumentName" == "$ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST" ]; then
+            ResultRecievingVarName_AnonymousValuesArray="$_ProcessingVariableName"
+        fi
 
 
 
@@ -151,12 +225,23 @@ function Read-吴乐川读取并处理某函数的参数表 {
         #     echo
         # fi
 
-        eval "${_ProcessingVariableName}='${VALUE_OF_UNDEFINED}'" # 这里不要用 local 。
+
+
+        if [ "$_ProcessingArgumentName" != "$ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST" ]; then
+            eval "${_ProcessingVariableName}='${VALUE_OF_UNDEFINED}'" # 这里不要用 local 。
+        fi
     done
 
 
 
-    while [[ ! -z "$1" && $_ProcessedArgumentsCount -lt $_OriginalArgumentsCount ]]; do
+    # if [ ! -z "$ResultRecievingVarName_AnonymousValuesArray" ]; then
+    #     echo "〔调试〕： $ResultRecievingVarName_AnonymousValuesArray"
+    #     eval "echo \"〔调试〕： \$$ResultRecievingVarName_AnonymousValuesArray\""
+    # fi
+
+
+
+    while [[ $# -gt 0 && $_ProcessedArgumentsCount -lt $_OriginalArgumentsCount ]]; do
 
         _ProcessedArgumentsCount=$((_ProcessedArgumentsCount+1))
         _CurrentArgumentOrArgumentPairHaveRecognized=0
@@ -167,22 +252,30 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
                 _ProcessingArgumentName=${_ProcessingArgumentConfig%%|*}
                 _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingArgumentName}+1}
-                read _ProcessingArgumentName <<< $_ProcessingArgumentName
+                read  -r  _ProcessingArgumentName <<< $_ProcessingArgumentName
                 # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
+
+                if [ "$_ProcessingArgumentName" == "$ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST" ]; then
+                    continue
+                fi
 
                 _ProcessingVariableName=${_ProcessingArgumentConfig%%|*}
                 _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingVariableName}+1}
-                read _ProcessingVariableName <<< $_ProcessingVariableName
+                read  -r  _ProcessingVariableName <<< $_ProcessingVariableName
                 # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
+
+                # if [ "$_ProcessingVariableName" == "$ResultRecievingVarName_AnonymousValuesArray" ]; then
+                #     continue
+                # fi
 
                 _ProcessingArgumentType=${_ProcessingArgumentConfig%%|*}
                 _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingArgumentType}+1}
-                read _ProcessingArgumentType <<< $_ProcessingArgumentType
+                read  -r  _ProcessingArgumentType <<< $_ProcessingArgumentType
                 # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
 
                 _ProcessingArgumentDefaultValue=${_ProcessingArgumentConfig%%|*}
                 _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingArgumentDefaultValue}+1}
-                read _ProcessingArgumentDefaultValue <<< $_ProcessingArgumentDefaultValue
+                read  -r  _ProcessingArgumentDefaultValue <<< $_ProcessingArgumentDefaultValue
                 # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
 
 
@@ -236,21 +329,21 @@ function Read-吴乐川读取并处理某函数的参数表 {
                     shift
 
                     if [ "${_ExistingValueOfProcessingVar}" != "${VALUE_OF_UNDEFINED}" ]; then
-                        Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔1〕。'
-                        return
+                        Write-_吴乐川打印针对当前处理的参数的错误信息_参数不应重复出现  '1'
+                        return 1
                     fi
 
                     if [[ "$1" =~ ^-[^0-9].*$ ]] || [ "$1" == '-' ]; then
                         if   [ "$_ProcessingArgumentType" != '标准类型_布尔' ]; then
-                            Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值〔1〕。'
-                            return
+                            Write-_吴乐川打印针对当前处理的参数的错误信息_参数未给出值  '1'
+                            return 2
                         fi
                     fi
 
                     if [ -z "$1" ]; then
                         if   [ "$_ProcessingArgumentType" != '标准类型_布尔' ]; then
-                            Write-_吴乐川打印针对当前处理的参数的错误信息  '后面没有给出值〔2〕。'
-                            return
+                            Write-_吴乐川打印针对当前处理的参数的错误信息_参数未给出值  '2'
+                            return 2
                         fi
                     fi
 
@@ -263,9 +356,9 @@ function Read-吴乐川读取并处理某函数的参数表 {
                     _CurrentArgumentOrArgumentPairHaveRecognized=1
 
                     if [ "${_ExistingValueOfProcessingVar}" != "${VALUE_OF_UNDEFINED}" ]; then
-                        Write-_吴乐川打印针对当前处理的参数的错误信息  '不应重复出现〔2〕。'
+                        Write-_吴乐川打印针对当前处理的参数的错误信息_参数不应重复出现  '2'
                         shift
-                        return
+                        return 1
                     fi
 
                     _TemporaryArgumentValue=${1:${#_ProcessingArgumentName}+1}
@@ -273,8 +366,8 @@ function Read-吴乐川读取并处理某函数的参数表 {
                     shift
 
                     if [ -z "${_TemporaryArgumentValue}" ]; then
-                        Write-_吴乐川打印针对当前处理的参数的错误信息  '等号（=）后面没有给出值〔3〕。'
-                        return
+                        Write-_吴乐川打印针对当前处理的参数的错误信息_参数未给出值  '3'  true
+                        return 2
                     fi
                 fi
 
@@ -351,10 +444,8 @@ function Read-吴乐川读取并处理某函数的参数表 {
                     if [ $_TemporaryArgumentValueIsInvalid -eq 0 ]; then
                         eval "$_ProcessingVariableName=\$_TemporaryArgumentValue"
                     else
-                        Write-_吴乐川打印针对当前处理的参数的错误信息  \
-                            "给出值不合规〔1〕。\n    给出的值为 “ \e[0;93m${_TemporaryArgumentValue}${ColorOfErrorMessage} ” 。" \
-                            "$_ProcessingArgumentTypeStandardName"
-                        return
+                        Write-_吴乐川打印针对当前处理的参数的错误信息_参数值不合规
+                        return 3
                     fi
 
 
@@ -375,6 +466,15 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
 
         if [ $_CurrentArgumentOrArgumentPairHaveRecognized -eq 0 ]; then
+
+            eval "AnonymouseValuesArrayAddedByThisTool+=( \"\${1}\" )"
+            # AnonymouseValuesArrayAddedByThisTool+=( \"${1}\" ) # 这种写法反而不可靠。
+            ((AnonymouseValuesCountAddedByThisTool++))
+
+            if [ ! -z "$ResultRecievingVarName_AnonymousValuesArray" ]; then
+                eval "$ResultRecievingVarName_AnonymousValuesArray+=( \"\${1}\" )"
+            fi
+
             shift
         fi
     done
@@ -386,22 +486,22 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
         _ProcessingArgumentName=${_ProcessingArgumentConfig%%|*}
         _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingArgumentName}+1}
-        read _ProcessingArgumentName <<< $_ProcessingArgumentName
+        read  -r  _ProcessingArgumentName <<< $_ProcessingArgumentName
         # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
 
         _ProcessingVariableName=${_ProcessingArgumentConfig%%|*}
         _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingVariableName}+1}
-        read _ProcessingVariableName <<< $_ProcessingVariableName
+        read  -r  _ProcessingVariableName <<< $_ProcessingVariableName
         # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
 
         _ProcessingArgumentType=${_ProcessingArgumentConfig%%|*}
         _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingArgumentType}+1}
-        read _ProcessingArgumentType <<< $_ProcessingArgumentType
+        read  -r  _ProcessingArgumentType <<< $_ProcessingArgumentType
         # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
 
         _ProcessingArgumentDefaultValue=${_ProcessingArgumentConfig%%|*}
         _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingArgumentDefaultValue}+1}
-        read _ProcessingArgumentDefaultValue <<< $_ProcessingArgumentDefaultValue
+        read  -r  _ProcessingArgumentDefaultValue <<< $_ProcessingArgumentDefaultValue
         # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
 
 
@@ -447,6 +547,12 @@ function Read-吴乐川读取并处理某函数的参数表 {
         echo  -e  "〔调试〕： \e[0;32m的各变量：${NoColor}"
         echo
 
+        local ColorOfArgumentNames="\e[0;96m"
+        local ColorOfVarNames="\e[0;33m"
+        local ColorOfVarValueTypes="\e[0;32m"
+        local ColorOfValues="\e[0;91m"
+        local ColorOfExpressionParts="\e[0;97m"
+
         for ((_ArgumentConfigsLoopIndex=0; _ArgumentConfigsLoopIndex<_ArgumentConfigsCount; _ArgumentConfigsLoopIndex++)); do
             _ProcessingArgumentConfig=${ArgumentConfigsArray[$_ArgumentConfigsLoopIndex]}
 
@@ -454,6 +560,10 @@ function Read-吴乐川读取并处理某函数的参数表 {
             _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingArgumentName}+1}
             read _ProcessingArgumentName <<< $_ProcessingArgumentName
             # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
+
+            if [ "$_ProcessingArgumentName" == "$ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST" ]; then
+                continue
+            fi
 
             _ProcessingVariableName=${_ProcessingArgumentConfig%%|*}
             _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingVariableName}+1}
@@ -487,14 +597,63 @@ function Read-吴乐川读取并处理某函数的参数表 {
             echo      '〔调试〕： ──────────────────────────────────────'
 
             if [ -z "$_ProcessingArgumentTypeStandardName" ]; then
-            echo  -e  "〔调试〕： \e[0;96m${_ProcessingArgumentName}${NoColor}"
+            echo  -e  "〔调试〕： ${ColorOfArgumentNames}${_ProcessingArgumentName}${NoColor}"
             else
-            echo  -e  "〔调试〕： \e[0;96m${_ProcessingArgumentName}${NoColor} （\e[0;32m${_ProcessingArgumentTypeStandardName}\e[0;0m）"
+            echo  -e  "〔调试〕： ${ColorOfArgumentNames}${_ProcessingArgumentName}${NoColor} （${ColorOfVarValueTypes}${_ProcessingArgumentTypeStandardName}${NoColor}）"
             fi
 
-            echo  -e  "〔调试〕：     \e[0;33m${_ProcessingVariableName}\e[0;32m=\e[0;91m${_ExistingValueOfProcessingVar}${NoColor}"
+            echo  -e  "〔调试〕：     ${ColorOfVarNames}${_ProcessingVariableName}${ColorOfExpressionParts}=${ColorOfValues}${_ExistingValueOfProcessingVar}${NoColor}"
             echo
 
         done
+
+        if [ $AnonymouseValuesCountAddedByThisTool -gt 0 ]; then
+            echo      '〔调试〕： ──────────────────────────────────────'
+            echo  -e  "〔调试〕： ${ColorOfArgumentNames}${ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST}${NoColor}"
+            echo  -e  "〔调试〕：     ${ColorOfVarNames}${ResultRecievingVarName_AnonymousValuesArray}${ColorOfExpressionParts}+=(${NoColor}"
+
+            local AnonymouseValue=
+            local AnonymouseValueIndex=0
+            local AnonymouseValueNumberWithPadding=''
+            local AnonymouseValuesCountAddedByThisToolIsGreaterThan9=0
+            local AnonymouseValuesCountAddedByThisToolIsGreaterThan99=0
+
+            if [ $AnonymouseValuesCountAddedByThisTool -gt 9 ]; then
+                AnonymouseValuesCountAddedByThisToolIsGreaterThan9=1
+            fi
+
+            if [ $AnonymouseValuesCountAddedByThisTool -gt 99 ]; then
+                AnonymouseValuesCountAddedByThisToolIsGreaterThan99=1
+            fi
+
+            for ((AnonymouseValueIndex=0; AnonymouseValueIndex<$AnonymouseValuesCountAddedByThisTool; AnonymouseValueIndex++)); do
+
+                AnonymouseValue=${AnonymouseValuesArrayAddedByThisTool[$AnonymouseValueIndex]}
+
+                # ──────────────────────────────────────
+
+                AnonymouseValueNumberWithPadding=$((AnonymouseValueIndex+1))
+                if [ $AnonymouseValueNumberWithPadding -lt 10 ]; then
+                    if [ $AnonymouseValuesCountAddedByThisToolIsGreaterThan99 -eq 1 ]; then
+                        AnonymouseValueNumberWithPadding="  ${AnonymouseValueNumberWithPadding}"
+                    elif [ $AnonymouseValuesCountAddedByThisToolIsGreaterThan9 -eq 1 ]; then
+                        AnonymouseValueNumberWithPadding=" ${AnonymouseValueNumberWithPadding}"
+                    fi
+                elif [ $AnonymouseValueNumberWithPadding -lt 100 ]; then
+                    if [ $AnonymouseValuesCountAddedByThisToolIsGreaterThan99 -eq 1 ]; then
+                        AnonymouseValueNumberWithPadding=" ${AnonymouseValueNumberWithPadding}"
+                    fi
+                fi
+                AnonymouseValueNumberWithPadding="[+${AnonymouseValueNumberWithPadding}]"
+
+                # ──────────────────────────────────────
+
+                echo  -e  "〔调试〕：        ${AnonymouseValueNumberWithPadding}： ${ColorOfExpressionParts}\"${ColorOfValues}${AnonymouseValue}${ColorOfExpressionParts}\"${NoColor}"
+
+            done
+
+            echo  -e  "〔调试〕：     ${ColorOfExpressionParts})${NoColor}"
+            echo
+        fi
     fi
 }

@@ -35,7 +35,10 @@ function 完整流程  {
         "--应仅作仿真演练                                       | ShouldDryRun                     | 标准类型_布尔 | ${BY_DEFAULT__SHOULD_DRY_RUN}"
     )
 
+    local LastTaskReturnCode
+
     Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
+    LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi
 
 
 
@@ -49,7 +52,10 @@ function 完整流程  {
     # ───────────────────────────────────────────────────────────────
 
     Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_modules       --应仅作仿真演练 $ShouldDryRun  --should-run-this-task $ShouldRemoveNodeModulesFirst
+    LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi
+
     Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_package_lock_json  --应仅作仿真演练 $ShouldDryRun  --should-run-this-task $ShouldRemovePackageLockJSONFirst
+    LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi
 
 
 
@@ -74,7 +80,7 @@ function 完整流程  {
         --某依赖包之版本配置 'jsonc-parser                       |::|   null' \
         --应仅作仿真演练 "$ShouldDryRun"
 
-    # echo  -e  "Update-吴乐川更新当前_npm_项目的某批依赖包的运行结果代码： \e[0;91m$?\e[0;0m"
+    LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi
 
 
 
@@ -95,7 +101,7 @@ function 完整流程  {
         --某依赖包之版本配置='eslint                             |::|   null' \
         --应仅作仿真演练 "$ShouldDryRun"
 
-    # echo  -e  "Update-吴乐川更新当前_npm_项目的某批依赖包的运行结果代码： \e[0;91m$?\e[0;0m"
+    LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi
 
 
 
@@ -197,4 +203,14 @@ function 完整流程  {
 
 
 完整流程  $*
+
+__wulechuan_temporary_exception_code__=$?
+if [ $__wulechuan_temporary_exception_code__ -ne 0 ]; then
+    echo  -e  "\e[0;31m──────────────────────── \e[0;0m"
+    echo  -e  "\e[0;31m程序异常结束代码： \e[0;33m${__wulechuan_temporary_exception_code__} \e[0;0m"
+    echo  -e  "\e[0;31m──────────────────────── \e[0;0m\n　"
+fi
+
 unset -f 完整流程
+# unset __wulechuan_temporary_exception_code__
+exit $__wulechuan_temporary_exception_code__
