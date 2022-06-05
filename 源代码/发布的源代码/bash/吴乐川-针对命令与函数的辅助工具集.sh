@@ -1,6 +1,14 @@
 
 function Read-吴乐川读取并处理某函数的参数表 {
+    local _IFS_BACKUP_="$IFS"
+    IFS=' '
+
+    function _善后 {
+        IFS="$_IFS_BACKUP_"
+    }
+
     local ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST='〈匿名值之汇总列表〉'
+    local SIGNAL_OF_UNDEFINED='*|未给出|*'
 
     # 外界应预备好以下两个变量：
     #
@@ -37,42 +45,13 @@ function Read-吴乐川读取并处理某函数的参数表 {
     #         【命令行参数名】有一种特殊值，为 “〈匿名值之汇总列表〉” ，含单书名号。
     #
     #         【类型】有以下特殊值。任一【条目】之【类型】可省略，或取任何值，亦可取下例任一，兼取则无效用。
+    #             标准类型_文本
     #             标准类型_整数
     #             标准类型_正整数
     #             标准类型_非负整数
     #             标准类型_布尔
     #             标准类型_变量名
     #             标准类型_列表
-
-
-
-
-
-    local ShouldDebug=0
-
-    if   [  "$1" == '--应开启调试功能'  ]; then
-        ShouldDebug=1
-        shift
-
-        if   [[ "$1" == '1' || "$1" == 'true'  || "$1" == '$true'  ]]; then
-            ShouldDebug=1
-            shift
-        elif [[ "$1" == '0' || "$1" == 'false' || "$1" == '$false' ]]; then
-            ShouldDebug=0
-            shift
-        fi
-    elif [[ "$1" =~ ^--应开启调试功能= ]]; then
-        ShouldDebug=${1:10}
-        shift
-
-        if [ -z "$ShouldDebug" ]; then
-            ShouldDebug=0
-        elif [[ "$ShouldDebug" =~ 1|true|$true ]]; then
-            ShouldDebug=1
-        else
-            ShouldDebug=0
-        fi
-    fi
 
 
 
@@ -85,6 +64,57 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
     local ColorOfWarningMessages="\e[0;33m"
     local ColorOfTermsWarningMessages="\e[0;97m"
+
+
+
+
+
+    local DebuggingLevel="${SIGNAL_OF_UNDEFINED}"
+
+    local TemporaryValueOfDebuggingLevel
+    local TemporaryValueOfDebuggingLevelIsFromNextRawArgument=0
+    local TemporaryValueOfDebuggingLevelIsAfterEqualSign=0
+
+    if   [  "$1" == '--应开启调试功能'  ]; then
+        DebuggingLevel=1
+        shift
+
+        if [ $# -gt 0 ] && [ ! -z "$1" ]; then
+            TemporaryValueOfDebuggingLevel="$1"
+            TemporaryValueOfDebuggingLevelIsFromNextRawArgument=1
+        fi
+
+    elif [[ "$1" =~ ^--应开启调试功能= ]]; then
+        TemporaryValueOfDebuggingLevel=${1:10}
+        TemporaryValueOfDebuggingLevelIsAfterEqualSign=1
+        shift
+    fi
+
+    if [ ! -z "$TemporaryValueOfDebuggingLevel" ]; then
+
+        if   [ "$TemporaryValueOfDebuggingLevel" == '0' ] || [[ "$TemporaryValueOfDebuggingLevel" =~ ^[1-9][0-9]*$ ]]; then
+            DebuggingLevel=$TemporaryValueOfDebuggingLevel
+            shift
+        elif [ "$TemporaryValueOfDebuggingLevel" == 'true' ]; then
+            DebuggingLevel=1
+            shift
+        elif [ "$TemporaryValueOfDebuggingLevel" == 'false' ]; then
+            DebuggingLevel=0
+            shift
+        fi
+
+    fi
+
+    if [ "$DebuggingLevel" == "$SIGNAL_OF_UNDEFINED" ]; then
+        DebuggingLevel=0
+    fi
+
+    if [ $DebuggingLevel -ge 1 ]; then
+        echo
+        echo  -e  "〔调试〕： \e[0;96m--应开启调试功能\e[0;97m=\e[0;91m${DebuggingLevel}${NoColor}    （\e[0;92m后跟原始参数之个数：\e[0;91m$#${NoColor}）"
+    fi
+
+
 
 
 
@@ -114,6 +144,9 @@ function Read-吴乐川读取并处理某函数的参数表 {
         local ErrorMessage="$1"
         local ShouldShowTipOfValueType="$2"
 
+        echo -e "\e[0;31m────────────────────────${NoColor}"
+        echo -e "         \e[0;31m出错！${NoColor}"
+        echo -e "\e[0;31m────────────────────────${NoColor}"
         echo -e "${ColorOfErrorMessages}在函数${NoColor}"
         echo -e "    ${ColorOfErrorMessages}“ ${ColorOfTermsInErrorMessages}${NameOfThisFunction}${ColorOfErrorMessages} ”${NoColor}"
         echo -e "${ColorOfErrorMessages}的参数表中，名为${NoColor}"
@@ -145,7 +178,11 @@ function Read-吴乐川读取并处理某函数的参数表 {
             ErrorMessageSnippet1="参数名在等号（=）后未跟随给出值。"
         fi
 
-        local ErrorMessage="${ErrorMessageSnippet1}\e[0;0m    〔源代码相关位置 ${ErrorVariationCode}〕\n    ${ColorOfErrorMessages}已另有参数将该变量配置为 “ \e[0;32m${_ExistingValueOfProcessingVar}${ColorOfErrorMessages} ” 。\n    \e[0;94m另注：上述已配置的值为等效后的标准值，并非命令行中的原始值。${ColorOfErrorMessages} "
+        local ErrorMessage="${ErrorMessageSnippet1}\e[0;0m    〔源代码相关位置 ${ErrorVariationCode}〕${ColorOfErrorMessages}"
+
+        if [ "$_ExistingValueOfProcessingVar" != "$SIGNAL_OF_UNDEFINED" ]; then
+            ErrorMessage="${ErrorMessage}\n    已另有参数将该变量配置为 “ \e[0;32m${_ExistingValueOfProcessingVar}${ColorOfErrorMessages} ” 。\n    \e[0;94m另注：上述已配置的值为等效后的标准值，并非命令行中的原始值。${ColorOfErrorMessages} "
+        fi
 
         Write-_吴乐川打印针对当前处理的参数的错误信息_通用版  "$ErrorMessage"  true
     }
@@ -164,11 +201,11 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
     local _OriginalArgumentsCount=$#
 
-    if [ $ShouldDebug -eq 1 ]; then
-        echo
-        echo  -e  "〔调试〕： \e[0;92m收到的参数总数（ 不含 \e[0;96m--应开启调试功能\e[0;92m ）： \e[0;91m${_OriginalArgumentsCount}\e[0;0m"
-        echo
-    fi
+    # if [ $DebuggingLevel -ge 1 ]; then
+    #     echo
+    #     echo  -e  "〔调试〕： \e[0;92m收到的参数总数（ 不含 \e[0;96m--应开启调试功能\e[0;92m ）： \e[0;91m${_OriginalArgumentsCount}\e[0;0m"
+    #     echo
+    # fi
 
     local _ProcessedArgumentsCount=0
 
@@ -189,6 +226,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
     local _TemporaryArgumentValueIsInvalid
     local _TemporaryArgumentValueIsAfterEqualSign
     local _TemporaryArgumentValueHasTaken
+    local _TemporaryArgumentValueIsFromNextRawArgument
 
     local _CurrentArgumentOrArgumentPairHaveRecognized=0
 
@@ -196,15 +234,13 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
     local _ArgumentConfigsCount=${#ArgumentConfigsArray[@]}
 
-    if [ $ShouldDebug -eq 1 ]; then
+    if [ $DebuggingLevel -ge 1 ]; then
         echo
         echo  -e  "〔调试〕： \e[0;92m探测到外界准备的参数配置条数： \e[0;91m${_ArgumentConfigsCount}\e[0;0m"
-        echo
+        # echo
     fi
 
     local _ProcessingArgumentConfig
-
-    local VALUE_OF_UNDEFINED='*|未给出|*'
 
     for ((_ArgumentConfigsLoopIndex=0; _ArgumentConfigsLoopIndex<_ArgumentConfigsCount; _ArgumentConfigsLoopIndex++)); do
         _ProcessingArgumentConfig=${ArgumentConfigsArray[$_ArgumentConfigsLoopIndex]}
@@ -217,6 +253,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
         if [ "$_ProcessingArgumentName" != "$ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST" ]; then
             if [ "$_ProcessingArgumentName" == '--' ] || [[ ! "$_ProcessingArgumentName" =~ ^- ]]; then
                 Write-_吴乐川打印针对当前处理的参数配置的错误信息  "$((_ArgumentConfigsLoopIndex+1))"  "命令行参数名"  "${_ProcessingArgumentName}"
+                _善后
                 return 92
             fi
         fi
@@ -228,6 +265,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
         if [ -z "$_ProcessingVariableName" ] || [[ ! "$_ProcessingVariableName" =~ ^[a-zA-Z_-][0-9a-zA-Z_-]*$ ]]; then
             Write-_吴乐川打印针对当前处理的参数配置的错误信息  "$((_ArgumentConfigsLoopIndex+1))"  "变量名"  "${_ProcessingVariableName}"
+            _善后
             return 92
         fi
 
@@ -262,16 +300,18 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
 
         if [ "$_ProcessingArgumentName" != "$ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST" ] && [ "$_ProcessingArgumentValueType" != '标准类型_列表' ]; then
-            eval "${_ProcessingVariableName}='${VALUE_OF_UNDEFINED}'" # 这里不要用 local 。
+            eval "${_ProcessingVariableName}='${SIGNAL_OF_UNDEFINED}'" # 这里不要用 local 。
         fi
     done
 
 
 
-    # if [ ! -z "$ResultRecievingVarName_AnonymousValuesArray" ]; then
-    #     echo "〔调试〕： $ResultRecievingVarName_AnonymousValuesArray"
-    #     eval "echo \"〔调试〕： \$$ResultRecievingVarName_AnonymousValuesArray\""
-    # fi
+    function Write-_吴乐川打印调试信息_遇到原始参数 {
+        if [ $DebuggingLevel -ge 2 ]; then
+            echo
+            echo  -e  "〔调试〕： 遇到原始参数 \e[0;96m${1}\e[0;0m 。"
+        fi
+    }
 
 
 
@@ -279,6 +319,8 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
         _ProcessedArgumentsCount=$((_ProcessedArgumentsCount+1))
         _CurrentArgumentOrArgumentPairHaveRecognized=0
+
+        Write-_吴乐川打印调试信息_遇到原始参数  "$1"
 
         if [ ! -z "$_ArgumentConfigsCount" ]; then
             for ((_ArgumentConfigsLoopIndex=0; _ArgumentConfigsLoopIndex<_ArgumentConfigsCount; _ArgumentConfigsLoopIndex++)); do
@@ -350,6 +392,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
                 _TemporaryArgumentValueIsAfterEqualSign=0
                 _TemporaryArgumentValueIsInvalid=0
                 _TemporaryArgumentValueHasTaken=0
+                _TemporaryArgumentValueIsFromNextRawArgument=0
                 _TemporaryArgumentValue=
 
 
@@ -357,53 +400,74 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
 
                 if [ "$1" == "${_ProcessingArgumentName}" ]; then
-                    # if [ $ShouldDebug -eq 1 ]; then
+
+                    # if [ $DebuggingLevel -ge 1 ]; then
                     #     echo  -e  "〔调试〕： 遇到参数 '\e[0;96m${_ProcessingArgumentName}\e[0;0m' 。"
                     # fi
 
                     _CurrentArgumentOrArgumentPairHaveRecognized=1
                     shift
 
-                    if [ "${_ExistingValueOfProcessingVar}" != "${VALUE_OF_UNDEFINED}" ]; then
+                    if [ "${_ExistingValueOfProcessingVar}" != "${SIGNAL_OF_UNDEFINED}" ]; then
                         if [ $_ProcessingArgumentValueIsAList -eq 0 ]; then
                             Write-_吴乐川打印针对当前处理的参数的错误信息_参数不应重复出现  '1'
+                            _善后
                             return 1
                         fi
                     fi
 
                     if [ $# -gt 0 ]; then
                         if [[ "$1" =~ ^-[^0-9].*$ ]] || [ "$1" == '-' ]; then
-                            if [ "$_ProcessingArgumentValueType" != '标准类型_布尔' ]; then
+                            if [ "$_ProcessingArgumentValueType" != '标准类型_布尔' ] && [ "$_ProcessingArgumentValueType" != '标准类型_文本' ]; then
                                 Write-_吴乐川打印针对当前处理的参数的错误信息_参数未给出值  '1'
+                                _善后
                                 return 2
                             fi
+
+                            _TemporaryArgumentValue=""
+                            _TemporaryArgumentValueIsFromNextRawArgument=0
+                        elif [ -z "$1" ]; then
+                            if [ "$_ProcessingArgumentValueType" != '标准类型_布尔' ] && [ "$_ProcessingArgumentValueType" != '标准类型_文本' ] && [ "$_ProcessingArgumentValueType" != '标准类型_列表' ]; then
+                                Write-_吴乐川打印针对当前处理的参数的错误信息_参数未给出值  '2'
+                                _善后
+                                return 2
+                            fi
+
+                            Write-_吴乐川打印调试信息_遇到原始参数  "$1"
+
+                            _TemporaryArgumentValue="$1"
+                            _TemporaryArgumentValueIsFromNextRawArgument=1
+                        else
+                            Write-_吴乐川打印调试信息_遇到原始参数  "$1"
+
+                            _TemporaryArgumentValue="$1"
+                            _TemporaryArgumentValueIsFromNextRawArgument=1
                         fi
 
-                        if [ -z "$1" ]; then
-                            if [ "$_ProcessingArgumentValueType" != '标准类型_布尔' ] && [ "$_ProcessingArgumentValueType" != '标准类型_列表' ]; then
-                                Write-_吴乐川打印针对当前处理的参数的错误信息_参数未给出值  '2'
-                                return 2
-                            fi
-                        fi
                     else
-                        if [ "$_ProcessingArgumentValueType" != '标准类型_布尔' ]; then
+                        if [ "$_ProcessingArgumentValueType" != '标准类型_布尔' ] && [ "$_ProcessingArgumentValueType" != '标准类型_文本' ]; then
                             Write-_吴乐川打印针对当前处理的参数的错误信息_参数未给出值  '3'
+                            _善后
                             return 2
+                        else
+                            _TemporaryArgumentValue=""
+                            _TemporaryArgumentValueIsFromNextRawArgument=0
                         fi
                     fi
 
-                    _TemporaryArgumentValue="$1"
                 elif [[ "$1" =~ ^"${_ProcessingArgumentName}"= ]]; then
-                    # if [ $ShouldDebug -eq 1 ]; then
+
+                    # if [ $DebuggingLevel -ge 1 ]; then
                     #     echo  -e  "〔调试〕： 遇到参数 '\e[0;96m${_ProcessingArgumentName}=\e[0;0m' 。"
                     # fi
 
                     _CurrentArgumentOrArgumentPairHaveRecognized=1
 
-                    if [ "${_ExistingValueOfProcessingVar}" != "${VALUE_OF_UNDEFINED}" ]; then
+                    if [ "${_ExistingValueOfProcessingVar}" != "${SIGNAL_OF_UNDEFINED}" ]; then
                         if [ $_ProcessingArgumentValueIsAList -eq 0 ]; then
                             Write-_吴乐川打印针对当前处理的参数的错误信息_参数不应重复出现  '2'
                             shift
+                            _善后
                             return 1
                         fi
                     fi
@@ -415,20 +479,27 @@ function Read-吴乐川读取并处理某函数的参数表 {
                     if [ -z "${_TemporaryArgumentValue}" ]; then
                         if [ "$_ProcessingArgumentValueType" != '标准类型_列表' ]; then
                             Write-_吴乐川打印针对当前处理的参数的错误信息_参数未给出值  '3'  true
+                            _善后
                             return 2
                         fi
                     fi
+
                 fi
 
 
 
                 if [ $_CurrentArgumentOrArgumentPairHaveRecognized -eq 1 ]; then
 
-                    # if [ $ShouldDebug -eq 1 ]; then
-                    #     echo  -e  "〔调试〕： 考察参数值 '\e[0;91m${_TemporaryArgumentValue}\e[0;0m' 。"
-                    # fi
+                    if [ $DebuggingLevel -ge 1 ]; then
+                        echo  -e  "〔调试〕： 考察参数 '\e[0;96m${_ProcessingArgumentName}\e[0;0m' 的值 '\e[0;91m${_TemporaryArgumentValue}\e[0;0m' 。"
+                    fi
 
-                    if   [ "$_ProcessingArgumentValueType" == '标准类型_布尔' ]; then
+                    if   [ "$_ProcessingArgumentValueType" == '标准类型_文本' ]; then
+
+                        _TemporaryArgumentValueIsInvalid=0
+                        _TemporaryArgumentValueHasTaken=1
+
+                    elif   [ "$_ProcessingArgumentValueType" == '标准类型_布尔' ]; then
 
                         if   [ "${_TemporaryArgumentValue}" == '$true'  ] || [ "${_TemporaryArgumentValue}" == 'true'  ] || [ "${_TemporaryArgumentValue}" == '1' ]; then
                             _TemporaryArgumentValue='true'
@@ -503,13 +574,14 @@ function Read-吴乐川读取并处理某函数的参数表 {
                         fi
                     else
                         Write-_吴乐川打印针对当前处理的参数的错误信息_参数值不合规  '1'
+                        _善后
                         return 3
                     fi
 
 
 
-                    if [ $_TemporaryArgumentValueIsAfterEqualSign -eq 0 ]; then
-                        if [ $_TemporaryArgumentValueHasTaken -eq 1 ]; then
+                    if [ $_TemporaryArgumentValueHasTaken -eq 1 ]; then
+                        if [ $_TemporaryArgumentValueIsAfterEqualSign -eq 0 ] && [ $_TemporaryArgumentValueIsFromNextRawArgument -eq 1 ]; then
                             shift
                         fi
                     fi
@@ -583,7 +655,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
 
 
-        if [ "${_ExistingValueOfProcessingVar}" == "${VALUE_OF_UNDEFINED}" ]; then
+        if [ "${_ExistingValueOfProcessingVar}" == "${SIGNAL_OF_UNDEFINED}" ]; then
             _ExistingValueOfProcessingVar=$_ProcessingArgumentDefaultValue
             eval "${_ProcessingVariableName}=\$_ExistingValueOfProcessingVar"
         fi
@@ -607,6 +679,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
             echo  -e  "${ColorOfErrorMessages}〔调试〕： ──────────────────────────────────────────────────${NoColor}"
             echo  -e  "${ColorOfErrorMessages}〔调试〕： 无法打印列表。因为未给出 “${ColorOfTermsInErrorMessages} ArgumentNameOfList ${ColorOfErrorMessages}” 。${NoColor}"
             echo  -e  "${ColorOfErrorMessages}〔调试〕： ──────────────────────────────────────────────────${NoColor}"
+            _善后
             return
         fi
 
@@ -616,6 +689,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
             echo  -e  "${ColorOfErrorMessages}〔调试〕：     “${ColorOfTermsInErrorMessages} ${ArgumentNameOfList} ${ColorOfErrorMessages}”。"
             echo  -e  "${ColorOfErrorMessages}〔调试〕： 因为未给出 “${ColorOfTermsInErrorMessages} VarNameOfFullList ${ColorOfErrorMessages}” 。${NoColor}"
             echo  -e  "${ColorOfErrorMessages}〔调试〕： ──────────────────────────────────────────────────${NoColor}"
+            _善后
             return
         fi
 
@@ -625,6 +699,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
             echo  -e  "${ColorOfErrorMessages}〔调试〕：     “${ColorOfTermsInErrorMessages} ${ArgumentNameOfList} ${ColorOfErrorMessages}”。"
             echo  -e  "${ColorOfErrorMessages}〔调试〕： 因为未给出 “${ColorOfTermsInErrorMessages} VarNameOfListPartToPrint ${ColorOfErrorMessages}” 。${NoColor}"
             echo  -e  "${ColorOfErrorMessages}〔调试〕： ──────────────────────────────────────────────────${NoColor}"
+            _善后
             return
         fi
 
@@ -664,8 +739,6 @@ function Read-吴乐川读取并处理某函数的参数表 {
         local ColorOfValues="\e[0;91m"
         local ColorOfExpressionParts="\e[0;97m"
 
-        echo  -e  "〔调试〕："
-        # echo      '〔调试〕： ──────────────────────────────────────'
         echo  -e  "〔调试〕： ${ColorOfArgumentNames}${ArgumentNameOfList}${NoColor} （${ColorOfVarValueTypes}列表${NoColor}）"
         echo  -e  "〔调试〕：     ${ColorOfVarNames}${VarNameOfFullList}${ColorOfExpressionParts}+=(${NoColor}"
 
@@ -709,7 +782,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
 
 
-    if [ $ShouldDebug -eq 1 ]; then
+    if [ $DebuggingLevel -ge 1 ]; then
         echo
         echo      '〔调试〕： ────────────────────────────────────────────────────────────────'
         echo  -e  "〔调试〕： \e[0;32m函数${NoColor}"

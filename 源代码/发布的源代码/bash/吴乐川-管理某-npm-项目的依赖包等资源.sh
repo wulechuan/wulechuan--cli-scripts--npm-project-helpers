@@ -68,8 +68,9 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_
     local ShouldRunThisTask
     local ShouldDryRun
 
-    #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
+        # 命令行参数名    | 变量名             | 取值之类型   | 默认值
+        # ----------------------------------------------------------
         "--确应运行该任务 | ShouldRunThisTask | 标准类型_布尔 | false"
         "--应仅作仿真演练 | ShouldDryRun      | 标准类型_布尔 | false"
     )
@@ -92,7 +93,7 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_
     if [ "$ShouldRunThisTask" == true ]; then
         if [ -d .'/node_modules' ]; then
             if [ "$ShouldDryRun" == false ]; then
-                echo  -e  "\e[0;31m正在删除 node_modules 文件夹。\e[0;0m"
+                echo  -e  "\e[0;91m正在删除 node_modules 文件夹。\e[0;0m"
                 echo
 
                 rm  -rf  .'/node_modules'
@@ -137,8 +138,9 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_packa
     local ShouldRunThisTask
     local ShouldDryRun
 
-    #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
+        # 命令行参数名    | 变量名             | 取值之类型   | 默认值
+        # ----------------------------------------------------------
         "--确应运行该任务 | ShouldRunThisTask | 标准类型_布尔 | false"
         "--应仅作仿真演练 | ShouldDryRun      | 标准类型_布尔 | false"
     )
@@ -199,8 +201,9 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
     local IsEnding
     local ShouldDryRun
 
-    #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
+        # 命令行参数名            | 变量名        | 取值之类型   | 默认值
+        # -------------------------------------------------------------
         "--系作为该任务之结束提示语 | IsEnding     | 标准类型_布尔 | false"
         "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
@@ -238,8 +241,9 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
     local IsEnding
     local ShouldDryRun
 
-    #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
+        # 命令行参数名            | 变量名        | 取值之类型   | 默认值
+        # -------------------------------------------------------------
         "--系作为该任务之结束提示语 | IsEnding     | 标准类型_布尔 | false"
         "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
@@ -277,8 +281,9 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
     local IsEnding
     local ShouldDryRun
 
-    #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
+        # 命令行参数名            | 变量名        | 取值之类型   | 默认值
+        # -------------------------------------------------------------
         "--系作为该任务之结束提示语 | IsEnding     | 标准类型_布尔 | false"
         "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
@@ -316,8 +321,9 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
     local IsEnding
     local ShouldDryRun
 
-    #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
+        # 命令行参数名            | 变量名        | 取值之类型   | 默认值
+        # -------------------------------------------------------------
         "--系作为该任务之结束提示语 | IsEnding     | 标准类型_布尔 | false"
         "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
@@ -355,8 +361,9 @@ function Write-吴乐川管理某_npm_项目__打印提示语__更新与研发�
     local IsEnding
     local ShouldDryRun
 
-    #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
+        # 命令行参数名            | 变量名        | 取值之类型   | 默认值
+        # -------------------------------------------------------------
         "--系作为该任务之结束提示语 | IsEnding     | 标准类型_布尔 | false"
         "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
@@ -394,8 +401,9 @@ function Write-吴乐川管理某_npm_项目__打印提示语__其他交代 {
     local IsEnding
     local ShouldDryRun
 
-    #  命令行参数名 | 变量名 | 类型 | 默认值
     local ArgumentConfigsArray=(
+        # 命令行参数名            | 变量名        | 取值之类型   | 默认值
+        # -------------------------------------------------------------
         "--系作为该任务之结束提示语 | IsEnding     | 标准类型_布尔 | false"
         "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
@@ -428,6 +436,44 @@ function Write-吴乐川管理某_npm_项目__打印提示语__其他交代 {
 
 
 
+function Update-吴乐川更新当前_npm_项目的所有依赖包 {
+    local NameOfThisFunction='测试之主程序（第一部分）'
+
+    local ShouldDryRun
+    local PackageConfigContentSeparator
+    local NpmExtraArguments
+    local NPMDependencyVersionConfigs_Produ=()
+    local NPMDependencyVersionConfigs_Devel=()
+    local RestArgumentsArray=()
+
+    local ArgumentConfigsArray=(
+        #  命令行参数名                     | 变量名                             | 取值之类型     | 默认值
+        # ------------------------------------------------------------------------------------------------
+        "--应仅作仿真演练                   | ShouldDryRun                      | 标准类型_布尔   | false"
+        "--内容分割记号                     | PackageConfigContentSeparator     |               |      |::|"
+        "--NPM安装依赖包时须额外带上的参数序列 | NpmExtraArguments                 | 标准类型_文本"
+        "--某产品级依赖包之版本配置           | NPMDependencyVersionConfigs_Produ | 标准类型_列表"
+        "--某研发级依赖包之版本配置           | NPMDependencyVersionConfigs_Devel | 标准类型_列表"
+        '〈匿名值之汇总列表〉                | RestArgumentsArray'
+    )
+
+    if true; then
+        Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 1 $*
+    else
+        local ArgumentsParsingCommandLine='Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 2'
+        while [ $# -gt 0 ]; do
+            ArgumentsParsingCommandLine="${ArgumentsParsingCommandLine}  \"$1\""
+            shift
+        done
+
+        echo "<<\"$ArgumentsParsingCommandLine\">>"
+        $ArgumentsParsingCommandLine
+    fi
+}
+
+
+
+
 
 function Update-吴乐川更新当前_npm_项目的某批依赖包 {
     local PACKAGE_CONFIG_CONTENT_DEFAULT_SEPARATOR='|::|'
@@ -437,11 +483,11 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
 
 
-    # --内容分割记号                       至多出现 1 次。    非空白文本。
-    # --这批依赖包之依赖类别                至多出现 1 次。    '本产品拟囊括这些软件之整体或部分' | '本产品仅会在研发阶段借助这些软件'
     # --应仅作仿真演练                     至多出现 1 次。    1 | 0 | true | false
+    # --内容分割记号                       至多出现 1 次。    非空白文本。
     # --NPM安装依赖包时须额外带上的参数序列  至多出现 1 次。     文本。
     # --某依赖包之版本配置                 可多次出现。        非空白文本。
+    # --这批依赖包之依赖类别                至多出现 1 次。    '本产品拟囊括这些软件之整体或部分' | '本产品仅会在研发阶段借助这些软件'
 
 
 
