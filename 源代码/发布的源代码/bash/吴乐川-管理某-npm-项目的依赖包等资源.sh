@@ -74,7 +74,7 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_
         "--应仅作仿真演练 | ShouldDryRun      | 标准类型_布尔 | false"
     )
 
-    Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
+    Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 false  $*
 
 
 
@@ -143,7 +143,7 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_packa
         "--应仅作仿真演练 | ShouldDryRun      | 标准类型_布尔 | false"
     )
 
-    Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
+    Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 false  $*
 
 
 
@@ -205,7 +205,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
         "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
 
-    Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
+    Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 false  $*
 
 
 
@@ -244,7 +244,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
         "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
 
-    Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
+    Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 false  $*
 
 
 
@@ -283,7 +283,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
         "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
 
-    Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
+    Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 false  $*
 
 
 
@@ -322,7 +322,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
         "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
 
-    Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
+    Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 false  $*
 
 
 
@@ -361,7 +361,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__更新与研发�
         "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
 
-    Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
+    Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 false  $*
 
 
 
@@ -400,7 +400,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__其他交代 {
         "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
 
-    Read-吴乐川读取并处理某函数的参数表  --should-debug false  $*
+    Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 false  $*
 
 
 

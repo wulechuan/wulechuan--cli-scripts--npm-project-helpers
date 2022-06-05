@@ -50,7 +50,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
     local ShouldDebug=0
 
-    if   [  "$1" == '--should-debug'  ]; then
+    if   [  "$1" == '--应开启调试功能'  ]; then
         ShouldDebug=1
         shift
 
@@ -61,8 +61,8 @@ function Read-吴乐川读取并处理某函数的参数表 {
             ShouldDebug=0
             shift
         fi
-    elif [[ "$1" =~ ^--should-debug= ]]; then
-        ShouldDebug=${1:15}
+    elif [[ "$1" =~ ^--应开启调试功能= ]]; then
+        ShouldDebug=${1:10}
         shift
 
         if [ -z "$ShouldDebug" ]; then
@@ -166,7 +166,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
     if [ $ShouldDebug -eq 1 ]; then
         echo
-        echo  -e  "〔调试〕： \e[0;92m收到的参数总数（ 不含 \e[0;96m--should-debug\e[0;92m ）： \e[0;91m${_OriginalArgumentsCount}\e[0;0m"
+        echo  -e  "〔调试〕： \e[0;92m收到的参数总数（ 不含 \e[0;96m--应开启调试功能\e[0;92m ）： \e[0;91m${_OriginalArgumentsCount}\e[0;0m"
         echo
     fi
 

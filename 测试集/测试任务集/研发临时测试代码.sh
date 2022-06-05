@@ -44,7 +44,7 @@ function 测试之主程序 {
 
 
 
-        Read-吴乐川读取并处理某函数的参数表  --should-debug true \
+        Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 true \
             --number-1 1 \
             匿名值表中新添的第一词 \
             --正整数 2 \
