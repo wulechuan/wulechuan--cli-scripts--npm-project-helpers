@@ -457,18 +457,12 @@ function Update-吴乐川更新当前_npm_项目的所有依赖包 {
         '〈匿名值之汇总列表〉                | RestArgumentsArray'
     )
 
-    if true; then
-        Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 1 $*
-    else
-        local ArgumentsParsingCommandLine='Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 2'
-        while [ $# -gt 0 ]; do
-            ArgumentsParsingCommandLine="${ArgumentsParsingCommandLine}  \"$1\""
-            shift
-        done
-
-        echo "<<\"$ArgumentsParsingCommandLine\">>"
-        $ArgumentsParsingCommandLine
-    fi
+    local ArgumentsParsingCommandLine='Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 2'
+    while [ $# -gt 0 ]; do
+        ArgumentsParsingCommandLine="${ArgumentsParsingCommandLine}  '$1'"
+        shift
+    done
+    source <(echo $ArgumentsParsingCommandLine )
 }
 
 
