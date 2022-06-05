@@ -27,6 +27,8 @@ function 测试之主程序 {
         local boolean1
         local Bool2
         local AllTextSnippets=( '测试程序调用 “ Read-吴乐川读取并处理某函数的参数表 ” 之前旧有的内容，不应被洗掉。' )
+        local ChineseHeros=( '李广' '岳飞' )
+        local SomeList=()
 
         local ArgumentConfigsArray=(
             #  命令行参数名                                         | 变量名                            | 取值之类型    | 默认值
@@ -34,9 +36,12 @@ function 测试之主程序 {
             "--正整数           | number2         | 标准类型_正整数   | ${BY_DEFAULT__SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST}"
             "--整数3            | n3              | 标准类型_非负整数 | ${BY_DEFAULT__SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST}"
             "--开关甲           | boolean1        | 标准类型_布尔     | ${BY_DEFAULT__SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST}"
+            "--中华英雄谱       | ChineseHeros    | 标准类型_列表"
             "--bool-2          | Bool2           | 标准类型_布尔     | ${BY_DEFAULT__SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST}"
-            "〈匿名值之汇总列表〉 | AllTextSnippets |                 | ${BY_DEFAULT__SHOULD_DRY_RUN}"
+            "〈匿名值之汇总列表〉 | AllTextSnippets"
+            "--实验性列表       | SomeList        | 标准类型_列表"
         )
+
 
 
         Read-吴乐川读取并处理某函数的参数表  --should-debug true \
@@ -47,12 +52,22 @@ function 测试之主程序 {
             --开关甲 true \
             --bool-2 \
             0 \
+            --实验性列表 \
+                '看看会不会包含这一条' --实验性列表 '第二条' \
             --作者 '作者是吴乐川' \
             '匿名值表中新添的第2词' \
             "这后面带有换行符：\n……这是换行符之后的内容。" \
             '' \
             "" \
+            --中华英雄谱 '辛弃疾' \
+            --中华英雄谱 '程开甲' \
+            --中华英雄谱='黄继光' \
+            --中华英雄谱 '钱学森' \
+            --中华英雄谱 '张桃芳' \
             ' ' \
+            --中华英雄谱='王伟（81192）' \
+            --中华英雄谱 '袁隆平' \
+            --实验性列表 '' \
             我就是吴乐川！
 
         echo
