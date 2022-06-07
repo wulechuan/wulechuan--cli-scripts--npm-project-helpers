@@ -427,7 +427,6 @@ function Update-吴乐川更新当前_npm_项目的所有依赖包 {
     local NpmExtraArguments
     local NPMDependencyVersionConfigs_Produ=()
     local NPMDependencyVersionConfigs_Devel=()
-    local RestArgumentsArray=()
 
     local ArgumentConfigsArray=(
         #  命令行参数名                     | 变量名                             | 取值之类型     | 默认值
@@ -441,7 +440,7 @@ function Update-吴乐川更新当前_npm_项目的所有依赖包 {
 
     local LastTaskReturnCode=0
 
-    Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 2 "$@"
+    Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 1 "$@"
     # LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi
 
     # Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_modules       --应仅作仿真演练 $ShouldDryRun  --确应运行该任务 $ShouldRemoveNodeModulesFirst

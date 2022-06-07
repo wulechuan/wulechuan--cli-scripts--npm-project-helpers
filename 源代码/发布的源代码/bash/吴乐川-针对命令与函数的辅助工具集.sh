@@ -60,7 +60,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
     local ColorOfWarningMessages="\e[0;33m"
     local ColorOfTermsWarningMessages="\e[0;97m"
-    
+
     local NameOfTheFunctionAsCaller="${FUNCNAME[1]}"
 
 
@@ -488,7 +488,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
                 if [ $_CurrentArgumentOrArgumentPairHaveRecognized -eq 1 ]; then
 
-                    if [ $DebuggingLevel -ge 1 ]; then
+                    if [ $DebuggingLevel -ge 2 ]; then
                         echo  -e  "〔调试〕： 考察参数 '\e[0;96m${_ProcessingArgumentName}\e[0;0m' 的值 '\e[0;91m${_TemporaryArgumentValue}\e[0;0m' 。"
                     fi
 
@@ -666,10 +666,11 @@ function Read-吴乐川读取并处理某函数的参数表 {
     # 最后，按需打印结论性的调试信息。
 
     function Write-_吴乐川打印一个列表 {
-        local ArgumentNameOfList="$1"
-        local VarNameOfFullList="$2"
-        local VarNameOfListPartToPrint="$3"
-        local ListItemsKnownCount="$4"
+        local ArgumentIndex="$1"
+        local ArgumentNameOfList="$2"
+        local VarNameOfFullList="$3"
+        local VarNameOfListPartToPrint="$4"
+        local ListItemsKnownCount="$5"
 
 
 
@@ -703,7 +704,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
 
         local IsPrintingFullList=0
-        if [ "$VarNameOfFullList" == "$VarNameOfListPartToPrint" ]; then
+        if [ "$VarNameOfFullList" == "$VarNameOfListPartToPrint" ] || [ "$VarNameOfFullList" == "${ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST}" ]; then
             IsPrintingFullList=1
         fi
 
@@ -731,14 +732,30 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
 
 
-        local ColorOfArgumentNames="\e[0;96m"
-        local ColorOfVarNames="\e[0;33m"
-        local ColorOfVarValueTypes="\e[0;32m"
-        local ColorOfValues="\e[0;91m"
-        local ColorOfExpressionParts="\e[0;97m"
+        local ColorOfArgumentIndex='\e[0;0m'
+        local ColorOfArgumentNames='\e[0;96m'
+        local ColorOfVarNames='\e[0;33m'
+        local ColorOfVarValueTypes='\e[0;32m'
+        local ColorOfValues='\e[0;91m'
+        local ColorOfExpressionParts='\e[0;97m'
 
-        echo  -e  "〔调试〕： ${ColorOfArgumentNames}${ArgumentNameOfList}${NoColor} （${ColorOfVarValueTypes}列表${NoColor}）"
+        echo  -en "〔调试〕：〔${ColorOfArgumentIndex}${ArgumentIndex}${NoColor}〕"
+        
+        if [ "$VarNameOfFullList" == "${ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST}" ]; then
+            echo  -e  "（\e[0;31m并未提供变量来接收它们，它们将被丢弃${NoColor}）"
+        else
+            echo
+        fi
+
+        echo  -e  "〔调试〕：   ${ColorOfArgumentNames}${ArgumentNameOfList}${NoColor} （${ColorOfVarValueTypes}列表${NoColor}）"
+        
+        if [ $IsPrintingFullList -eq 1 ]; then
+        echo  -e  "〔调试〕：     ${ColorOfVarNames}${VarNameOfFullList}${ColorOfExpressionParts}=(${NoColor}"
+        else
         echo  -e  "〔调试〕：     ${ColorOfVarNames}${VarNameOfFullList}${ColorOfExpressionParts}+=(${NoColor}"
+        fi
+
+
 
         local ListItemValue
 
@@ -787,6 +804,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
         echo  -e  "〔调试〕：     \e[0;32m“ ${ColorOfTermsInErrorMessages}${NameOfTheFunctionAsCaller}\e[0;32m ”${NoColor}"
         echo  -e  "〔调试〕： \e[0;32m的各参数及其对应变量：${NoColor}"
 
+        local ColorOfArgumentIndex='\e[0;0m'
         local ColorOfArgumentNames="\e[0;96m"
         local ColorOfVarNames="\e[0;33m"
         local ColorOfVarValueTypes="\e[0;32m"
@@ -836,14 +854,16 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
 
             if [ "$_ProcessingArgumentValueType" == '标准类型_列表' ]; then
-                Write-_吴乐川打印一个列表  "${_ProcessingArgumentName}"  "$_ProcessingVariableName"  "$_ProcessingVariableName"
+                Write-_吴乐川打印一个列表  "$((_ArgumentConfigsLoopIndex+1))"  "${_ProcessingArgumentName}"  "$_ProcessingVariableName"  "$_ProcessingVariableName"
             else
                 eval "_ExistingValueOfProcessingVar=\"\$${_ProcessingVariableName}\""
 
+                echo  -e  "〔调试〕：〔${ColorOfArgumentIndex}$((_ArgumentConfigsLoopIndex+1))${NoColor}〕"
+                echo  -en "〔调试〕：   ${ColorOfArgumentNames}${_ProcessingArgumentName}${NoColor}"
                 if [ -z "$_ProcessingArgumentValueTypeStandardName" ]; then
-                echo  -e  "〔调试〕： ${ColorOfArgumentNames}${_ProcessingArgumentName}${NoColor}"
+                    echo
                 else
-                echo  -e  "〔调试〕： ${ColorOfArgumentNames}${_ProcessingArgumentName}${NoColor} （${ColorOfVarValueTypes}${_ProcessingArgumentValueTypeStandardName}${NoColor}）"
+                    echo  -e  " （${ColorOfVarValueTypes}${_ProcessingArgumentValueTypeStandardName}${NoColor}）"
                 fi
 
                 echo  -e  "〔调试〕：     ${ColorOfVarNames}${_ProcessingVariableName}${ColorOfExpressionParts}=${ColorOfValues}${_ExistingValueOfProcessingVar}${NoColor}"
@@ -851,8 +871,18 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
         done
 
-        if [ ! -z "$ResultRecievingVarName_AnonymousValuesArray" ]; then
-            Write-_吴乐川打印一个列表  "${ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST}"  "${ResultRecievingVarName_AnonymousValuesArray}"  'AnonymouseValuesArrayAddedByThisTool'
+        if [ $AnonymouseValuesCountAddedByThisTool -gt 0 ]; then
+            echo  -e  "〔调试〕："
+
+            if [ -z "$ResultRecievingVarName_AnonymousValuesArray" ]; then
+                Write-_吴乐川打印一个列表  '*'  "${ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST}" \
+                    "${ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST}" \
+                    'AnonymouseValuesArrayAddedByThisTool'
+            else
+                Write-_吴乐川打印一个列表  '*'  "${ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST}" \
+                    "${ResultRecievingVarName_AnonymousValuesArray}" \
+                    'AnonymouseValuesArrayAddedByThisTool'
+            fi
         fi
 
         echo      '〔调试〕： ────────────────────────────────────────────────────────────────'
