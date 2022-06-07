@@ -10,19 +10,15 @@ function Read-吴乐川读取并处理某函数的参数表 {
     local ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST='〈匿名值之汇总列表〉'
     local SIGNAL_OF_UNDEFINED='*|未给出|*'
 
-    # 外界应预备好以下两个变量：
-    #
-    #     NameOfThisFunction
+    # 外界首先应预备好以下变量：
     #
     #     ArgumentConfigsArray
     #
-    # 但上述两个变量不应通过本函数的参数（ arguments ）给出。
+    # 但上述变量不应通过本函数的参数（ arguments ）给出。
     #
     # 外界还应预备好各变量，并且也不应通过本函数的参数给出。
     #
     # 示例：
-    #     local NameOfThisFunction='某某函数'
-    #
     #     local ShouldDryRun
     #     local Number1
     #     local N2
@@ -64,6 +60,8 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
     local ColorOfWarningMessages="\e[0;33m"
     local ColorOfTermsWarningMessages="\e[0;97m"
+    
+    local NameOfTheFunctionAsCaller="${FUNCNAME[1]}"
 
 
 
@@ -127,7 +125,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
         local ColorOfInvalidValue="\e[0;33m"
 
         echo -e "${ColorOfErrorMessages}在函数${NoColor}"
-        echo -e "    ${ColorOfErrorMessages}“ ${ColorOfTermsInErrorMessages}${NameOfThisFunction}${ColorOfErrorMessages} ”${NoColor}"
+        echo -e "    ${ColorOfErrorMessages}“ ${ColorOfTermsInErrorMessages}${NameOfTheFunctionAsCaller}${ColorOfErrorMessages} ”${NoColor}"
         echo -e "${ColorOfErrorMessages}的参数配置表出现如下问题：${NoColor}"
         echo -e "    ${ColorOfErrorMessages}第 \e[0;96m${IndexOfInvolvedConfig}${ColorOfErrorMessages} 个参数配置中的〈${ColorOfItemName}${NameOfInvolvedConfigItem}${ColorOfErrorMessages}〉配置了无效的值。${NoColor}"
         echo -e "    ${ColorOfErrorMessages}该〈${ColorOfItemName}${NameOfInvolvedConfigItem}${ColorOfErrorMessages}〉的无效值为 “ ${ColorOfInvalidValue}${InvalidValueOfInvolvedConfigItem}${ColorOfErrorMessages} ”。${NoColor}"
@@ -148,7 +146,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
         echo -e "         \e[0;31m出错！${NoColor}"
         echo -e "\e[0;31m────────────────────────${NoColor}"
         echo -e "${ColorOfErrorMessages}在函数${NoColor}"
-        echo -e "    ${ColorOfErrorMessages}“ ${ColorOfTermsInErrorMessages}${NameOfThisFunction}${ColorOfErrorMessages} ”${NoColor}"
+        echo -e "    ${ColorOfErrorMessages}“ ${ColorOfTermsInErrorMessages}${NameOfTheFunctionAsCaller}${ColorOfErrorMessages} ”${NoColor}"
         echo -e "${ColorOfErrorMessages}的参数表中，名为${NoColor}"
         echo -e "    ${ColorOfErrorMessages}“ ${ColorOfTermsInErrorMessages}${_ProcessingArgumentName}${ColorOfErrorMessages} ”${NoColor}"
         echo -e "${ColorOfErrorMessages}的参数出现如下问题：${NoColor}"
@@ -786,7 +784,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
         echo
         echo      '〔调试〕： ────────────────────────────────────────────────────────────────'
         echo  -e  "〔调试〕： \e[0;32m函数${NoColor}"
-        echo  -e  "〔调试〕：     \e[0;32m“ ${ColorOfTermsInErrorMessages}${NameOfThisFunction}\e[0;32m ”${NoColor}"
+        echo  -e  "〔调试〕：     \e[0;32m“ ${ColorOfTermsInErrorMessages}${NameOfTheFunctionAsCaller}\e[0;32m ”${NoColor}"
         echo  -e  "〔调试〕： \e[0;32m的各参数及其对应变量：${NoColor}"
 
         local ColorOfArgumentNames="\e[0;96m"

@@ -22,8 +22,6 @@ function 完整流程  {
 
 
 
-    local NameOfThisFunction='完整流程'
-
     local ShouldRemoveNodeModulesFirst
     local ShouldRemovePackageLockJSONFirst
     local ShouldDryRun
@@ -39,7 +37,7 @@ function 完整流程  {
 
     local LastTaskReturnCode
 
-    Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 false  $*
+    Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 false  "$@"
     LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi
 
 

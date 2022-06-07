@@ -63,8 +63,6 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_
 
 
 
-    local NameOfThisFunction='Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_modules'
-
     local ShouldRunThisTask
     local ShouldDryRun
 
@@ -133,8 +131,6 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_packa
 
 
 
-    local NameOfThisFunction='Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_package_lock_json'
-
     local ShouldRunThisTask
     local ShouldDryRun
 
@@ -196,8 +192,6 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_packa
 
 
 function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为最晚版本 {
-    local NameOfThisFunction='Remove-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为最晚版本'
-
     local IsEnding
     local ShouldDryRun
 
@@ -236,8 +230,6 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
 
 
 function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为特定版本 {
-    local NameOfThisFunction='Remove-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为特定版本'
-
     local IsEnding
     local ShouldDryRun
 
@@ -276,8 +268,6 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
 
 
 function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为最晚版本 {
-    local NameOfThisFunction='Remove-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为最晚版本'
-
     local IsEnding
     local ShouldDryRun
 
@@ -316,8 +306,6 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
 
 
 function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为特定版本 {
-    local NameOfThisFunction='Remove-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为特定版本'
-
     local IsEnding
     local ShouldDryRun
 
@@ -356,8 +344,6 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
 
 
 function Write-吴乐川管理某_npm_项目__打印提示语__更新与研发相关的数据库 {
-    local NameOfThisFunction='Remove-吴乐川管理某_npm_项目__打印提示语__更新与研发相关的数据库'
-
     local IsEnding
     local ShouldDryRun
 
@@ -396,8 +382,6 @@ function Write-吴乐川管理某_npm_项目__打印提示语__更新与研发�
 
 
 function Write-吴乐川管理某_npm_项目__打印提示语__其他交代 {
-    local NameOfThisFunction='Remove-吴乐川管理某_npm_项目__打印提示语__其他交代'
-
     local IsEnding
     local ShouldDryRun
 
@@ -436,9 +420,8 @@ function Write-吴乐川管理某_npm_项目__打印提示语__其他交代 {
 
 
 
-function Update-吴乐川更新当前_npm_项目的所有依赖包 {
-    local NameOfThisFunction='测试之主程序（第一部分）'
 
+function Update-吴乐川更新当前_npm_项目的所有依赖包 {
     local ShouldDryRun
     local PackageConfigContentSeparator
     local NpmExtraArguments
@@ -454,15 +437,18 @@ function Update-吴乐川更新当前_npm_项目的所有依赖包 {
         "--NPM安装依赖包时须额外带上的参数序列 | NpmExtraArguments                 | 标准类型_文本"
         "--某产品级依赖包之版本配置           | NPMDependencyVersionConfigs_Produ | 标准类型_列表"
         "--某研发级依赖包之版本配置           | NPMDependencyVersionConfigs_Devel | 标准类型_列表"
-        '〈匿名值之汇总列表〉                | RestArgumentsArray'
     )
 
-    local ArgumentsParsingCommandLine='Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 2'
-    while [ $# -gt 0 ]; do
-        ArgumentsParsingCommandLine="${ArgumentsParsingCommandLine}  '$1'"
-        shift
-    done
-    source <(echo $ArgumentsParsingCommandLine )
+    local LastTaskReturnCode=0
+
+    Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 2 "$@"
+    # LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi
+
+    # Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_modules       --应仅作仿真演练 $ShouldDryRun  --确应运行该任务 $ShouldRemoveNodeModulesFirst
+    # LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi
+
+    # Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_package_lock_json  --应仅作仿真演练 $ShouldDryRun  --确应运行该任务 $ShouldRemovePackageLockJSONFirst
+    # LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi
 }
 
 
