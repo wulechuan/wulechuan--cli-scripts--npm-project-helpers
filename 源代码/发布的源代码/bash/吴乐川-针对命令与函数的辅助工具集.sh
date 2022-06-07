@@ -67,14 +67,16 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
 
 
-    local DebuggingLevel="${SIGNAL_OF_UNDEFINED}"
+    local __wlc_arguments_parser_DebuggingLevel_="${SIGNAL_OF_UNDEFINED}"
 
     local TemporaryValueOfDebuggingLevel
     local TemporaryValueOfDebuggingLevelIsFromNextRawArgument=0
     local TemporaryValueOfDebuggingLevelIsAfterEqualSign=0
 
-    if   [  "$1" == '--应开启调试功能'  ]; then
-        DebuggingLevel=1
+    if   [  "$1" == '--调试功能之级别'  ]; then
+        # 不带参数则默认为零，而不是为壹。
+        # 因为这不是严格的布尔值，尽管我将其设计为也可接受 true 与 false 两个值。
+        __wlc_arguments_parser_DebuggingLevel_=0
         shift
 
         if [ $# -gt 0 ] && [ ! -z "$1" ]; then
@@ -82,7 +84,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
             TemporaryValueOfDebuggingLevelIsFromNextRawArgument=1
         fi
 
-    elif [[ "$1" =~ ^--应开启调试功能= ]]; then
+    elif [[ "$1" =~ ^--调试功能之级别= ]]; then
         TemporaryValueOfDebuggingLevel=${1:10}
         TemporaryValueOfDebuggingLevelIsAfterEqualSign=1
         shift
@@ -91,25 +93,25 @@ function Read-吴乐川读取并处理某函数的参数表 {
     if [ ! -z "$TemporaryValueOfDebuggingLevel" ]; then
 
         if   [ "$TemporaryValueOfDebuggingLevel" == '0' ] || [[ "$TemporaryValueOfDebuggingLevel" =~ ^[1-9][0-9]*$ ]]; then
-            DebuggingLevel=$TemporaryValueOfDebuggingLevel
+            __wlc_arguments_parser_DebuggingLevel_=$TemporaryValueOfDebuggingLevel
             shift
         elif [ "$TemporaryValueOfDebuggingLevel" == 'true' ]; then
-            DebuggingLevel=1
+            __wlc_arguments_parser_DebuggingLevel_=1
             shift
         elif [ "$TemporaryValueOfDebuggingLevel" == 'false' ]; then
-            DebuggingLevel=0
+            __wlc_arguments_parser_DebuggingLevel_=0
             shift
         fi
 
     fi
 
-    if [ "$DebuggingLevel" == "$SIGNAL_OF_UNDEFINED" ]; then
-        DebuggingLevel=0
+    if [ "$__wlc_arguments_parser_DebuggingLevel_" == "$SIGNAL_OF_UNDEFINED" ]; then
+        __wlc_arguments_parser_DebuggingLevel_=0
     fi
 
-    if [ $DebuggingLevel -ge 1 ]; then
+    if [ $__wlc_arguments_parser_DebuggingLevel_ -ge 1 ]; then
         echo
-        echo  -e  "〔调试〕： \e[0;96m--应开启调试功能\e[0;97m=\e[0;91m${DebuggingLevel}${NoColor}    （\e[0;92m后跟原始参数之个数：\e[0;91m$#${NoColor}）"
+        echo  -e  "〔调试〕： \e[0;96m--调试功能之级别\e[0;97m=\e[0;91m${__wlc_arguments_parser_DebuggingLevel_}${NoColor}    （\e[0;92m后跟原始参数之个数：\e[0;91m$#${NoColor}）"
     fi
 
 
@@ -199,9 +201,9 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
     local _OriginalArgumentsCount=$#
 
-    # if [ $DebuggingLevel -ge 1 ]; then
+    # if [ $__wlc_arguments_parser_DebuggingLevel_ -ge 1 ]; then
     #     echo
-    #     echo  -e  "〔调试〕： \e[0;92m收到的参数总数（ 不含 \e[0;96m--应开启调试功能\e[0;92m ）： \e[0;91m${_OriginalArgumentsCount}\e[0;0m"
+    #     echo  -e  "〔调试〕： \e[0;92m收到的参数总数（ 不含 \e[0;96m--调试功能之级别\e[0;92m ）： \e[0;91m${_OriginalArgumentsCount}\e[0;0m"
     #     echo
     # fi
 
@@ -232,7 +234,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
     local _ArgumentConfigsCount=${#ArgumentConfigsArray[@]}
 
-    if [ $DebuggingLevel -ge 1 ]; then
+    if [ $__wlc_arguments_parser_DebuggingLevel_ -ge 1 ]; then
         echo
         echo  -e  "〔调试〕： \e[0;92m探测到外界准备的参数配置条数： \e[0;91m${_ArgumentConfigsCount}\e[0;0m"
         # echo
@@ -241,12 +243,15 @@ function Read-吴乐川读取并处理某函数的参数表 {
     local _ProcessingArgumentConfig
 
     for ((_ArgumentConfigsLoopIndex=0; _ArgumentConfigsLoopIndex<_ArgumentConfigsCount; _ArgumentConfigsLoopIndex++)); do
+        # [ $__wlc_arguments_parser_DebuggingLevel_ -ge 3 ] && echo '────────────────────────'
+
         _ProcessingArgumentConfig=${ArgumentConfigsArray[$_ArgumentConfigsLoopIndex]}
 
         _ProcessingArgumentName=${_ProcessingArgumentConfig%%|*}
         _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingArgumentName}+1}
         read  -r  _ProcessingArgumentName <<< $_ProcessingArgumentName
-        # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
+
+        # [ $__wlc_arguments_parser_DebuggingLevel_ -ge 3 ] && echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
 
         if [ "$_ProcessingArgumentName" != "$ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST" ]; then
             if [ "$_ProcessingArgumentName" == '--' ] || [[ ! "$_ProcessingArgumentName" =~ ^- ]]; then
@@ -259,7 +264,8 @@ function Read-吴乐川读取并处理某函数的参数表 {
         _ProcessingVariableName=${_ProcessingArgumentConfig%%|*}
         _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingVariableName}+1}
         read  -r  _ProcessingVariableName <<< $_ProcessingVariableName
-        # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
+
+        # [ $__wlc_arguments_parser_DebuggingLevel_ -ge 3 ] && echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
 
         if [ -z "$_ProcessingVariableName" ] || [[ ! "$_ProcessingVariableName" =~ ^[a-zA-Z_-][0-9a-zA-Z_-]*$ ]]; then
             Write-_吴乐川打印针对当前处理的参数配置的错误信息  "$((_ArgumentConfigsLoopIndex+1))"  "变量名"  "${_ProcessingVariableName}"
@@ -270,12 +276,12 @@ function Read-吴乐川读取并处理某函数的参数表 {
         _ProcessingArgumentValueType=${_ProcessingArgumentConfig%%|*}
         _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingArgumentValueType}+1}
         read  -r  _ProcessingArgumentValueType <<< $_ProcessingArgumentValueType
-        # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
 
-        # _ProcessingArgumentDefaultValue=${_ProcessingArgumentConfig%%|*}
-        # _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingArgumentDefaultValue}+1}
-        # read  -r  _ProcessingArgumentDefaultValue <<< $_ProcessingArgumentDefaultValue
-        # # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
+        # [ $__wlc_arguments_parser_DebuggingLevel_ -ge 3 ] && echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
+
+        _ProcessingArgumentDefaultValue=${_ProcessingArgumentConfig%%|*}
+        _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingArgumentDefaultValue}+1}
+        read  -r  _ProcessingArgumentDefaultValue <<< $_ProcessingArgumentDefaultValue
 
         if [ "$_ProcessingArgumentName" == "$ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST" ]; then
             ResultRecievingVarName_AnonymousValuesArray="$_ProcessingVariableName"
@@ -283,15 +289,12 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
 
 
-        # if true; then
+        # if [ $__wlc_arguments_parser_DebuggingLevel_ -ge 3 ]; then
         #     echo "_ProcessingArgumentName='$_ProcessingArgumentName'"
         #     echo "_ProcessingVariableName='$_ProcessingVariableName'"
         #     echo "_ProcessingArgumentValueType='$_ProcessingArgumentValueType'"
         #     echo "_ProcessingArgumentDefaultValue='$_ProcessingArgumentDefaultValue'"
         #     echo "_ExistingValueOfProcessingVar='$_ExistingValueOfProcessingVar'"
-
-        #     echo
-        #     echo '────────────────────────────────────────────────────────────────'
         #     echo
         # fi
 
@@ -305,7 +308,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
 
     function Write-_吴乐川打印调试信息_遇到原始参数 {
-        if [ $DebuggingLevel -ge 2 ]; then
+        if [ $__wlc_arguments_parser_DebuggingLevel_ -ge 2 ]; then
             echo
             echo  -e  "〔调试〕： 遇到原始参数 \e[0;96m${1}\e[0;0m 。"
         fi
@@ -322,12 +325,18 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
         if [ ! -z "$_ArgumentConfigsCount" ]; then
             for ((_ArgumentConfigsLoopIndex=0; _ArgumentConfigsLoopIndex<_ArgumentConfigsCount; _ArgumentConfigsLoopIndex++)); do
+                if [ $__wlc_arguments_parser_DebuggingLevel_ -ge 4 ]; then
+                    echo
+                    echo '────────────────────────────────────────────────────────────────'
+                fi
+
                 _ProcessingArgumentConfig=${ArgumentConfigsArray[$_ArgumentConfigsLoopIndex]}
 
                 _ProcessingArgumentName=${_ProcessingArgumentConfig%%|*}
                 _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingArgumentName}+1}
                 read  -r  _ProcessingArgumentName <<< $_ProcessingArgumentName
-                # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
+
+                [ $__wlc_arguments_parser_DebuggingLevel_ -ge 4 ] && echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
 
                 if [ "$_ProcessingArgumentName" == "$ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST" ]; then
                     continue
@@ -336,17 +345,19 @@ function Read-吴乐川读取并处理某函数的参数表 {
                 _ProcessingVariableName=${_ProcessingArgumentConfig%%|*}
                 _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingVariableName}+1}
                 read  -r  _ProcessingVariableName <<< $_ProcessingVariableName
-                # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
+
+                [ $__wlc_arguments_parser_DebuggingLevel_ -ge 4 ] && echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
 
                 _ProcessingArgumentValueType=${_ProcessingArgumentConfig%%|*}
                 _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingArgumentValueType}+1}
                 read  -r  _ProcessingArgumentValueType <<< $_ProcessingArgumentValueType
-                # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
+
+                [ $__wlc_arguments_parser_DebuggingLevel_ -ge 4 ] && echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
 
                 _ProcessingArgumentDefaultValue=${_ProcessingArgumentConfig%%|*}
-                _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingArgumentDefaultValue}+1}
+                _ProcessingArgumentDefaultValue="${_ProcessingArgumentConfig}"
+                # _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingArgumentDefaultValue}+1}
                 read  -r  _ProcessingArgumentDefaultValue <<< $_ProcessingArgumentDefaultValue
-                # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
 
 
 
@@ -370,18 +381,17 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
 
 
-                # if true; then
-                #     echo
-                #     echo '────────────────────────────────────────────────────────────────'
-                #     echo "_ProcessingArgumentName='$_ProcessingArgumentName'"
-                #     echo "_ProcessingVariableName='$_ProcessingVariableName'"
-                #     echo "_ProcessingArgumentValueType='$_ProcessingArgumentValueType'"
-                #     echo "_ProcessingArgumentValueTypeStandardName='$_ProcessingArgumentValueTypeStandardName'"
-                #     echo "_ProcessingArgumentDefaultValue='$_ProcessingArgumentDefaultValue'"
-                #     echo "_ExistingValueOfProcessingVar='$_ExistingValueOfProcessingVar'"
-                #     echo '────────────────────────────────────────────────────────────────'
-                #     echo
-                # fi
+                if [ $__wlc_arguments_parser_DebuggingLevel_ -ge 4 ]; then
+                    echo '────────────────────────────────────────────────────────────────'
+                    echo "_ProcessingArgumentName='$_ProcessingArgumentName'"
+                    echo "_ProcessingVariableName='$_ProcessingVariableName'"
+                    echo "_ProcessingArgumentValueType='$_ProcessingArgumentValueType'"
+                    echo "_ProcessingArgumentValueTypeStandardName='$_ProcessingArgumentValueTypeStandardName'"
+                    echo "_ProcessingArgumentDefaultValue='$_ProcessingArgumentDefaultValue'"
+                    echo "_ExistingValueOfProcessingVar='$_ExistingValueOfProcessingVar'"
+                    echo '────────────────────────────────────────────────────────────────'
+                    echo
+                fi
 
 
 
@@ -399,7 +409,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
                 if [ "$1" == "${_ProcessingArgumentName}" ]; then
 
-                    # if [ $DebuggingLevel -ge 1 ]; then
+                    # if [ $__wlc_arguments_parser_DebuggingLevel_ -ge 1 ]; then
                     #     echo  -e  "〔调试〕： 遇到参数 '\e[0;96m${_ProcessingArgumentName}\e[0;0m' 。"
                     # fi
 
@@ -455,7 +465,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
                 elif [[ "$1" =~ ^"${_ProcessingArgumentName}"= ]]; then
 
-                    # if [ $DebuggingLevel -ge 1 ]; then
+                    # if [ $__wlc_arguments_parser_DebuggingLevel_ -ge 1 ]; then
                     #     echo  -e  "〔调试〕： 遇到参数 '\e[0;96m${_ProcessingArgumentName}=\e[0;0m' 。"
                     # fi
 
@@ -488,7 +498,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
                 if [ $_CurrentArgumentOrArgumentPairHaveRecognized -eq 1 ]; then
 
-                    if [ $DebuggingLevel -ge 2 ]; then
+                    if [ $__wlc_arguments_parser_DebuggingLevel_ -ge 2 ]; then
                         echo  -e  "〔调试〕： 考察参数 '\e[0;96m${_ProcessingArgumentName}\e[0;0m' 的值 '\e[0;91m${_TemporaryArgumentValue}\e[0;0m' 。"
                     fi
 
@@ -610,27 +620,34 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
 
     for ((_ArgumentConfigsLoopIndex=0; _ArgumentConfigsLoopIndex<_ArgumentConfigsCount; _ArgumentConfigsLoopIndex++)); do
+        if [ $__wlc_arguments_parser_DebuggingLevel_ -ge 3 ]; then
+            echo '────────────────────────────────────────────────────────────────'
+        fi
+
         _ProcessingArgumentConfig=${ArgumentConfigsArray[$_ArgumentConfigsLoopIndex]}
 
         _ProcessingArgumentName=${_ProcessingArgumentConfig%%|*}
         _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingArgumentName}+1}
         read  -r  _ProcessingArgumentName <<< $_ProcessingArgumentName
-        # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
+
+        [ $__wlc_arguments_parser_DebuggingLevel_ -ge 3 ] && echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
 
         _ProcessingVariableName=${_ProcessingArgumentConfig%%|*}
         _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingVariableName}+1}
         read  -r  _ProcessingVariableName <<< $_ProcessingVariableName
-        # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
+
+        [ $__wlc_arguments_parser_DebuggingLevel_ -ge 3 ] && echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
 
         _ProcessingArgumentValueType=${_ProcessingArgumentConfig%%|*}
         _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingArgumentValueType}+1}
         read  -r  _ProcessingArgumentValueType <<< $_ProcessingArgumentValueType
-        # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
 
-        _ProcessingArgumentDefaultValue=${_ProcessingArgumentConfig%%|*}
-        _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingArgumentDefaultValue}+1}
+        [ $__wlc_arguments_parser_DebuggingLevel_ -ge 3 ] && echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
+
+        _ProcessingArgumentDefaultValue="${_ProcessingArgumentConfig}"
+        # _ProcessingArgumentDefaultValue=${_ProcessingArgumentConfig%%|*}
+        # _ProcessingArgumentConfig=${_ProcessingArgumentConfig:${#_ProcessingArgumentDefaultValue}+1}
         read  -r  _ProcessingArgumentDefaultValue <<< $_ProcessingArgumentDefaultValue
-        # echo "剩余的 _ProcessingArgumentConfig='$_ProcessingArgumentConfig'"
 
 
 
@@ -638,18 +655,17 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
 
 
-        # if true; then
-        #     echo
-        #     echo '────────────────────────────────────────────────────────────────'
-        #     echo "_ProcessingArgumentName='$_ProcessingArgumentName'"
-        #     echo "_ProcessingVariableName='$_ProcessingVariableName'"
-        #     echo "_ProcessingArgumentValueType='$_ProcessingArgumentValueType'"
-        #     echo "_ProcessingArgumentValueTypeStandardName='$_ProcessingArgumentValueTypeStandardName'"
-        #     echo "_ProcessingArgumentDefaultValue='$_ProcessingArgumentDefaultValue'"
-        #     echo "_ExistingValueOfProcessingVar='$_ExistingValueOfProcessingVar'"
-        #     echo '────────────────────────────────────────────────────────────────'
-        #     echo
-        # fi
+        if [ $__wlc_arguments_parser_DebuggingLevel_ -ge 3 ]; then
+            echo '────────────────────────────────────────────────────────────────'
+            echo "_ProcessingArgumentName='$_ProcessingArgumentName'"
+            echo "_ProcessingVariableName='$_ProcessingVariableName'"
+            echo "_ProcessingArgumentValueType='$_ProcessingArgumentValueType'"
+            echo "_ProcessingArgumentValueTypeStandardName='$_ProcessingArgumentValueTypeStandardName'"
+            echo "_ProcessingArgumentDefaultValue='$_ProcessingArgumentDefaultValue'"
+            echo "_ExistingValueOfProcessingVar='$_ExistingValueOfProcessingVar'"
+            echo '────────────────────────────────────────────────────────────────'
+            echo
+        fi
 
 
 
@@ -740,7 +756,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
         local ColorOfExpressionParts='\e[0;97m'
 
         echo  -en "〔调试〕：〔${ColorOfArgumentIndex}${ArgumentIndex}${NoColor}〕"
-        
+
         if [ "$VarNameOfFullList" == "${ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST}" ]; then
             echo  -e  "（\e[0;31m并未提供变量来接收它们，它们将被丢弃${NoColor}）"
         else
@@ -748,7 +764,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
         fi
 
         echo  -e  "〔调试〕：   ${ColorOfArgumentNames}${ArgumentNameOfList}${NoColor} （${ColorOfVarValueTypes}列表${NoColor}）"
-        
+
         if [ $IsPrintingFullList -eq 1 ]; then
         echo  -e  "〔调试〕：     ${ColorOfVarNames}${VarNameOfFullList}${ColorOfExpressionParts}=(${NoColor}"
         else
@@ -797,7 +813,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
 
 
 
-    if [ $DebuggingLevel -ge 1 ]; then
+    if [ $__wlc_arguments_parser_DebuggingLevel_ -ge 1 ]; then
         echo
         echo      '〔调试〕： ────────────────────────────────────────────────────────────────'
         echo  -e  "〔调试〕： \e[0;32m函数${NoColor}"

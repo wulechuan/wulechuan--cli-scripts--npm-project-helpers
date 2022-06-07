@@ -73,7 +73,7 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_
         "--应仅作仿真演练 | ShouldDryRun      | 标准类型_布尔 | false"
     )
 
-    Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 false  $*
+    Read-吴乐川读取并处理某函数的参数表  --调试功能之级别 0  $*
 
 
 
@@ -141,7 +141,7 @@ function Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_packa
         "--应仅作仿真演练 | ShouldDryRun      | 标准类型_布尔 | false"
     )
 
-    Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 false  $*
+    Read-吴乐川读取并处理某函数的参数表  --调试功能之级别 0  $*
 
 
 
@@ -202,7 +202,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
         "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
 
-    Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 false  $*
+    Read-吴乐川读取并处理某函数的参数表  --调试功能之级别 0  $*
 
 
 
@@ -240,7 +240,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
         "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
 
-    Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 false  $*
+    Read-吴乐川读取并处理某函数的参数表  --调试功能之级别 0  $*
 
 
 
@@ -278,7 +278,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
         "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
 
-    Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 false  $*
+    Read-吴乐川读取并处理某函数的参数表  --调试功能之级别 0  $*
 
 
 
@@ -316,7 +316,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__新装或升级�
         "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
 
-    Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 false  $*
+    Read-吴乐川读取并处理某函数的参数表  --调试功能之级别 0  $*
 
 
 
@@ -354,7 +354,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__更新与研发�
         "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
 
-    Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 false  $*
+    Read-吴乐川读取并处理某函数的参数表  --调试功能之级别 0  $*
 
 
 
@@ -392,7 +392,7 @@ function Write-吴乐川管理某_npm_项目__打印提示语__其他交代 {
         "--应仅作仿真演练          | ShouldDryRun | 标准类型_布尔 | false"
     )
 
-    Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 false  $*
+    Read-吴乐川读取并处理某函数的参数表  --调试功能之级别 0  $*
 
 
 
@@ -422,6 +422,13 @@ function Write-吴乐川管理某_npm_项目__打印提示语__其他交代 {
 
 
 function Update-吴乐川更新当前_npm_项目的所有依赖包 {
+    local PACKAGE_CONFIG_CONTENT_DEFAULT_SEPARATOR='|::|'
+    local BY_DEFAULT__SHOULD_REMOVE_NODE_MODULES_FIRST='true'
+    local BY_DEFAULT__SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST='true'
+
+
+
+    local DebuggingLevel
     local ShouldDryRun
     local PackageConfigContentSeparator
     local NpmExtraArguments
@@ -429,25 +436,40 @@ function Update-吴乐川更新当前_npm_项目的所有依赖包 {
     local NPMDependencyVersionConfigs_Devel=()
 
     local ArgumentConfigsArray=(
-        #  命令行参数名                     | 变量名                             | 取值之类型     | 默认值
-        # ------------------------------------------------------------------------------------------------
-        "--应仅作仿真演练                   | ShouldDryRun                      | 标准类型_布尔   | false"
-        "--内容分割记号                     | PackageConfigContentSeparator     |               |      |::|"
-        "--NPM安装依赖包时须额外带上的参数序列 | NpmExtraArguments                 | 标准类型_文本"
-        "--某产品级依赖包之版本配置           | NPMDependencyVersionConfigs_Produ | 标准类型_列表"
-        "--某研发级依赖包之版本配置           | NPMDependencyVersionConfigs_Devel | 标准类型_列表"
+        #  命令行参数名                                         | 变量名                              | 取值之类型       | 默认值
+        # ----------------------------------------------------------------------------------------------------------------------------------------------------
+        "--调试功能之级别                                       | DebuggingLevel                     | 标准类型_非负整数  | 0"
+        "--应仅作仿真演练                                       | ShouldDryRun                       | 标准类型_布尔     | false"
+        "--在安装诸依赖包之前应先删除旧有的_node_modules_文件夹     | ShouldRemoveNodeModulesFirst      | 标准类型_布尔     | ${BY_DEFAULT__SHOULD_REMOVE_NODE_MODULES_FIRST}"
+        "--在安装诸依赖包之前应先删除旧有的_package-lock点json_文件 | ShouldRemovePackageLockJSONFirst  | 标准类型_布尔     | ${BY_DEFAULT__SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST}"
+        "--内容分割记号                                         | PackageConfigContentSeparator     | 标准类型_文本     | ${PACKAGE_CONFIG_CONTENT_DEFAULT_SEPARATOR}"
+        "--某产品级依赖包之版本配置                               | NPMDependencyVersionConfigs_Produ | 标准类型_列表"
+        "--某研发级依赖包之版本配置                               | NPMDependencyVersionConfigs_Devel | 标准类型_列表"
+        "--NPM安装依赖包时须额外带上的参数序列                     | NpmExtraArguments                 | 标准类型_文本"
     )
 
     local LastTaskReturnCode=0
 
-    Read-吴乐川读取并处理某函数的参数表  --应开启调试功能 1 "$@"
-    # LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi
+    Read-吴乐川读取并处理某函数的参数表  --调试功能之级别 1  "$@"
+    LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi
 
-    # Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_modules       --应仅作仿真演练 $ShouldDryRun  --确应运行该任务 $ShouldRemoveNodeModulesFirst
-    # LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi
 
-    # Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_package_lock_json  --应仅作仿真演练 $ShouldDryRun  --确应运行该任务 $ShouldRemovePackageLockJSONFirst
-    # LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi
+
+    # ────────────────────────────────────────────────────────────────
+    #  1) 按需删除 node_modules      文件夹。
+    # ────────────────────────────────────────────────────────────────
+
+    Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_node_modules       --应仅作仿真演练 $ShouldDryRun  --确应运行该任务 $ShouldRemoveNodeModulesFirst
+    LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi
+
+
+
+    # ────────────────────────────────────────────────────────────────
+    #  2) 按需删除 package-lock.json 文件。
+    # ────────────────────────────────────────────────────────────────
+
+    Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_package_lock_json  --应仅作仿真演练 $ShouldDryRun  --确应运行该任务 $ShouldRemovePackageLockJSONFirst
+    LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi
 }
 
 
