@@ -827,6 +827,8 @@ function Read-吴乐川读取并处理某函数的参数表 {
         local ColorOfValues="\e[0;91m"
         local ColorOfExpressionParts="\e[0;97m"
 
+        local _ArgumentPrintingIndex=1
+
         for ((_ArgumentConfigsLoopIndex=0; _ArgumentConfigsLoopIndex<_ArgumentConfigsCount; _ArgumentConfigsLoopIndex++)); do
             _ProcessingArgumentConfig=${ArgumentConfigsArray[$_ArgumentConfigsLoopIndex]}
 
@@ -868,13 +870,12 @@ function Read-吴乐川读取并处理某函数的参数表 {
             # echo      '〔调试〕： ──────────────────────────────────────'
 
 
-
             if [ "$_ProcessingArgumentValueType" == '标准类型_列表' ]; then
-                Write-_吴乐川打印一个列表  "$((_ArgumentConfigsLoopIndex+1))"  "${_ProcessingArgumentName}"  "$_ProcessingVariableName"  "$_ProcessingVariableName"
+                Write-_吴乐川打印一个列表  "${_ArgumentPrintingIndex}"  "${_ProcessingArgumentName}"  "$_ProcessingVariableName"  "$_ProcessingVariableName"
             else
                 eval "_ExistingValueOfProcessingVar=\"\$${_ProcessingVariableName}\""
 
-                echo  -e  "〔调试〕：〔${ColorOfArgumentIndex}$((_ArgumentConfigsLoopIndex+1))${NoColor}〕"
+                echo  -e  "〔调试〕：〔${ColorOfArgumentIndex}${_ArgumentPrintingIndex}${NoColor}〕"
                 echo  -en "〔调试〕：   ${ColorOfArgumentNames}${_ProcessingArgumentName}${NoColor}"
                 if [ -z "$_ProcessingArgumentValueTypeStandardName" ]; then
                     echo
@@ -885,17 +886,20 @@ function Read-吴乐川读取并处理某函数的参数表 {
                 echo  -e  "〔调试〕：     ${ColorOfVarNames}${_ProcessingVariableName}${ColorOfExpressionParts}=${ColorOfValues}${_ExistingValueOfProcessingVar}${NoColor}"
             fi
 
+            ((_ArgumentPrintingIndex++))
         done
+
+
 
         if [ $AnonymouseValuesCountAddedByThisTool -gt 0 ]; then
             echo  -e  "〔调试〕："
 
             if [ -z "$ResultRecievingVarName_AnonymousValuesArray" ]; then
-                Write-_吴乐川打印一个列表  '*'  "${ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST}" \
+                Write-_吴乐川打印一个列表  ${_ArgumentPrintingIndex}  "${ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST}" \
                     "${ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST}" \
                     'AnonymouseValuesArrayAddedByThisTool'
             else
-                Write-_吴乐川打印一个列表  '*'  "${ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST}" \
+                Write-_吴乐川打印一个列表  ${_ArgumentPrintingIndex}  "${ARGUMENT_ID_OF_ANONYMOUSE_VALUES_LIST}" \
                     "${ResultRecievingVarName_AnonymousValuesArray}" \
                     'AnonymouseValuesArrayAddedByThisTool'
             fi

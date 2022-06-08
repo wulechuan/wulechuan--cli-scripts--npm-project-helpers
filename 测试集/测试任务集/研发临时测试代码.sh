@@ -18,7 +18,7 @@ function 测试之主程序 {
 
 
 
-    if true; then
+    if false; then
         local NameOfThisFunction='测试之主程序（第一部分）'
 
         local Number1
@@ -36,9 +36,9 @@ function 测试之主程序 {
             "--正整数           | number2         | 标准类型_正整数   | ${BY_DEFAULT__SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST}"
             "--整数3            | n3              | 标准类型_非负整数 | ${BY_DEFAULT__SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST}"
             "--开关甲           | boolean1        | 标准类型_布尔     | ${BY_DEFAULT__SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST}"
+            "〈匿名值之汇总列表〉 | AllTextSnippets"
             "--中华英雄谱       | ChineseHeros    | 标准类型_列表"
             "--bool-2          | Bool2           | 标准类型_布尔     | ${BY_DEFAULT__SHOULD_REMOVE_PACKAGE_LOCK_JSON_FIRST}"
-            "〈匿名值之汇总列表〉 | AllTextSnippets"
             "--实验性列表       | SomeList        | 标准类型_列表"
         )
 
@@ -379,6 +379,31 @@ function 测试之主程序 {
 
         # return
 
+        # echo
+        # echo
+        # echo
+        # Write-Line
+        # Write-Line
+        # Write-Line
+        # echo
+        # echo
+        # echo
+
+        # Update-吴乐川更新当前_npm_项目的某批依赖包 \
+        #     --这批依赖包之依赖类别='本产品拟囊括这些软件之整体或部分' \
+        #     --内容分割记号='|::|' \
+        #     --某依赖包之版本配置='   vue    |::|       2.6      |::|    本项目之前端技术框架暂不打算迁移至 Vuejs 3.x 。' \
+        #     --某依赖包之版本配置='vue-router        |::| ~3.4 |::| 版本兼容问题。' \
+        #     --某依赖包之版本配置='vuex |::| ~3.4 |::|  ' \
+        #     --某依赖包之版本配置='@zhong-hua/package-a |::| null ' \
+        #     --某依赖包之版本配置='@zhong-hua/package-b |::| $null ' \
+        #     --某依赖包之版本配置='@zhong-hua/package-cde         |::|   0  |::| 这表示仅限版本零，而不是不设限。' \
+        #     --某依赖包之版本配置='@zhong-hua/package-fghi' \
+        #     --某依赖包之版本配置='@jun-yong-fei-ji/jian-ji-ji    |::|  2025  |::|   出征。' \
+        #     --某依赖包之版本配置="@dao-dan/dong-feng-17          |::|  2025  |::|   ${GUO_JI_GE}" \
+        #     --某依赖包之版本配置='@dao-dan/dong-feng-41          |::|  2025  |::|   也没有神仙皇帝。' \
+        #     --应仅作仿真演练 true
+
         echo
         echo
         echo
@@ -389,19 +414,19 @@ function 测试之主程序 {
         echo
         echo
 
-        Update-吴乐川更新当前_npm_项目的某批依赖包 \
-            --这批依赖包之依赖类别='本产品拟囊括这些软件之整体或部分' \
+        Update-吴乐川更新当前_npm_项目的所有依赖包 \
+            --调试功能之级别 1
             --内容分割记号='|::|' \
-            --某依赖包之版本配置='   vue    |::|       2.6      |::|    本项目之前端技术框架暂不打算迁移至 Vuejs 3.x 。' \
-            --某依赖包之版本配置='vue-router        |::| ~3.4 |::| 版本兼容问题。' \
-            --某依赖包之版本配置='vuex |::| ~3.4 |::|  ' \
-            --某依赖包之版本配置='@zhong-hua/package-a |::| null ' \
-            --某依赖包之版本配置='@zhong-hua/package-b |::| $null ' \
-            --某依赖包之版本配置='@zhong-hua/package-cde         |::|   0  |::| 这表示仅限版本零，而不是不设限。' \
-            --某依赖包之版本配置='@zhong-hua/package-fghi' \
-            --某依赖包之版本配置='@jun-yong-fei-ji/jian-ji-ji    |::|  2025  |::|   出征。' \
-            --某依赖包之版本配置="@dao-dan/dong-feng-17          |::|  2025  |::|   ${GUO_JI_GE}" \
-            --某依赖包之版本配置='@dao-dan/dong-feng-41          |::|  2025  |::|   也没有神仙皇帝。' \
+            --某产品级依赖包之版本配置='   vue    |::|       2.6      |::|    本项目之前端技术框架暂不打算迁移至 Vuejs 3.x 。' \
+            --某产品级依赖包之版本配置='vue-router        |::| ~3.4 |::| 版本兼容问题。' \
+            --某产品级依赖包之版本配置='vuex |::| ~3.4 |::|  ' \
+            --某产品级依赖包之版本配置='@zhong-hua/package-a |::| null ' \
+            --某产品级依赖包之版本配置='@zhong-hua/package-b |::| $null ' \
+            --某产品级依赖包之版本配置='@zhong-hua/package-cde         |::|   0  |::| 这表示仅限版本零，而不是不设限。' \
+            --某研发级依赖包之版本配置='@zhong-hua/package-fghi' \
+            --某研发级依赖包之版本配置='@jun-yong-fei-ji/jian-ji-ji    |::|  2025  |::|   出征。' \
+            --某研发级依赖包之版本配置="@dao-dan/dong-feng-17          |::|  2025  |::|   ${GUO_JI_GE}" \
+            --某研发级依赖包之版本配置='@dao-dan/dong-feng-41          |::|  2025  |::|   也没有神仙皇帝。' \
             --应仅作仿真演练 true
 
         # Update-吴乐川更新当前_npm_项目的某批依赖包 \

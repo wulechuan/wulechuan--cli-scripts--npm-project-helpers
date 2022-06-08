@@ -470,6 +470,652 @@ function Update-吴乐川更新当前_npm_项目的所有依赖包 {
 
     Remove-吴乐川管理某_npm_项目__删除当前文件夹下的_package_lock_json  --应仅作仿真演练 $ShouldDryRun  --确应运行该任务 $ShouldRemovePackageLockJSONFirst
     LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi
+
+
+
+    # ────────────────────────────────────────────────────────────────
+    #  3) 安装所有依赖包。
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #     顺便提醒，虽然一般而言 latest 版本应恰为最高版本，但并不确保。
+    # ────────────────────────────────────────────────────────────────
+
+    local -a NPMDependencyCategories=( '产品级' '研发级' )
+
+    function Write-_吴乐川打印一条红线 {
+        echo  -en  "\e[0;31m";  Write-Line-without-line-break 66;  echo  -e "\e[0;0m"
+    }
+
+    function Write-_吴乐川为方框打印一段水平边线 {
+        if [[ ! "$1" =~ ^[1-9][0-9]*$ ]]; then
+            return 1
+        fi
+
+        local _temp_looping_index=0
+        for ((_temp_looping_index=0; _temp_looping_index<$1; _temp_looping_index++)); do
+            echo -n '═'
+        done
+    }
+
+
+
+    for NPMDependencyCategory in ${NPMDependencyCategories[@]}; do
+
+        local PackageGroupA_PackageNames=()
+        local PackageGroupA_PackageVersionConfigs=()
+        local PackageGroupA_PackageVersionLockReasons=()
+        local PackageGroupA_PackagesCount=0
+        local PackageGroupA_LongestPackageNameLength=0
+
+        local PackageGroupB_PackageNames=()
+        local PackageGroupB_PackageVersionConfigs=()
+        local PackageGroupB_PackageVersionLockReasons=()
+        local PackageGroupB_PackagesCount=0
+        local PackageGroupB_LongestPackageNameLength=0
+
+
+
+        local _ProcessingPackageName=''
+        local _ProcessingPackageVerionConfig=''
+        local _ProcessingPackageVerionLockReason=''
+        local _RestPartOfProcessingPackageConfig=''
+        local _ProcessingPackageNameLength=0
+        local _ProcessingPackageHasLockedVersionRange=0
+
+        _IndexOfProcessingConfiguration=0
+
+        for _ProcessingPackageConfig in "${DependencyVersionConfigurations[@]}"; do
+            _IndexOfProcessingConfiguration=$((_IndexOfProcessingConfiguration+1))
+
+            if [ $DebuggingLevel -ge 1 ]; then
+                echo
+                Write-Line
+                echo  -en "〔调试〕： 依赖包 [$_IndexOfProcessingConfiguration] 之配置：  "
+                echo  -e  "\"\e[0;30;42m${_ProcessingPackageConfig}\e[0;0m\""
+                Write-Line
+            fi
+
+
+
+            read  -r  _RestPartOfProcessingPackageConfig <<< ${_ProcessingPackageConfig} # 此举可截去剩余部分的首尾空白。
+
+            _ProcessingPackageName="${_RestPartOfProcessingPackageConfig%%${PackageConfigContentSeparator}*}"
+
+            read  -r  _RestPartOfProcessingPackageConfig <<< ${_RestPartOfProcessingPackageConfig:${#_ProcessingPackageName}+${#PackageConfigContentSeparator}} # 此举可截去剩余部分的首尾空白。
+
+            _ProcessingPackageVerionConfig="${_RestPartOfProcessingPackageConfig%%${PackageConfigContentSeparator}*}"
+
+            read  -r  _RestPartOfProcessingPackageConfig <<< ${_RestPartOfProcessingPackageConfig:${#_ProcessingPackageVerionConfig}+${#PackageConfigContentSeparator}} # 此举可截去剩余部分的首尾空白。
+
+            read  -r  _ProcessingPackageName             <<< ${_ProcessingPackageName}             # 此举可截去【包名】的首尾空白。
+            read  -r  _ProcessingPackageVerionConfig     <<< ${_ProcessingPackageVerionConfig}     # 此举可截去【版本配置】的首尾空白。
+            read  -r  _ProcessingPackageVerionLockReason <<< ${_RestPartOfProcessingPackageConfig} # 此举可截去【版本设限之原因】的首尾空白。
+
+
+
+            if [[ ! "$_ProcessingPackageName" =~ ^(@[a-z][a-z0-9_-]*\/)?[a-z][a-z0-9_-]*$ ]]; then
+                echo
+                Write-_吴乐川打印一条红线
+                echo -e "\e[0;31m第 \e[0;96m${_IndexOfProcessingConfiguration}\e[0;31m 个依赖包的名称不合规。该名称为 \"\e[0;97m${_ProcessingPackageName}\e[0;31m\" 。\e[0;0m"
+                Write-_吴乐川打印一条红线
+                echo
+
+                return 21
+            fi
+
+
+
+            if [ "$_ProcessingPackageVerionConfig" == '0' ]; then
+
+                _ProcessingPackageVerionConfig='^0'
+
+            elif [ -z "${_ProcessingPackageVerionConfig}" ] || [[ "${_ProcessingPackageVerionConfig}" =~ ^\$?null$ ]]; then
+
+                _ProcessingPackageVerionConfig='latest'
+
+            fi
+
+            _ProcessingPackageHasLockedVersionRange=1
+            if [ "${_ProcessingPackageVerionConfig}" == 'latest' ]; then
+                _ProcessingPackageHasLockedVersionRange=0
+            fi
+
+
+
+
+
+            if [ $_ProcessingPackageHasLockedVersionRange -eq 0 ]; then
+                if [ ! -z "$_ProcessingPackageVerionLockReason" ]; then
+                    echo
+                    Write-_吴乐川打印一条红线
+                    echo  -e  "\e[0;31m解析【npm 软件包版本配置】时，发行某配置有误。\e[0;0m"
+                    Write-_吴乐川打印一条红线
+
+                    echo  -e  "  \e[0;31m依赖包\e[0;0m"
+                    echo  -e  "      \e[0;31m“ \e[0;33m${_ProcessingPackageName}\e[0;31m ”\e[0;0m"
+                    echo  -e  "  \e[0;31m并未锁定安装版本之范围，却给出了相关原因。这不合规。\e[0;0m"
+                    echo  -e  "  \e[0;31m凡不锁定版本的软件无所谓“版本锁定之原因”。\e[0;0m"
+                    echo
+
+                    echo  -e  "  \e[0;31m给出的所谓“原因”如下：\e[0;0m"
+                    echo  -e  "      \"\e[0;33m${_ProcessingPackageVerionLockReason}\e[0;0m\""
+
+                    echo  -e
+                    echo  -e  "  \e[0;31m务必删去这一讲述“原因”的措辞。\e[0;0m"
+
+                    Write-_吴乐川打印一条红线
+                    echo
+
+                    return 22
+                fi
+
+                _ProcessingPackageVerionLockReason='~~~ 版本并未设限。故谈不上什么原因。 ~~~'
+            fi
+
+
+
+
+
+            _ProcessingPackageNameLength=${#_ProcessingPackageName}
+
+            if [ $_ProcessingPackageHasLockedVersionRange -eq 0 ]; then
+                PackageGroupA_PackageNames+=( "${_ProcessingPackageName}" )
+                PackageGroupA_PackageVersionConfigs+=( "${_ProcessingPackageVerionConfig}" )
+                PackageGroupA_PackageVersionLockReasons+=( "${_ProcessingPackageVerionLockReason}" )
+
+                if [ $_ProcessingPackageNameLength -gt $PackageGroupA_LongestPackageNameLength ]; then
+                    PackageGroupA_LongestPackageNameLength=$_ProcessingPackageNameLength
+                fi
+            else
+                PackageGroupB_PackageNames+=( "${_ProcessingPackageName}" )
+                PackageGroupB_PackageVersionConfigs+=( "${_ProcessingPackageVerionConfig}" )
+                PackageGroupB_PackageVersionLockReasons+=( "${_ProcessingPackageVerionLockReason}" )
+
+                if [ $_ProcessingPackageNameLength -gt $PackageGroupB_LongestPackageNameLength ]; then
+                    PackageGroupB_LongestPackageNameLength=$_ProcessingPackageNameLength
+                fi
+            fi
+
+
+
+
+
+            if [ $DebuggingLevel -ge 1 ]; then
+                echo  -e   "〔调试〕：               \e[0;92m包名\e[0;0m： \e[0;91m\"\e[0;93m${_ProcessingPackageName}\e[0;91m\"\e[0;0m"
+                echo  -e   "〔调试〕：           \e[0;92m版本配置\e[0;0m： \e[0;91m\"\e[0;93m${_ProcessingPackageVerionConfig}\e[0;91m\"\e[0;0m"
+                echo  -e   "〔调试〕：     \e[0;92m版本设限之原因\e[0;0m： \e[0;91m\"\e[0;93m${_ProcessingPackageVerionLockReason}\e[0;91m\"\e[0;0m"
+
+                echo  -en  "〔调试〕：               \e[0;92m归类\e[0;0m： \e[0;91m\"\e[0;0m"
+                if [ $_ProcessingPackageHasLockedVersionRange -eq 0 ]; then
+                    echo  -en  "\e[0;93m甲类\e[0;0m"
+                else
+                    echo  -en  "\e[0;93m乙类\e[0;0m"
+                fi
+                echo  -e   "\e[0;91m\"\e[0;0m"
+
+                Write-Line
+                echo
+                echo
+            fi
+        done
+
+
+
+        PackageGroupA_PackagesCount=${#PackageGroupA_PackageNames[@]}
+        PackageGroupB_PackagesCount=${#PackageGroupB_PackageNames[@]}
+
+
+
+        if [ $DebuggingLevel -ge 1 ]; then
+            echo
+            echo  -e  "〔调试〕： 甲类依赖包共计 \e[0;33m${PackageGroupA_PackagesCount}\e[0;0m 个。"
+            echo  -e  "〔调试〕： 乙类依赖包共计 \e[0;33m${PackageGroupB_PackagesCount}\e[0;0m 个。"
+            echo
+            echo  -e  "〔调试〕： 甲类依赖包名称最长者，名称长度为 \e[0;33m${PackageGroupA_LongestPackageNameLength}\e[0;0m"
+            echo  -e  "〔调试〕： 乙类依赖包名称最长者，名称长度为 \e[0;33m${PackageGroupB_LongestPackageNameLength}\e[0;0m"
+            echo
+        fi
+
+
+
+
+
+        local _LONG_ENOUGH_WHITE_SPACES_TEXT=''
+        local _temp_looping_index
+
+        for _temp_looping_index in {1..319}; do _LONG_ENOUGH_WHITE_SPACES_TEXT+=' '; done
+        # if [ $DebuggingLevel -ge 2 ]; then
+        #     echo
+        #     echo  -e  "〔调试〕： 够长够用的全空白文本：\"\e[0;43m${_LONG_ENOUGH_WHITE_SPACES_TEXT}\e[0;0m\""
+        #     echo
+        # fi
+
+        local _GlobalIndentation="${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:4}"
+
+
+
+
+
+        local PackageGroupA_CommandLineSnippet_PerPackage=()
+        local PackageGroupA_Descriptions_PerPackage=()
+
+        local PackageGroupB_CommandLineSnippet_PerPackage=()
+        local PackageGroupB_Descriptions_PerPackage=()
+
+
+
+
+
+        local _ColorOf_PacakgeName=''
+        local _ColorOf_AtSign=''
+        local _ColorOf_VersionConfig=''
+
+        local _ProcessingPackageIsLastOneInTheGroup=0
+        local _ProcessingPackageNamePaddingLength=0
+        local _ProcessingPackageNamePaddingText=''
+        local _ProcessingPackageDescription=''
+        local _ProcessingPackageCommandLineSnippet=''
+        local _ProcessingPackageCommandLineSnippet_Colorful=''
+
+
+
+        _ColorOf_PacakgeName='\e[0;42;30m'
+        _ColorOf_AtSign='\e[0;46;30m'
+        _ColorOf_VersionConfig='\e[0;44;30m'
+
+        _IndexOfProcessingConfiguration=0
+
+        for _ProcessingPackageName in "${PackageGroupA_PackageNames[@]}"; do
+            if [ $((PackageGroupA_PackagesCount-_IndexOfProcessingConfiguration)) -gt 1 ]; then
+                _ProcessingPackageIsLastOneInTheGroup=0
+            else
+                _ProcessingPackageIsLastOneInTheGroup=1
+            fi
+
+            _ProcessingPackageNameLength=${#_ProcessingPackageName}
+
+            _ProcessingPackageVerionConfig=${PackageGroupA_PackageVersionConfigs[${_IndexOfProcessingConfiguration}]}
+            # _ProcessingPackageVerionLockReason=${PackageGroupA_PackageVersionLockReasons[${_IndexOfProcessingConfiguration}]}
+
+            _ProcessingPackageNamePaddingLength=$((PackageGroupA_LongestPackageNameLength-_ProcessingPackageNameLength))
+            _ProcessingPackageNamePaddingText="${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:$_ProcessingPackageNamePaddingLength}"
+
+            _ProcessingPackageCommandLineSnippet="${_ProcessingPackageName}@${_ProcessingPackageVerionConfig}"
+            _ProcessingPackageCommandLineSnippet_Colorful="${_ProcessingPackageNamePaddingText}${_ColorOf_PacakgeName}${_ProcessingPackageName}${_ColorOf_AtSign}@${_ColorOf_VersionConfig}${_ProcessingPackageVerionConfig}\e[0;0m"
+
+            _ProcessingPackageDescription=''
+
+            _ProcessingPackageDescription+="${_GlobalIndentation}${_ProcessingPackageCommandLineSnippet_Colorful}"
+
+            if [ $_ProcessingPackageIsLastOneInTheGroup -eq 0 ]; then
+                _ProcessingPackageDescription+=' \'
+            else
+                _ProcessingPackageDescription+=';'
+            fi
+
+            PackageGroupA_CommandLineSnippet_PerPackage+=( "${_ProcessingPackageCommandLineSnippet}" )
+            PackageGroupA_Descriptions_PerPackage+=( "${_ProcessingPackageDescription}" )
+
+            if [ $DebuggingLevel -ge 1 ]; then
+                echo  -e  "〔调试〕： 甲类包的命令行片段： ${_ProcessingPackageCommandLineSnippet_Colorful}"
+            fi
+
+            _IndexOfProcessingConfiguration=$((_IndexOfProcessingConfiguration+1))
+        done
+
+
+
+
+
+        if [ $DebuggingLevel -ge 1 ]; then
+            echo
+        fi
+
+
+
+
+
+        _ColorOf_PacakgeName='\e[0;103;30m'
+        _ColorOf_AtSign='\e[0;43;30m'
+        _ColorOf_VersionConfig='\e[0;101;30m'
+
+        _IndexOfProcessingConfiguration=0
+
+        local _DescriptionFrameWidthInHanCharsCount=30
+        local _DescriptionContentLineMaxHanCharsCount=$((_DescriptionFrameWidthInHanCharsCount-1-1-2-1))
+        local _DescriptionFrameWidthInEnglishCharsCount=$((_DescriptionFrameWidthInHanCharsCount*2))
+        local _DescriptionFrameInnerWidth1=$((PackageGroupB_LongestPackageNameLength-3))
+        local _DescriptionFrameInnerWidth2=$((_DescriptionFrameWidthInEnglishCharsCount-3-$_DescriptionFrameInnerWidth1))
+
+        local _ShouldUseArrayForReceiveingFormattedTexts='true'
+        local _DescriptionContentPerLineTextsArray
+        local _DescriptionContentPerLineTextVarsNamePrefix='_DescriptionContentTextOfLine_'
+        local _DescriptionContentPerLineTextVarsCount=0 # 0 代表关闭该功能。也不会初始化一系列 local 变量。整数代表开启该功能，但为求稳妥，应令取值足够大，例如取 200 。拟取 319 。
+        local _DescriptionContentLineLoopIndex=0
+        local _DescriptionContentLinesCount=0
+
+        local _DescriptionContentProcessingLineText=''
+        local _DescriptionContentProcessingLineLength=0
+        local _DescriptionContentProcessingLinePaddingCount=0
+        local _DescriptionContentProcessingLinePaddingTextAndTailFrame=''
+
+        if [[ ! "$_DescriptionContentPerLineTextVarsCount" =~ ^[0-9]*$ ]]; then
+            echo  -e  "\e[0;91m在函数\n    “ \e[0;97mUpdate-吴乐川更新当前_npm_项目的某批依赖包\e[0;91m ”\n中：\e[0;0m"
+            echo  -e  "\e[0;91m变量\n    “ \e[0;97m_DescriptionContentPerLineTextVarsCount\e[0;91m ”\n取值不合规。\n须取正整数。给出的值却是 “ \e[0;33m${_DescriptionContentPerLineTextVarsCount}\e[0;91m ”。\e[0;0m"
+            echo
+            echo
+            return
+        fi
+
+        for _ProcessingPackageName in "${PackageGroupB_PackageNames[@]}"; do
+            if [ $((PackageGroupB_PackagesCount-_IndexOfProcessingConfiguration)) -gt 1 ]; then
+                _ProcessingPackageIsLastOneInTheGroup=0
+            else
+                _ProcessingPackageIsLastOneInTheGroup=1
+            fi
+
+            _ProcessingPackageNameLength=${#_ProcessingPackageName}
+
+            _ProcessingPackageVerionConfig=${PackageGroupB_PackageVersionConfigs[${_IndexOfProcessingConfiguration}]}
+            _ProcessingPackageVerionLockReason=${PackageGroupB_PackageVersionLockReasons[${_IndexOfProcessingConfiguration}]}
+
+            _ProcessingPackageNamePaddingLength=$((PackageGroupB_LongestPackageNameLength-_ProcessingPackageNameLength))
+            _ProcessingPackageNamePaddingText="${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:$_ProcessingPackageNamePaddingLength}"
+
+            _ProcessingPackageCommandLineSnippet="${_ProcessingPackageName}@${_ProcessingPackageVerionConfig}"
+            _ProcessingPackageCommandLineSnippet_Colorful="${_ProcessingPackageNamePaddingText}${_ColorOf_PacakgeName}${_ProcessingPackageName}${_ColorOf_AtSign}@${_ColorOf_VersionConfig}${_ProcessingPackageVerionConfig}\e[0;0m"
+
+            _ProcessingPackageDescription=''
+
+
+
+
+
+            # ────────────────────────────────────────────────────────────────────────────────
+            # ────────────────────────────────  ╔╦╗═╬╚╩╝║  ───────────────────────────────────
+            # ────────────────────────────────────────────────────────────────────────────────
+
+            _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ╔$(Write-_吴乐川为方框打印一段水平边线 ${_DescriptionFrameInnerWidth1})╦$(Write-_吴乐川为方框打印一段水平边线 ${_DescriptionFrameInnerWidth2})╗\e[0;0m"
+
+            for _temp_looping_index in {1..2}; do
+                _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameInnerWidth1}}║${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameInnerWidth2}}║\e[0;0m"
+            done
+
+            for _temp_looping_index in {1..1}; do
+                _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameInnerWidth1}} ${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameInnerWidth2}}║\e[0;0m"
+            done
+
+            _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║ 该软件锁定版本范围之原因：${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:${_DescriptionFrameWidthInEnglishCharsCount}-29}║\e[0;0m"
+
+            # ───────────────────  ╔╦╗═╬╚╩╝║  ──────────────────
+
+            if [ "$_ShouldUseArrayForReceiveingFormattedTexts" == 'false' ]; then
+                # 利用循环语句和 eval 语句，准备好足够多的 local 变量，用以接下来接收逐行文本。
+                for ((_DescriptionContentLineLoopIndex=1; _DescriptionContentLineLoopIndex<=$_DescriptionContentPerLineTextVarsCount; _DescriptionContentLineLoopIndex++)); do
+                    eval "local ${_DescriptionContentPerLineTextVarsNamePrefix}${_DescriptionContentLineLoopIndex}=''"
+                done
+            fi
+
+            ConvertTo-吴乐川将文本转换为多行文本_须采用接收器变量 \
+                --单行等效汉字字数上限 $((_DescriptionContentLineMaxHanCharsCount)) \
+                --用以接收排好版的逐行文本列表的变量名                         _DescriptionContentPerLineTextsArray \
+                --用以接收排好版的文本的行数的变量名                           _DescriptionContentLinesCount \
+                --外界预备好用以接收排好版的逐行文本的一系列变量之名称之公共前缀  $_DescriptionContentPerLineTextVarsNamePrefix \
+                --外界预备好用以接收排好版的逐行文本的一系列变量的总数           $_DescriptionContentPerLineTextVarsCount \
+                --原文本中的每个换行符在产生的内容中应改作两个换行符 true \
+                "${_ProcessingPackageVerionLockReason}"
+
+
+
+            if [ -z "$_DescriptionContentLinesCount" ] || [ "$_DescriptionContentLinesCount" == '0' ]; then
+                _DescriptionContentLinesCount=1
+
+                if [ "$_ShouldUseArrayForReceiveingFormattedTexts" == 'true' ]; then
+                    _DescriptionContentPerLineTextsArray=( '~~~ 未注明须锁定版本范围的原因。 ~~~' )
+                fi
+            fi
+
+            for ((_DescriptionContentLineLoopIndex=0; _DescriptionContentLineLoopIndex<$_DescriptionContentLinesCount; _DescriptionContentLineLoopIndex++)); do
+                if [ "$_ShouldUseArrayForReceiveingFormattedTexts" == 'true' ]; then
+                    _DescriptionContentProcessingLineText=${_DescriptionContentPerLineTextsArray[${_DescriptionContentLineLoopIndex}]}
+                else
+                    eval "_DescriptionContentProcessingLineText=\"\$${_DescriptionContentPerLineTextVarsNamePrefix}$((_DescriptionContentLineLoopIndex+1))\""
+                fi
+
+
+
+                if [ -z "$_DescriptionContentProcessingLineText" ]; then
+                    _DescriptionContentProcessingLineLength=0
+                else
+                    Get-吴乐川求一行文本视觉宽度等效英语字母数_须采用接收器变量  _DescriptionContentProcessingLineLength  "$_DescriptionContentProcessingLineText"
+                fi
+
+                _DescriptionContentProcessingLinePaddingCount=$((_DescriptionFrameWidthInEnglishCharsCount-1-5-_DescriptionContentProcessingLineLength-1-1))
+                _DescriptionContentProcessingLinePaddingTextAndTailFrame=''
+                if [ $_DescriptionContentProcessingLinePaddingCount -gt 0 ]; then
+                    _DescriptionContentProcessingLinePaddingTextAndTailFrame="\e[0;36m${_LONG_ENOUGH_WHITE_SPACES_TEXT:0:$_DescriptionContentProcessingLinePaddingCount} ║"
+                fi
+
+                if [ "$_DescriptionContentProcessingLineText" == '~~~ 未注明须锁定版本范围的原因。 ~~~' ]; then
+                    _DescriptionContentProcessingLineText="\e[0;37m${_DescriptionContentProcessingLineText}"
+                fi
+
+                _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ║     ${_DescriptionContentProcessingLineText}${_DescriptionContentProcessingLinePaddingTextAndTailFrame}"
+
+            done
+
+            # ───────────────────  ╔╦╗═╬╚╩╝║  ──────────────────
+
+            _ProcessingPackageDescription+="\n${_GlobalIndentation}\e[0;36m# ╚$(Write-_吴乐川为方框打印一段水平边线 ${_DescriptionFrameInnerWidth1})╦$(Write-_吴乐川为方框打印一段水平边线 ${_DescriptionFrameInnerWidth2})╝\e[0;0m"
+
+            # ────────────────────────────────────────────────────────────────────────────────
+            # ────────────────────────────────  ╔╦╗═╬╚╩╝║  ───────────────────────────────────
+            # ────────────────────────────────────────────────────────────────────────────────
+
+
+
+
+
+            _ProcessingPackageDescription+="\n${_GlobalIndentation}${_ProcessingPackageCommandLineSnippet_Colorful}"
+
+            if [ $_ProcessingPackageIsLastOneInTheGroup -eq 0 ]; then
+                _ProcessingPackageDescription+=' \'
+            else
+                _ProcessingPackageDescription+=';'
+            fi
+
+            PackageGroupB_CommandLineSnippet_PerPackage+=( "${_ProcessingPackageCommandLineSnippet}" )
+            PackageGroupB_Descriptions_PerPackage+=( "${_ProcessingPackageDescription}" )
+
+            if [ $DebuggingLevel -ge 1 ]; then
+                echo
+                Write-Line
+                # echo  -e  "〔调试〕： 乙类包的命令行片段： ${_ProcessingPackageCommandLineSnippet_Colorful}"
+                echo  -e  "〔调试〕： 乙类包的描述片段： "
+                Write-Line
+                echo  -e  "${_ProcessingPackageDescription}"
+            fi
+
+            _IndexOfProcessingConfiguration=$((_IndexOfProcessingConfiguration+1))
+        done
+
+
+
+
+
+        # ───────────────────────────────────────────────────────────────────────────────────────────────────────────────
+        # ───────────────────────────────────────────────────────────────────────────────────────────────────────────────
+        # ───────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+
+
+
+        local NPMCommand='npm'
+
+        local NPMSubCommand=''
+        local NPMFullCommandLine=''
+
+
+
+
+
+        # ───────────────────────────────────────────────────────────────────────────────────────────────────────────────
+        # ───────────────────────────────────────────────────────────────────────────────────────────────────────────────
+        # ───────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+
+
+
+        if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
+            Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为最晚版本  --应仅作仿真演练 $ShouldDryRun
+        else
+            Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为最晚版本  --应仅作仿真演练 $ShouldDryRun
+        fi
+
+        if [ $PackageGroupA_PackagesCount -eq 0 ]; then
+            echo  -e  "暂无。"
+        else
+            NPMSubCommand=''
+            NPMFullCommandLine=''
+
+            if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
+                NPMSubCommand="install  --save-prod  ${NpmExtraArguments}"
+            else
+                NPMSubCommand="install  --save-dev   ${NpmExtraArguments}"
+            fi
+
+            NPMFullCommandLine="${NPMCommand}  ${NPMSubCommand}"
+            echo  -e  "\e[0;92m${NPMFullCommandLine} \\ \e[0;0m"
+
+
+
+            _IndexOfProcessingConfiguration=0
+            for _ProcessingPackageCommandLineSnippet in "${PackageGroupA_CommandLineSnippet_PerPackage[@]}"; do
+                _ProcessingPackageDescription=${PackageGroupA_Descriptions_PerPackage[$_IndexOfProcessingConfiguration]}
+
+                NPMFullCommandLine+="  ${_ProcessingPackageCommandLineSnippet}"
+                echo  -e  "${_ProcessingPackageDescription}"
+
+                _IndexOfProcessingConfiguration=$((_IndexOfProcessingConfiguration+1))
+            done
+
+
+
+            echo
+            if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
+                echo  -e  "\e[0;31m`Write-Line`\e[0;0m"
+            else
+                echo  -e  "\e[0;32m`Write-Line`\e[0;0m"
+            fi
+            echo
+
+
+
+            if [ "$ShouldDryRun" == true ]; then
+                echo  -en  "   \e[0;33m【仿真演练】\n    \e[0;0m"
+            fi
+
+            echo  -e  "\e[0;97m${NPMFullCommandLine}\e[0;0m"
+
+            if [ "$ShouldDryRun" == false ]; then
+                echo
+                ${NPMFullCommandLine}
+            fi
+        fi
+
+
+
+        if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
+            Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为最晚版本  --应仅作仿真演练 $ShouldDryRun  --系作为该任务之结束提示语
+        else
+            Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为最晚版本  --应仅作仿真演练 $ShouldDryRun  --系作为该任务之结束提示语
+        fi
+
+
+
+
+
+        # ───────────────────────────────────────────────────────────────────────────────────────────────────────────────
+        # ───────────────────────────────────────────────────────────────────────────────────────────────────────────────
+        # ───────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+
+
+
+        if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
+            Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为特定版本  --应仅作仿真演练 $ShouldDryRun
+        else
+            Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为特定版本  --应仅作仿真演练 $ShouldDryRun
+        fi
+
+        if [ $PackageGroupB_PackagesCount -eq 0 ]; then
+            echo  -e  "暂无。"
+        else
+            NPMSubCommand=''
+            NPMFullCommandLine=''
+
+            if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
+                NPMSubCommand="install  --save-prod  ${NpmExtraArguments}"
+            else
+                NPMSubCommand="install  --save-dev   ${NpmExtraArguments}"
+            fi
+
+            NPMFullCommandLine="${NPMCommand}  ${NPMSubCommand}"
+            echo  -e  "\e[0;92m${NPMFullCommandLine} \\ \e[0;0m"
+
+
+
+            _IndexOfProcessingConfiguration=0
+            for _ProcessingPackageCommandLineSnippet in "${PackageGroupB_CommandLineSnippet_PerPackage[@]}"; do
+                _ProcessingPackageDescription=${PackageGroupB_Descriptions_PerPackage[$_IndexOfProcessingConfiguration]}
+
+                NPMFullCommandLine+="  ${_ProcessingPackageCommandLineSnippet}"
+                echo  -e  "${_ProcessingPackageDescription}"
+
+                _IndexOfProcessingConfiguration=$((_IndexOfProcessingConfiguration+1))
+            done
+
+
+
+            echo
+            if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
+                echo  -e  "\e[0;31m`Write-Line`\e[0;0m"
+            else
+                echo  -e  "\e[0;32m`Write-Line`\e[0;0m"
+            fi
+            echo
+
+
+
+            if [ "$ShouldDryRun" == true ]; then
+                echo  -en  "   \e[0;33m【仿真演练】\n    \e[0;0m"
+            fi
+
+            echo  -e  "\e[0;97m${NPMFullCommandLine}\e[0;0m"
+
+            if [ "$ShouldDryRun" == false ]; then
+                echo
+                ${NPMFullCommandLine}
+            fi
+        fi
+
+        if [ "$DependenciesAreOfCateogryOfProduction" == 'true' ]; then
+            Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_产品级_均为特定版本  --应仅作仿真演练 $ShouldDryRun  --系作为该任务之结束提示语
+        else
+            Write-吴乐川管理某_npm_项目__打印提示语__新装或升级某批依赖包_研发级_均为特定版本  --应仅作仿真演练 $ShouldDryRun  --系作为该任务之结束提示语
+        fi
+
+
+
+
+
+        # ───────────────────────────────────────────────────────────────────────────────────────────────────────────────
+        # ───────────────────────────────────────────────────────────────────────────────────────────────────────────────
+        # ───────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    done
 }
 
 
@@ -889,20 +1535,19 @@ function Update-吴乐川更新当前_npm_项目的某批依赖包 {
 
 
 
-        read  -r  _RestPartOfProcessingPackageConfig <<< "${_ProcessingPackageConfig}" # 可截去剩余部分的首尾空白。
+        read  -r  _RestPartOfProcessingPackageConfig <<< ${_ProcessingPackageConfig} # 此举可截去剩余部分的首尾空白。
 
         _ProcessingPackageName="${_RestPartOfProcessingPackageConfig%%${PackageConfigContentSeparator}*}"
 
-        read  -r  _RestPartOfProcessingPackageConfig <<< "${_RestPartOfProcessingPackageConfig:${#_ProcessingPackageName}+${#PackageConfigContentSeparator}}" # 可截去剩余部分的首尾空白。
+        read  -r  _RestPartOfProcessingPackageConfig <<< ${_RestPartOfProcessingPackageConfig:${#_ProcessingPackageName}+${#PackageConfigContentSeparator}} # 此举可截去剩余部分的首尾空白。
 
         _ProcessingPackageVerionConfig="${_RestPartOfProcessingPackageConfig%%${PackageConfigContentSeparator}*}"
 
-        read  -r  _RestPartOfProcessingPackageConfig <<< "${_RestPartOfProcessingPackageConfig:${#_ProcessingPackageVerionConfig}+${#PackageConfigContentSeparator}}" # 可截去剩余部分的首尾空白。
+        read  -r  _RestPartOfProcessingPackageConfig <<< ${_RestPartOfProcessingPackageConfig:${#_ProcessingPackageVerionConfig}+${#PackageConfigContentSeparator}} # 此举可截去剩余部分的首尾空白。
 
-        read  -r  _ProcessingPackageName             <<< "${_ProcessingPackageName}"             # 可截去【包名】的首尾空白。
-        read  -r  _ProcessingPackageVerionConfig     <<< "${_ProcessingPackageVerionConfig}"     # 可截去【版本配置】的首尾空白。
-        read  -r  _ProcessingPackageVerionLockReason <<< "${_RestPartOfProcessingPackageConfig}" # 可截去【版本设限之原因】的首尾空白。
-
+        read  -r  _ProcessingPackageName             <<< ${_ProcessingPackageName}             # 此举可截去【包名】的首尾空白。
+        read  -r  _ProcessingPackageVerionConfig     <<< ${_ProcessingPackageVerionConfig}     # 此举可截去【版本配置】的首尾空白。
+        read  -r  _ProcessingPackageVerionLockReason <<< ${_RestPartOfProcessingPackageConfig} # 此举可截去【版本设限之原因】的首尾空白。
 
 
 
