@@ -1,13 +1,19 @@
 #!/bin/bash
 
 # 下方这一行的写法专门针对本工具集自身，不适应于其他任何 npm 项。
-source  './源代码/发布的源代码/bash/吴乐川-针对命令与函数的辅助工具集.sh'
-source  './源代码/发布的源代码/bash/吴乐川-数据处理-文本.sh'
-source  './源代码/发布的源代码/bash/吴乐川-打印-json.sh'
-source  './源代码/发布的源代码/bash/吴乐川-管理某-npm-项目的依赖包等资源.sh'
+__wulechuan_temporary_var___source_common_path__='.'
 
-# 在采用本工具集的其他 npm 项目中，应这样写：
-# source  './node_modules/@wulechuan/cli-scripts--npm-project-helpers/源代码/发布的源代码/bash/吴乐川-管理某-npm-项目的依赖包等资源.sh'
+# 在采用本工具集的其他 npm 项目中，均应这样写：
+# __wulechuan_temporary_var___source_common_path__='./node_modules/@wulechuan/cli-scripts--npm-project-helpers'
+
+
+
+
+
+source  "${__wulechuan_temporary_var___source_common_path__}/源代码/发布的源代码/bash/吴乐川-针对命令与函数的辅助工具集.sh"
+source  "${__wulechuan_temporary_var___source_common_path__}/源代码/发布的源代码/bash/吴乐川-数据处理-文本.sh"
+source  "${__wulechuan_temporary_var___source_common_path__}/源代码/发布的源代码/bash/吴乐川-打印-json.sh"
+source  "${__wulechuan_temporary_var___source_common_path__}/源代码/发布的源代码/bash/吴乐川-管理某-npm-项目的依赖包等资源.sh"
 
 
 
@@ -54,6 +60,18 @@ function 完整流程  {
     #     顺便提醒，虽然一般而言 latest 版本应恰为最高版本，但并不确保。
     # ────────────────────────────────────────────────────────────────
 
+    # 使用示范：
+    #
+    # Update-吴乐川更新当前_npm_项目的所有依赖包 \
+    #     --某产品级依赖包之版本配置 '@wulechuan/text-basic-typography   |::|   null' \
+    #     --某产品级依赖包之版本配置 'chalk                              |::|   null' \
+    #     --某产品级依赖包之版本配置 'fs-extra                           |::|   null' \
+    #     --某产品级依赖包之版本配置 'jsonc-parser                       |::|   null' \
+    #     --某研发级依赖包之版本配置 '@wulechuan/cli-scripts--git-push   |::|   null' \
+    #     --某研发级依赖包之版本配置 'eslint                             |::|   null' \
+    #     --NPM安装依赖包时须额外带上的参数序列="$NpmArguments" \
+    #     --应仅作仿真演练 "$ShouldDryRun"
+
     # 如果 @wulechuan/cli-scripts--npm-project-helpers 工具集随附的 JavaScript 程序运行如期，
     # 其将在此处插入当前 npm 项目的【产品级】、【可自由采取其版本】的依赖包的列表。    另，切勿改动该行。该行之部分文字是供 JavaScript 程序识别的特殊记号。
 
@@ -89,11 +107,11 @@ function 完整流程  {
 
     else
 
-        # ───────────────────────────
+        # ──────────────────────────────────────────────────────
 
-        # [ 0 ]        # 当本 else 语句块中没有其它语句时，这句必须存在。
+        :        # 当本 else 语句块中没有其它语句时，这句必须存在。
 
-        # ───────────────────────────
+        # ──────────────────────────────────────────────────────
 
         if false; then
             if [ "$ShouldDryRun" == true ]; then
@@ -109,7 +127,7 @@ function 完整流程  {
             echo
         fi
 
-        # ───────────────────────────
+        # ──────────────────────────────────────────────────────
 
     fi
 
@@ -133,14 +151,14 @@ function 完整流程  {
 
     else
 
-        # ───────────────────────────
+        # ──────────────────────────────────────────────────────
         # 此处不妨做些关于当前 npm 项目的必要交代。
         # 例如注意事项、关键步骤等等。
-        # ───────────────────────────
+        # ──────────────────────────────────────────────────────
 
-        # [ 0 ]        # 当本 else 语句块中没有其它语句时，这句必须存在。
+        :        # 当本 else 语句块中没有其它语句时，这句必须存在。
 
-        # ───────────────────────────
+        # ──────────────────────────────────────────────────────
 
         echo -e "\e[33m以下是一个 JavaScript 对象。\e[0;0m"
         echo
@@ -158,7 +176,7 @@ function 完整流程  {
 
         echo '}'
 
-        # ───────────────────────────
+        # ──────────────────────────────────────────────────────
 
     fi
 
@@ -171,13 +189,14 @@ function 完整流程  {
 
 完整流程  "$@"
 
-__wulechuan_temporary_exception_code__=$?
-if [ $__wulechuan_temporary_exception_code__ -ne 0 ]; then
+__wulechuan_temporary_var___exit_code__exception_code__=$?
+if [ $__wulechuan_temporary_var___exit_code__exception_code__ -ne 0 ]; then
     echo  -e  "\e[0;31m──────────────────────── \e[0;0m"
-    echo  -e  "\e[0;31m程序异常结束代码： \e[0;33m${__wulechuan_temporary_exception_code__} \e[0;0m"
+    echo  -e  "\e[0;31m程序异常结束代码： \e[0;33m${__wulechuan_temporary_var___exit_code__exception_code__} \e[0;0m"
     echo  -e  "\e[0;31m──────────────────────── \e[0;0m\n　"
 fi
 
 unset -f 完整流程
-# unset __wulechuan_temporary_exception_code__
-return $__wulechuan_temporary_exception_code__
+unset __wulechuan_temporary_var___source_common_path__
+
+return $__wulechuan_temporary_var___exit_code__exception_code__
