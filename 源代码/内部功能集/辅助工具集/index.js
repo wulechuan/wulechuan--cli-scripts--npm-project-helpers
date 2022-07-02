@@ -245,7 +245,7 @@ function 探测采用本工具集的_npm_项目的根文件夹路径 ({
 
     console.debug(`\n\n${
         本函数之一切消息之前缀
-    }\n    在最顶层_node_modules_之上的各路径片段`, 在最顶层_node_modules_之上的各路径片段)
+    }\n在最顶层_node_modules_之上的各路径片段`, 在最顶层_node_modules_之上的各路径片段)
 
     返回值.找到的_node_modules_之个数 = 找到的_node_modules_之个数
 
