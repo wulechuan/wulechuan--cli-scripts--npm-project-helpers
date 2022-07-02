@@ -229,12 +229,13 @@ function 探测采用本工具集的_npm_项目的根文件夹路径 ({
     let 找到的_node_modules_之个数 = 0
 
     各路径片段之列表.forEach(路径片段 => {
-        if (找到的_node_modules_之个数 === 0) {
-            在最顶层_node_modules_之上的各路径片段.push(路径片段)
-        }
-
         if (路径片段 === 'node_modules') {
             找到的_node_modules_之个数++
+            return
+        }
+
+        if (找到的_node_modules_之个数 === 0) {
+            在最顶层_node_modules_之上的各路径片段.push(路径片段)
         }
     })
 
