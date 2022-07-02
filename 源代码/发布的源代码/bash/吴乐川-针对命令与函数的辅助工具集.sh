@@ -485,7 +485,7 @@ function Read-吴乐川读取并处理某函数的参数表 {
                     shift
 
                     if [ -z "${_TemporaryArgumentValue}" ]; then
-                        if [ "$_ProcessingArgumentValueType" != '标准类型_列表' ]; then
+                        if [[ "$_ProcessingArgumentValueType" != '标准类型_列表' && "$_ProcessingArgumentValueType" != '标准类型_文本' ]]; then
                             Write-_吴乐川打印针对当前处理的参数的错误信息_参数未给出值  '3'  true
                             _善后
                             return 2
