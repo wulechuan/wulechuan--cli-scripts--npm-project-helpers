@@ -16,7 +16,7 @@ source  "${__wulechuan_temporary_var___source_common_path__}/源代码/发布的
 
 
 
-function 完整流程  {
+function 完整流程 {
     local BY_DEFAULT__SHOULD_DRY_RUN='false'
 
 
@@ -70,7 +70,10 @@ function 完整流程  {
     #     --应仅作仿真演练 "$ShouldDryRun"
 
     # 如果 @wulechuan/cli-scripts--npm-project-helpers 工具集随附的 JavaScript 程序运行如期，
-    # 其将在此处插入当前 npm 项目的【产品级】、【可自由采取其版本】的依赖包的列表。    另，切勿改动该行。该行之部分文字是供 JavaScript 程序识别的特殊记号。
+    # 其将在此后插入当前 npm 项目的依赖包之列表。    另，切勿改动该行。该行之部分文字是供 JavaScript 程序识别的特殊记号。
+
+    # 如果 @wulechuan/cli-scripts--npm-project-helpers 工具集随附的 JavaScript 程序运行如期，
+    # 其将在此前插入当前 npm 项目的依赖包之列表。    另，切勿改动该行。该行之部分文字是供 JavaScript 程序识别的特殊记号。
 
     LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi
 

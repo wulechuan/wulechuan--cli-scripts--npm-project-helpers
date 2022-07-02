@@ -1199,6 +1199,9 @@ function Update-吴乐川更新当前_npm_项目的所有依赖包 {
 
     for NPMDependencyCategory in ${NPMDependencyCategories[@]}; do
 
+        _NPMSubCommand=''
+        _ColorOf_ProcessingNPMDepCategory=''
+
         if   [ "$NPMDependencyCategory" == '本产品拟囊括这些软件之整体或部分' ]; then
             _NPMSubCommand="install  --save-prod${NpmExtraArguments}"
             _ColorOf_ProcessingNPMDepCategory='\e[0;31m'
@@ -1212,6 +1215,8 @@ function Update-吴乐川更新当前_npm_项目的所有依赖包 {
 
 
         for _ProcessingGroupID in ${NPMDepPackage_GroupIDs[@]}; do
+
+            _NPMFullCommandLine=''
 
             if   [ "$NPMDependencyCategory" == '本产品拟囊括这些软件之整体或部分' ]; then
 
@@ -1299,25 +1304,24 @@ function Update-吴乐川更新当前_npm_项目的所有依赖包 {
 
                 done # 某组内的所有依赖包的循环结束于此。
 
-            fi
 
 
-
-            echo
-            echo  -e  "${_ColorOf_ProcessingNPMDepCategory}`Write-Line`\e[0;0m"
-            echo
-
-
-
-            if [ "$ShouldDryRun" == true ]; then
-                echo  -en  "   \e[0;33m【仿真演练】\n    \e[0;0m"
-            fi
-
-            echo  -e  "\e[0;97m${_NPMFullCommandLine}\e[0;0m"
-
-            if [ "$ShouldDryRun" == false ]; then
                 echo
-                ${_NPMFullCommandLine}
+                echo  -e  "${_ColorOf_ProcessingNPMDepCategory}`Write-Line`\e[0;0m"
+                echo
+
+
+
+                if [ "$ShouldDryRun" == true ]; then
+                    echo  -en  "   \e[0;93m【仿真演练】\n    \e[0;0m"
+                fi
+
+                echo  -e  "\e[0;97m${_NPMFullCommandLine}\e[0;0m"
+
+                if [ "$ShouldDryRun" == false ]; then
+                    echo
+                    ${_NPMFullCommandLine}
+                fi
             fi
 
 

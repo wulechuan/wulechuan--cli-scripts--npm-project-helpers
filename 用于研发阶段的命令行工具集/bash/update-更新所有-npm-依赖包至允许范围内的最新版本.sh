@@ -19,7 +19,7 @@ source  "${__wulechuan_temporary_var___source_common_path__}/源代码/发布的
 
 
 
-function 完整流程  {
+function 完整流程 {
     local BY_DEFAULT__SHOULD_DRY_RUN='false'
 
 
@@ -82,7 +82,9 @@ function 完整流程  {
         --某产品级依赖包之版本配置 'jsonc-parser                       |::|   null' \
         --某研发级依赖包之版本配置 '@wulechuan/cli-scripts--git-push   |::|   null' \
         --某研发级依赖包之版本配置 'eslint                             |::|   null' \
+        --内容分割记号='|:|' \
         --NPM安装依赖包时须额外带上的参数序列="$NpmArguments" \
+        --调试功能之级别 0 \
         --应仅作仿真演练 "$ShouldDryRun"
 
     LastTaskReturnCode=$?; if [ $LastTaskReturnCode -ne 0 ]; then return $LastTaskReturnCode; fi

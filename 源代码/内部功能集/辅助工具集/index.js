@@ -146,7 +146,7 @@ function 将JSON中单个属性或成员配置为新值 (旧有实体, 拟配置
  * @param {string}                  配置项集.本函数之一切消息之前缀
  * @param {string}                  配置项集.探测之起点之绝对路径
  *
- * @returns {{ 理想的文件夹之完整路径: string; 未成功: boolean; 疑似为本工具集自身的_install_生命周期任务故不必配置命令行脚本: boolean; }}
+ * @returns {{ 理想的文件夹之完整路径: string; 未成功: boolean; 疑似为本工具集自身的_install_生命周期任务故不必配置命令行脚本: boolean; 找到的_node_modules_之个数: number; 失败之原因: string; }}
  */
 function 探测采用本工具集的_npm_项目的根文件夹路径 ({
     粉笔工具,
@@ -184,6 +184,7 @@ function 探测采用本工具集的_npm_项目的根文件夹路径 ({
         疑似为本工具集自身的_install_生命周期任务故不必配置命令行脚本: false,
         理想的文件夹之完整路径: '',
         失败之原因: '',
+        找到的_node_modules_之个数: 0,
     }
 
 
@@ -220,15 +221,21 @@ function 探测采用本工具集的_npm_项目的根文件夹路径 ({
     // console.log(各路径片段之列表)
 
     const 在最顶层_node_modules_之上的各路径片段 = []
-    const 自顶而下找到了一个_node_modules = 各路径片段之列表.some(路径片段 => {
-        if (路径片段 === 'node_modules') {
-            return true
+    let 找到的_node_modules_之个数 = 0
+
+    各路径片段之列表.forEach(路径片段 => {
+        if (找到的_node_modules_之个数 === 0) {
+            在最顶层_node_modules_之上的各路径片段.push(路径片段)
         }
 
-        在最顶层_node_modules_之上的各路径片段.push(路径片段)
+        if (路径片段 === 'node_modules') {
+            找到的_node_modules_之个数++
+        }
     })
 
-    if (!自顶而下找到了一个_node_modules) {
+    返回值.找到的_node_modules_之个数 = 找到的_node_modules_之个数
+
+    if (找到的_node_modules_之个数 === 0) {
         console.log(`\n\n${
             本函数之一切消息之前缀
         }\n    ${
@@ -237,6 +244,15 @@ function 探测采用本工具集的_npm_项目的根文件夹路径 ({
 
         返回值.失败之原因 = '探测之起点所有的上层文件夹没有任何一个名为“node_modules”。'
         返回值.疑似为本工具集自身的_install_生命周期任务故不必配置命令行脚本 = true
+        return 返回值
+    } else if (找到的_node_modules_之个数 > 1) {
+        console.log(`\n\n${
+            本函数之一切消息之前缀
+        }\n    ${
+            粉笔工具.yellow(`探测之起点所有的上层诸文件夹中不止一个名为 “${粉笔工具.white('node_modules')}”。`)
+        }`)
+
+        返回值.失败之原因 = '探测之起点所有的上层诸文件夹中不止一个名为“node_modules”。'
         return 返回值
     }
 
