@@ -168,6 +168,11 @@ function 探测采用本工具集的_npm_项目的根文件夹路径 ({
                 确为文件 = true
             }
         }
+
+        console.debug(`\n\n${
+            本函数之一切消息之前缀
+        }\n    某路径为真实存在的文件`, 确为文件, `"${待检验的路径}"`)
+
         return 确为文件
     }
 
@@ -232,6 +237,14 @@ function 探测采用本工具集的_npm_项目的根文件夹路径 ({
             找到的_node_modules_之个数++
         }
     })
+
+    console.debug(`\n\n${
+        本函数之一切消息之前缀
+    }\n    找到的_node_modules_之个数`, 找到的_node_modules_之个数)
+
+    console.debug(`\n\n${
+        本函数之一切消息之前缀
+    }\n    在最顶层_node_modules_之上的各路径片段`, 在最顶层_node_modules_之上的各路径片段)
 
     返回值.找到的_node_modules_之个数 = 找到的_node_modules_之个数
 
